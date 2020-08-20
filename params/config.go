@@ -70,7 +70,7 @@ var (
 		MuirGlacierBlock:    big.NewInt(9200000),
 		Ethash:              new(EthashConfig),
 		// TODO chaojigongshi
-		ChaoJiGongShiSubsidyHalvingInterval:  big.NewInt(21),
+		ChaoJiGongShiSubsidyHalvingInterval:  big.NewInt(210000),
 		ChaoJiGongShiSubsidyHalvingFrequency: 0.5,
 	}
 

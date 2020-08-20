@@ -39,8 +39,8 @@ import (
 // Ethash proof-of-work protocol constants.
 var (
 	FrontierBlockReward       = big.NewInt(5e+18) // Block reward in wei for successfully mining a block
-	ByzantiumBlockReward      = big.NewInt(3e+18) // Block reward in wei for successfully mining a block upward from Byzantium
-	ConstantinopleBlockReward = big.NewInt(2e+18) // Block reward in wei for successfully mining a block upward from Constantinople
+	ByzantiumBlockReward      = big.NewInt(5e+18) // Block reward in wei for successfully mining a block upward from Byzantium
+	ConstantinopleBlockReward = big.NewInt(5e+18) // Block reward in wei for successfully mining a block upward from Constantinople
 	maxUncles                 = 2                 // Maximum number of uncles allowed in a single block
 	allowedFutureBlockTime    = 15 * time.Second  // Max time from current time allowed for blocks, before they're considered future blocks
 
@@ -624,23 +624,14 @@ func accumulateRewards(config *params.ChainConfig, state *state.StateDB, header 
 	if config.IsByzantium(header.Number) {
 		blockReward = ByzantiumBlockReward
 	}
+
+	if config.IsConstantinople(header.Number) {
+		blockReward = ConstantinopleBlockReward
+	}
+
 	// TODO chaojigongshi
 	if config.IsArriveHalfTime(header.Number) {
-		// 第一种方法
-		/**
 		r := new(big.Int)
-		// 这是第几次减半，默认向下取整
-		i := r.Div(header.Number, config.ChaoJiGongShiSubsidyHalvingInterval).Int64()
-		// 注意：
-		threshold := 1.0 / config.ChaoJiGongShiSubsidyHalvingFrequency
-		for j := 1; j <= int(i); j++ {
-			blockReward = r.Div(blockReward, big.NewInt(int64(threshold)))
-		}
-		*/
-
-		// 第二种方法，应该是这种靠谱
-		r := new(big.Int)
-		// 这是第几次减半，默认向下取整
 		i := r.Div(header.Number, config.ChaoJiGongShiSubsidyHalvingInterval).Int64()
 		blockRewardFloat64 := float64(blockReward.Int64())
 		for j := 1; j <= int(i); j++ {
@@ -648,10 +639,7 @@ func accumulateRewards(config *params.ChainConfig, state *state.StateDB, header 
 		}
 		blockReward = big.NewInt(int64(blockRewardFloat64))
 	}
-
-	if config.IsConstantinople(header.Number) {
-		blockReward = ConstantinopleBlockReward
-	}
+	
 	// Accumulate the rewards for the miner and any included uncles
 	reward := new(big.Int).Set(blockReward)
 	r := new(big.Int)
