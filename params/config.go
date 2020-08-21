@@ -332,9 +332,9 @@ type ChainConfig struct {
 
 	// TODO chaojigongshi
 	// 减半时长
-	ChaoJiGongShiSubsidyHalvingInterval *big.Int `json:"chaoJiGongShiHalfTime,omitempty"`
+	ChaoJiGongShiSubsidyHalvingInterval *big.Int `json:"chaoJiGongShiSubsidyHalvingInterval,omitempty"`
 	// 衰减频率
-	ChaoJiGongShiSubsidyHalvingFrequency float64 `json:"chaoJiGongShiHalfFrequency,omitempty"`
+	ChaoJiGongShiSubsidyHalvingFrequency float64 `json:"chaoJiGongShiSubsidyHalvingFrequency,omitempty"`
 }
 
 // EthashConfig is the consensus engine configs for proof-of-work based sealing.
