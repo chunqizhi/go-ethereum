@@ -186,7 +186,10 @@ func NewPublicAccountAPI(am *accounts.Manager) *PublicAccountAPI {
 }
 
 // Accounts returns the collection of accounts this node manages
-func (s *PublicAccountAPI) Accounts() []common.Address {
+//func (s *PublicAccountAPI) Accounts() []common.Address {
+//	return s.am.Accounts()
+//}
+func (s *PublicAccountAPI) Accounts() []string {
 	return s.am.Accounts()
 }
 
@@ -209,7 +212,10 @@ func NewPrivateAccountAPI(b Backend, nonceLock *AddrLocker) *PrivateAccountAPI {
 }
 
 // listAccounts will return a list of addresses for accounts this node manages.
-func (s *PrivateAccountAPI) ListAccounts() []common.Address {
+//func (s *PrivateAccountAPI) ListAccounts() []common.Address {
+//	return s.am.Accounts()
+//}
+func (s *PrivateAccountAPI) ListAccounts() []string {
 	return s.am.Accounts()
 }
 
@@ -275,20 +281,34 @@ func (s *PrivateAccountAPI) DeriveAccount(url string, path string, pin *bool) (a
 }
 
 // NewAccount will create a new account and returns the address for the new account.
-func (s *PrivateAccountAPI) NewAccount(password string) (common.Address, error) {
+func (s *PrivateAccountAPI) NewAccount(password string) (string, error) {
 	ks, err := fetchKeystore(s.am)
 	if err != nil {
-		return common.Address{}, err
+		return "", err
 	}
 	acc, err := ks.NewAccount(password)
 	if err == nil {
 		log.Info("Your new key was generated", "address", acc.Address)
 		log.Warn("Please backup your key file!", "path", acc.URL.Path)
 		log.Warn("Please remember your password!")
-		return acc.Address, nil
+		return acc.Address.String(), nil
 	}
-	return common.Address{}, err
+	return "", err
 }
+//func (s *PrivateAccountAPI) NewAccount(password string) (common.Address, error) {
+//	ks, err := fetchKeystore(s.am)
+//	if err != nil {
+//		return common.Address{}, err
+//	}
+//	acc, err := ks.NewAccount(password)
+//	if err == nil {
+//		log.Info("Your new key was generated", "address", acc.Address)
+//		log.Warn("Please backup your key file!", "path", acc.URL.Path)
+//		log.Warn("Please remember your password!")
+//		return acc.Address, nil
+//	}
+//	return common.Address{}, err
+//}
 
 // fetchKeystore retrieves the encrypted keystore from the account manager.
 func fetchKeystore(am *accounts.Manager) (*keystore.KeyStore, error) {

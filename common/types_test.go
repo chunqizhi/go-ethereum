@@ -25,6 +25,20 @@ import (
 	"testing"
 )
 
+func TestGst(t *testing.T) {
+	//address=Gst1QDuxrYC83N57CfcbW2EWohUqJKrfxG1UH
+	//INFO [09-05|02:12:41.057] Your new key was generated               address=0xfEBC188A0041A652148364F281d7f6333eb699E4
+	//INFO [09-05|02:12:41.057] Your new key was generated               address="000000…b699e4"
+	a:= "Gst1QDuxrYC83N57CfcbW2EWohUqJKrfxG1UH"
+	address, err := StringToAddress(a)
+	if err != nil {
+		t.Error(err.Error())
+	}
+	t.Log(address.String())
+	t.Log(address.Hex())
+	t.Log(address.Hash())
+}
+
 func TestBytesConversion(t *testing.T) {
 	bytes := []byte{5}
 	hash := BytesToHash(bytes)
