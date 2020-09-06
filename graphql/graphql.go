@@ -198,12 +198,13 @@ func (t *Transaction) To(ctx context.Context, args BlockNumberArgs) (*Account, e
 		return nil, err
 	}
 	to := tx.To()
-	if to == nil {
+	if to == "" {
 		return nil, nil
 	}
+	addr, _ := common.StringToAddress(to)
 	return &Account{
 		backend:       t.backend,
-		address:       *to,
+		address:       addr,
 		blockNrOrHash: args.NumberOrLatest(),
 	}, nil
 }

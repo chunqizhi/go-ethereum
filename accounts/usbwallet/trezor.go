@@ -216,11 +216,12 @@ func (w *trezorDriver) trezorSign(derivationPath []uint32, tx *types.Transaction
 		Value:      tx.Value().Bytes(),
 		DataLength: &length,
 	}
-	if to := tx.To(); to != nil {
+	if to := tx.To(); to != "" {
 		// Non contract deploy, set recipient explicitly
-		hex := to.Hex()
+		addresses, _ := common.StringToAddress(to)
+		hex := addresses.Hex()
 		request.ToHex = &hex     // Newer firmwares (old will ignore)
-		request.ToBin = (*to)[:] // Older firmwares (new will ignore)
+		request.ToBin = (addresses)[:] // Older firmwares (new will ignore)
 	}
 	if length > 1024 { // Send the data chunked if that was requested
 		request.DataInitialChunk, data = data[:1024], data[1024:]
