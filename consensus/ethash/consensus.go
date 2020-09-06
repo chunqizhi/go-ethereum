@@ -82,7 +82,8 @@ var (
 // Author implements consensus.Engine, returning the header's coinbase as the
 // proof-of-work verified author of the block.
 func (ethash *Ethash) Author(header *types.Header) (common.Address, error) {
-	return header.Coinbase, nil
+	addr,_:=common.StringToAddress(header.Coinbase)
+	return addr, nil
 }
 
 // VerifyHeader checks whether a header conforms to the consensus rules of the
@@ -649,10 +650,12 @@ func accumulateRewards(config *params.ChainConfig, state *state.StateDB, header 
 		r.Sub(r, header.Number)
 		r.Mul(r, blockReward)
 		r.Div(r, big8)
-		state.AddBalance(uncle.Coinbase, r)
+		addr,_:=common.StringToAddress(uncle.Coinbase)
+		state.AddBalance(addr, r)
 
 		r.Div(blockReward, big32)
 		reward.Add(reward, r)
 	}
-	state.AddBalance(header.Coinbase, reward)
+	addr,_:=common.StringToAddress(header.Coinbase)
+	state.AddBalance(addr, reward)
 }

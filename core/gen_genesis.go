@@ -24,8 +24,8 @@ func (g Genesis) MarshalJSON() ([]byte, error) {
 		GasLimit   math.HexOrDecimal64                         `json:"gasLimit"   gencodec:"required"`
 		Difficulty *math.HexOrDecimal256                       `json:"difficulty" gencodec:"required"`
 		Mixhash    common.Hash                                 `json:"mixHash"`
-		Coinbase   common.Address                              `json:"coinbase"`
-		Alloc      map[common.UnprefixedAddress]GenesisAccount `json:"alloc"      gencodec:"required"`
+		Coinbase   string                              `json:"coinbase"`
+		Alloc      map[string]GenesisAccount `json:"alloc"      gencodec:"required"`
 		Number     math.HexOrDecimal64                         `json:"number"`
 		GasUsed    math.HexOrDecimal64                         `json:"gasUsed"`
 		ParentHash common.Hash                                 `json:"parentHash"`
@@ -40,9 +40,9 @@ func (g Genesis) MarshalJSON() ([]byte, error) {
 	enc.Mixhash = g.Mixhash
 	enc.Coinbase = g.Coinbase
 	if g.Alloc != nil {
-		enc.Alloc = make(map[common.UnprefixedAddress]GenesisAccount, len(g.Alloc))
+		enc.Alloc = make(map[string]GenesisAccount, len(g.Alloc))
 		for k, v := range g.Alloc {
-			enc.Alloc[common.UnprefixedAddress(k)] = v
+			enc.Alloc[k] = v
 		}
 	}
 	enc.Number = math.HexOrDecimal64(g.Number)
@@ -60,8 +60,8 @@ func (g *Genesis) UnmarshalJSON(input []byte) error {
 		GasLimit   *math.HexOrDecimal64                        `json:"gasLimit"   gencodec:"required"`
 		Difficulty *math.HexOrDecimal256                       `json:"difficulty" gencodec:"required"`
 		Mixhash    *common.Hash                                `json:"mixHash"`
-		Coinbase   *common.Address                             `json:"coinbase"`
-		Alloc      map[common.UnprefixedAddress]GenesisAccount `json:"alloc"      gencodec:"required"`
+		Coinbase   string                             `json:"coinbase"`
+		Alloc      map[string]GenesisAccount `json:"alloc"      gencodec:"required"`
 		Number     *math.HexOrDecimal64                        `json:"number"`
 		GasUsed    *math.HexOrDecimal64                        `json:"gasUsed"`
 		ParentHash *common.Hash                                `json:"parentHash"`
@@ -93,15 +93,15 @@ func (g *Genesis) UnmarshalJSON(input []byte) error {
 	if dec.Mixhash != nil {
 		g.Mixhash = *dec.Mixhash
 	}
-	if dec.Coinbase != nil {
-		g.Coinbase = *dec.Coinbase
+	if dec.Coinbase != "" {
+		g.Coinbase = dec.Coinbase
 	}
 	if dec.Alloc == nil {
 		return errors.New("missing required field 'alloc' for Genesis")
 	}
 	g.Alloc = make(GenesisAlloc, len(dec.Alloc))
 	for k, v := range dec.Alloc {
-		g.Alloc[common.Address(k)] = v
+		g.Alloc[k] = v
 	}
 	if dec.Number != nil {
 		g.Number = uint64(*dec.Number)

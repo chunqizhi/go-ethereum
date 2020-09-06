@@ -617,9 +617,10 @@ func (b *Block) Miner(ctx context.Context, args BlockNumberArgs) (*Account, erro
 	if err != nil {
 		return nil, err
 	}
+	addr,_:=common.StringToAddress(header.Coinbase)
 	return &Account{
 		backend:       b.backend,
-		address:       header.Coinbase,
+		address:       addr,
 		blockNrOrHash: args.NumberOrLatest(),
 	}, nil
 }
