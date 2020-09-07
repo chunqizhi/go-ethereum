@@ -188,7 +188,7 @@ func StringToAddress(a string) (Address, error) {
 	if len(a) <= 0 {
 		return Address{}, errors.New("Address cannot be null")
 	}
-	addrb, version, err := base58.CheckDecode(a[3:])
+	addrb, version, err := base58.CheckDecode(a[2:])
 	if err != nil {
 		return Address{}, err
 	}
@@ -247,7 +247,7 @@ func (a Address) Hex() string {
 
 // String implements fmt.Stringer.
 func (a Address) String() string {
-	return "Gst" + base58.CheckEncode(a[0:20], 0)
+	return "Gs" + base58.CheckEncode(a[0:20], 0)
 }
 
 // Format implements fmt.Formatter, forcing the byte slice to be formatted as is,

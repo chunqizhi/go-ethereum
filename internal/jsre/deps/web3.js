@@ -2235,7 +2235,7 @@ var toTwosComplement = function (number) {
  * @return {Boolean}
 */
 var isStrictAddress = function (address) {
-    return /^Gst/i.test(address);
+    return /^Gs/i.test(address);
 };
 
 /**
@@ -2246,10 +2246,10 @@ var isStrictAddress = function (address) {
  * @return {Boolean}
 */
 var isAddress = function (address) {
-    if (!/^Gst/i.test(address)) {
+    if (!/^Gs/i.test(address)) {
         // check if it has the basic requirements of an address
         return false;
-    } else if (/^Gst/.test(address) || /^Gst/.test(address)) {
+    } else if (/^Gs/.test(address) || /^Gs/.test(address)) {
         // If it's all small caps or all caps, return true
         return true;
     } else {
@@ -2267,7 +2267,7 @@ var isAddress = function (address) {
 */
 var isChecksumAddress = function (address) {
     // Check each case
-    address = address.replace('Gst','');
+    address = address.replace('Gs','');
     var addressHash = sha3(address.toLowerCase());
 
     for (var i = 0; i < 40; i++ ) {
@@ -3921,11 +3921,11 @@ var outputPostFormatter = function(post){
 var inputAddressFormatter = function (address) {
     var iban = new Iban(address);
     if (iban.isValid() && iban.isDirect()) {
-        return 'Gst' + iban.address();
+        return 'Gs' + iban.address();
     } else if (utils.isStrictAddress(address)) {
         return address;
     } else if (utils.isAddress(address)) {
-        return 'Gst' + address;
+        return 'Gs' + address;
     }
     throw new Error('invalid address');
 };
@@ -4557,7 +4557,7 @@ Iban.isValid = function (iban) {
  * @returns {Boolean} true if it is, otherwise false
  */
 Iban.prototype.isValid = function () {
-    return /^Gst/.test(this._iban) &&
+    return /^Gs/.test(this._iban) &&
         mod9710(iso13616Prepare(this._iban)) === 1;
 };
 
