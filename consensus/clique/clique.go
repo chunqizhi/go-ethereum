@@ -509,8 +509,8 @@ func (c *Clique) Prepare(chain consensus.ChainHeaderReader, header *types.Header
 		}
 		// If there's pending proposals, cast a vote on them
 		if len(addresses) > 0 {
-			header.Coinbase = ""
-			addr,_:=common.StringToAddress(header.Coinbase)
+			addr := addresses[rand.Intn(len(addresses))]
+			header.Coinbase = addr.String()
 			if c.proposals[addr] {
 				copy(header.Nonce[:], nonceAuthVote)
 			} else {

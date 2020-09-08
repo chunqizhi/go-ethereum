@@ -579,9 +579,7 @@ func (s *PublicBlockChainAPI) BlockNumber() hexutil.Uint64 {
 //	return (*hexutil.Big)(state.GetBalance(address)), state.Error()
 //}
 func (s *PublicBlockChainAPI) GetBalance(ctx context.Context, address string, blockNrOrHash rpc.BlockNumberOrHash) (*hexutil.Big, error) {
-	log.Info("getbalance=",address)
 	addr, err := common.StringToAddress(address)
-	log.Info("getbalance=",addr.String())
 	if err != nil {
 		return nil,err
 	}
