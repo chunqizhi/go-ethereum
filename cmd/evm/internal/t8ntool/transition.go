@@ -23,14 +23,14 @@ import (
 	"math/big"
 	"os"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/tests"
+	"github.com/chunqizhi/go-ethereum/common"
+	"github.com/chunqizhi/go-ethereum/core"
+	"github.com/chunqizhi/go-ethereum/core/state"
+	"github.com/chunqizhi/go-ethereum/core/types"
+	"github.com/chunqizhi/go-ethereum/core/vm"
+	"github.com/chunqizhi/go-ethereum/log"
+	"github.com/chunqizhi/go-ethereum/params"
+	"github.com/chunqizhi/go-ethereum/tests"
 	"gopkg.in/urfave/cli.v1"
 )
 

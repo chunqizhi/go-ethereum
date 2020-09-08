@@ -26,11 +26,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common/mclock"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/p2p/enode"
-	"github.com/ethereum/go-ethereum/p2p/enr"
+	"github.com/chunqizhi/go-ethereum/common/mclock"
+	"github.com/chunqizhi/go-ethereum/crypto"
+	"github.com/chunqizhi/go-ethereum/log"
+	"github.com/chunqizhi/go-ethereum/p2p/enode"
+	"github.com/chunqizhi/go-ethereum/p2p/enr"
 	lru "github.com/hashicorp/golang-lru"
 	"golang.org/x/time/rate"
 )

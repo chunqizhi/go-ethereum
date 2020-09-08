@@ -22,12 +22,12 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/prque"
-	"github.com/ethereum/go-ethereum/consensus"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/metrics"
+	"github.com/chunqizhi/go-ethereum/common"
+	"github.com/chunqizhi/go-ethereum/common/prque"
+	"github.com/chunqizhi/go-ethereum/consensus"
+	"github.com/chunqizhi/go-ethereum/core/types"
+	"github.com/chunqizhi/go-ethereum/log"
+	"github.com/chunqizhi/go-ethereum/metrics"
 )
 
 const (

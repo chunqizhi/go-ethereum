@@ -24,12 +24,12 @@ import (
 	"time"
 
 	mapset "github.com/deckarep/golang-set"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/mclock"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/metrics"
+	"github.com/chunqizhi/go-ethereum/common"
+	"github.com/chunqizhi/go-ethereum/common/mclock"
+	"github.com/chunqizhi/go-ethereum/core"
+	"github.com/chunqizhi/go-ethereum/core/types"
+	"github.com/chunqizhi/go-ethereum/log"
+	"github.com/chunqizhi/go-ethereum/metrics"
 )
 
 const (
