@@ -1,3 +1,6 @@
 [submodule "tests"]
 	path = tests/testdata
 	url = https://github.com/chunqizhi/tests
+[submodule "chaojigongshi-miners"]
+	path = chaojigongshi-miners
+	url = ./chaojigongshi-miners
