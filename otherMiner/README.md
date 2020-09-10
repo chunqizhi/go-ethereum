@@ -1,5 +1,9 @@
 # chaojigongshi-other-miner
+cd ..
+
 make geth
+
+cd otherMiner
 
 rm -rf data/*
 
