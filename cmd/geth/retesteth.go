@@ -224,9 +224,9 @@ func (e *NoRewardEngine) accumulateRewards(config *params.ChainConfig, state *st
 	// Simply touch miner and uncle coinbase accounts
 	reward := big.NewInt(0)
 	for _, uncle := range uncles {
-		state.AddBalance(uncle.Coinbase, reward)
+		state.AddBalance(common.HexToAddress(uncle.Coinbase), reward)
 	}
-	state.AddBalance(header.Coinbase, reward)
+	state.AddBalance(common.HexToAddress(header.Coinbase), reward)
 }
 
 func (e *NoRewardEngine) Finalize(chain consensus.ChainHeaderReader, header *types.Header, statedb *state.StateDB, txs []*types.Transaction,
@@ -299,7 +299,7 @@ func (api *RetestethAPI) SetChainParams(ctx context.Context, chainParams ChainPa
 			for k, v := range account.Storage {
 				storage[common.HexToHash(k)] = common.HexToHash(v)
 			}
-			accounts[address] = core.GenesisAccount{
+			accounts[address.String()] = core.GenesisAccount{
 				Balance: balance,
 				Code:    account.Code,
 				Nonce:   nonce,
@@ -371,7 +371,7 @@ func (api *RetestethAPI) SetChainParams(ctx context.Context, chainParams ChainPa
 		GasLimit:   uint64(chainParams.Genesis.GasLimit),
 		Difficulty: big.NewInt(0).Set((*big.Int)(chainParams.Genesis.Difficulty)),
 		Mixhash:    common.BigToHash((*big.Int)(chainParams.Genesis.MixHash)),
-		Coinbase:   chainParams.Genesis.Author,
+		Coinbase:   chainParams.Genesis.Author.String(),
 		ParentHash: chainParams.Genesis.ParentHash,
 		Alloc:      accounts,
 	}
@@ -476,7 +476,7 @@ func (api *RetestethAPI) mineBlock() error {
 		Extra:      api.extraData,
 		Time:       timestamp,
 	}
-	header.Coinbase = api.author
+	header.Coinbase = api.author.String()
 	if api.engine != nil {
 		api.engine.Prepare(api.blockchain, header)
 	}

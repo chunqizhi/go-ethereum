@@ -53,7 +53,7 @@ type Genesis struct {
 	GasLimit   uint64              `json:"gasLimit"   gencodec:"required"`
 	Difficulty *big.Int            `json:"difficulty" gencodec:"required"`
 	Mixhash    common.Hash         `json:"mixHash"`
-	Coinbase   common.Address      `json:"coinbase"`
+	Coinbase   string      `json:"coinbase"`
 	Alloc      GenesisAlloc        `json:"alloc"      gencodec:"required"`
 
 	// These fields are used for consensus tests. Please don't use them
@@ -64,7 +64,7 @@ type Genesis struct {
 }
 
 // GenesisAlloc specifies the initial state that is part of the genesis block.
-type GenesisAlloc map[common.Address]GenesisAccount
+type GenesisAlloc map[string]GenesisAccount
 
 func (ga *GenesisAlloc) UnmarshalJSON(data []byte) error {
 	m := make(map[common.UnprefixedAddress]GenesisAccount)
@@ -73,7 +73,7 @@ func (ga *GenesisAlloc) UnmarshalJSON(data []byte) error {
 	}
 	*ga = make(GenesisAlloc)
 	for addr, a := range m {
-		(*ga)[common.Address(addr)] = a
+		(*ga)[common.Address(addr).String()] = a
 	}
 	return nil
 }
@@ -257,11 +257,12 @@ func (g *Genesis) ToBlock(db ethdb.Database) *types.Block {
 	}
 	statedb, _ := state.New(common.Hash{}, state.NewDatabase(db), nil)
 	for addr, account := range g.Alloc {
-		statedb.AddBalance(addr, account.Balance)
-		statedb.SetCode(addr, account.Code)
-		statedb.SetNonce(addr, account.Nonce)
+		a:=common.HexToAddress(addr)
+		statedb.AddBalance(a, account.Balance)
+		statedb.SetCode(a, account.Code)
+		statedb.SetNonce(a, account.Nonce)
 		for key, value := range account.Storage {
-			statedb.SetState(addr, key, value)
+			statedb.SetState(a, key, value)
 		}
 	}
 	root := statedb.IntermediateRoot(false)
@@ -327,7 +328,7 @@ func (g *Genesis) MustCommit(db ethdb.Database) *types.Block {
 
 // GenesisBlockForTesting creates and writes a block in which addr has the given wei balance.
 func GenesisBlockForTesting(db ethdb.Database, addr common.Address, balance *big.Int) *types.Block {
-	g := Genesis{Alloc: GenesisAlloc{addr: {Balance: balance}}}
+	g := Genesis{Alloc: GenesisAlloc{addr.String(): {Balance: balance}}}
 	return g.MustCommit(db)
 }
 
@@ -402,17 +403,17 @@ func DeveloperGenesisBlock(period uint64, faucet common.Address) *Genesis {
 		ExtraData:  append(append(make([]byte, 32), faucet[:]...), make([]byte, crypto.SignatureLength)...),
 		GasLimit:   11500000,
 		Difficulty: big.NewInt(1),
-		Alloc: map[common.Address]GenesisAccount{
-			common.BytesToAddress([]byte{1}): {Balance: big.NewInt(1)}, // ECRecover
-			common.BytesToAddress([]byte{2}): {Balance: big.NewInt(1)}, // SHA256
-			common.BytesToAddress([]byte{3}): {Balance: big.NewInt(1)}, // RIPEMD
-			common.BytesToAddress([]byte{4}): {Balance: big.NewInt(1)}, // Identity
-			common.BytesToAddress([]byte{5}): {Balance: big.NewInt(1)}, // ModExp
-			common.BytesToAddress([]byte{6}): {Balance: big.NewInt(1)}, // ECAdd
-			common.BytesToAddress([]byte{7}): {Balance: big.NewInt(1)}, // ECScalarMul
-			common.BytesToAddress([]byte{8}): {Balance: big.NewInt(1)}, // ECPairing
-			common.BytesToAddress([]byte{9}): {Balance: big.NewInt(1)}, // BLAKE2b
-			faucet:                           {Balance: new(big.Int).Sub(new(big.Int).Lsh(big.NewInt(1), 256), big.NewInt(9))},
+		Alloc: map[string]GenesisAccount{
+			common.BytesToAddress([]byte{1}).String(): {Balance: big.NewInt(1)}, // ECRecover
+			common.BytesToAddress([]byte{2}).String(): {Balance: big.NewInt(1)}, // SHA256
+			common.BytesToAddress([]byte{3}).String(): {Balance: big.NewInt(1)}, // RIPEMD
+			common.BytesToAddress([]byte{4}).String(): {Balance: big.NewInt(1)}, // Identity
+			common.BytesToAddress([]byte{5}).String(): {Balance: big.NewInt(1)}, // ModExp
+			common.BytesToAddress([]byte{6}).String(): {Balance: big.NewInt(1)}, // ECAdd
+			common.BytesToAddress([]byte{7}).String(): {Balance: big.NewInt(1)}, // ECScalarMul
+			common.BytesToAddress([]byte{8}).String(): {Balance: big.NewInt(1)}, // ECPairing
+			common.BytesToAddress([]byte{9}).String(): {Balance: big.NewInt(1)}, // BLAKE2b
+			faucet.String():                           {Balance: new(big.Int).Sub(new(big.Int).Lsh(big.NewInt(1), 256), big.NewInt(9))},
 		},
 	}
 }
@@ -424,7 +425,7 @@ func decodePrealloc(data string) GenesisAlloc {
 	}
 	ga := make(GenesisAlloc, len(p))
 	for _, account := range p {
-		ga[common.BigToAddress(account.Addr)] = GenesisAccount{Balance: account.Balance}
+		ga[common.BigToAddress(account.Addr).String()] = GenesisAccount{Balance: account.Balance}
 	}
 	return ga
 }
