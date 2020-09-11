@@ -199,8 +199,8 @@ type signTransactionResult struct {
 func (api *ExternalSigner) SignTx(account accounts.Account, tx *types.Transaction, chainID *big.Int) (*types.Transaction, error) {
 	data := hexutil.Bytes(tx.Data())
 	var to *common.MixedcaseAddress
-	if tx.To() != nil {
-		t := common.NewMixedcaseAddress(*tx.To())
+	if tx.To() != "" {
+		t := common.NewMixedcaseAddress(common.HexToAddress(tx.To()))
 		to = &t
 	}
 	args := &core.SendTxArgs{

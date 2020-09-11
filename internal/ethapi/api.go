@@ -150,8 +150,8 @@ func (s *PublicTxPoolAPI) Inspect() map[string]map[string]map[string]string {
 
 	// Define a formatter to flatten a transaction into a string
 	var format = func(tx *types.Transaction) string {
-		if to := tx.To(); to != nil {
-			return fmt.Sprintf("%s: %v wei + %v gas × %v wei", tx.To().Hex(), tx.Value(), tx.Gas(), tx.GasPrice())
+		if to := tx.To(); to != "" {
+			return fmt.Sprintf("%s: %v wei + %v gas × %v wei", tx.To(), tx.Value(), tx.Gas(), tx.GasPrice())
 		}
 		return fmt.Sprintf("contract creation: %v wei + %v gas × %v wei", tx.Value(), tx.Gas(), tx.GasPrice())
 	}
@@ -186,6 +186,9 @@ func NewPublicAccountAPI(am *accounts.Manager) *PublicAccountAPI {
 }
 
 // Accounts returns the collection of accounts this node manages
+//func (s *PublicAccountAPI) Accounts() []common.Address {
+//	return s.am.Accounts()
+//}
 func (s *PublicAccountAPI) Accounts() []string {
 	return s.am.Accounts()
 }
@@ -209,6 +212,9 @@ func NewPrivateAccountAPI(b Backend, nonceLock *AddrLocker) *PrivateAccountAPI {
 }
 
 // listAccounts will return a list of addresses for accounts this node manages.
+//func (s *PrivateAccountAPI) ListAccounts() []common.Address {
+//	return s.am.Accounts()
+//}
 func (s *PrivateAccountAPI) ListAccounts() []string {
 	return s.am.Accounts()
 }
@@ -282,13 +288,27 @@ func (s *PrivateAccountAPI) NewAccount(password string) (string, error) {
 	}
 	acc, err := ks.NewAccount(password)
 	if err == nil {
-		log.Info("Your new key was generated", "address", acc.Address.String())
+		log.Info("Your new key was generated", "address", acc.Address)
 		log.Warn("Please backup your key file!", "path", acc.URL.Path)
 		log.Warn("Please remember your password!")
 		return acc.Address.String(), nil
 	}
 	return "", err
 }
+//func (s *PrivateAccountAPI) NewAccount(password string) (common.Address, error) {
+//	ks, err := fetchKeystore(s.am)
+//	if err != nil {
+//		return common.Address{}, err
+//	}
+//	acc, err := ks.NewAccount(password)
+//	if err == nil {
+//		log.Info("Your new key was generated", "address", acc.Address)
+//		log.Warn("Please backup your key file!", "path", acc.URL.Path)
+//		log.Warn("Please remember your password!")
+//		return acc.Address, nil
+//	}
+//	return common.Address{}, err
+//}
 
 // fetchKeystore retrieves the encrypted keystore from the account manager.
 func fetchKeystore(am *accounts.Manager) (*keystore.KeyStore, error) {
@@ -548,6 +568,13 @@ func (s *PublicBlockChainAPI) BlockNumber() hexutil.Uint64 {
 // GetBalance returns the amount of wei for the given address in the state of the
 // given block number. The rpc.LatestBlockNumber and rpc.PendingBlockNumber meta
 // block numbers are also allowed.
+//func (s *PublicBlockChainAPI) GetBalance(ctx context.Context, address common.Address, blockNrOrHash rpc.BlockNumberOrHash) (*hexutil.Big, error) {
+//	state, _, err := s.b.StateAndHeaderByNumberOrHash(ctx, blockNrOrHash)
+//	if state == nil || err != nil {
+//		return nil, err
+//	}
+//	return (*hexutil.Big)(state.GetBalance(address)), state.Error()
+//}
 func (s *PublicBlockChainAPI) GetBalance(ctx context.Context, address string, blockNrOrHash rpc.BlockNumberOrHash) (*hexutil.Big, error) {
 	state, _, err := s.b.StateAndHeaderByNumberOrHash(ctx, blockNrOrHash)
 	if state == nil || err != nil {
@@ -753,8 +780,8 @@ func (s *PublicBlockChainAPI) GetStorageAt(ctx context.Context, address common.A
 
 // CallArgs represents the arguments for a call.
 type CallArgs struct {
-	From     *common.Address `json:"from"`
-	To       *common.Address `json:"to"`
+	From     string `json:"from"`
+	To       string `json:"to"`
 	Gas      *hexutil.Uint64 `json:"gas"`
 	GasPrice *hexutil.Big    `json:"gasPrice"`
 	Value    *hexutil.Big    `json:"value"`
@@ -764,10 +791,10 @@ type CallArgs struct {
 // ToMessage converts CallArgs to the Message type used by the core evm
 func (args *CallArgs) ToMessage(globalGasCap uint64) types.Message {
 	// Set sender address or use zero address if none specified.
-	var addr common.Address
-	if args.From != nil {
-		addr = *args.From
-	}
+	//var addr common.Address
+	//if args.From != nil {
+	//	addr = *args.From
+	//}
 
 	// Set default gas & gas price if none were set
 	gas := globalGasCap
@@ -796,7 +823,7 @@ func (args *CallArgs) ToMessage(globalGasCap uint64) types.Message {
 		data = []byte(*args.Data)
 	}
 
-	msg := types.NewMessage(addr, args.To, 0, value, gas, gasPrice, data, false)
+	msg := types.NewMessage(args.From, args.To, 0, value, gas, gasPrice, data, false)
 	return msg
 }
 
@@ -951,9 +978,9 @@ func DoEstimateGas(ctx context.Context, b Backend, args CallArgs, blockNrOrHash 
 		cap uint64
 	)
 	// Use zero address if sender unspecified.
-	if args.From == nil {
-		args.From = new(common.Address)
-	}
+	//if args.From == nil {
+	//	args.From = new(common.Address)
+	//}
 	// Determine the highest gas limit can be used during the estimation.
 	if args.Gas != nil && uint64(*args.Gas) >= params.TxGas {
 		hi = uint64(*args.Gas)
@@ -971,7 +998,7 @@ func DoEstimateGas(ctx context.Context, b Backend, args CallArgs, blockNrOrHash 
 		if err != nil {
 			return 0, err
 		}
-		balance := state.GetBalance(*args.From) // from can't be nil
+		balance := state.GetBalance(common.HexToAddress(args.From)) // from can't be nil
 		available := new(big.Int).Set(balance)
 		if args.Value != nil {
 			if args.Value.ToInt().Cmp(available) >= 0 {
@@ -1201,13 +1228,13 @@ func (s *PublicBlockChainAPI) rpcMarshalBlock(ctx context.Context, b *types.Bloc
 type RPCTransaction struct {
 	BlockHash        *common.Hash    `json:"blockHash"`
 	BlockNumber      *hexutil.Big    `json:"blockNumber"`
-	From             common.Address  `json:"from"`
+	From             string  `json:"from"`
 	Gas              hexutil.Uint64  `json:"gas"`
 	GasPrice         *hexutil.Big    `json:"gasPrice"`
 	Hash             common.Hash     `json:"hash"`
 	Input            hexutil.Bytes   `json:"input"`
 	Nonce            hexutil.Uint64  `json:"nonce"`
-	To               *common.Address `json:"to"`
+	To               string `json:"to"`
 	TransactionIndex *hexutil.Uint64 `json:"transactionIndex"`
 	Value            *hexutil.Big    `json:"value"`
 	V                *hexutil.Big    `json:"v"`
@@ -1226,7 +1253,7 @@ func newRPCTransaction(tx *types.Transaction, blockHash common.Hash, blockNumber
 	v, r, s := tx.RawSignatureValues()
 
 	result := &RPCTransaction{
-		From:     from,
+		From:     from.String(),
 		Gas:      hexutil.Uint64(tx.Gas()),
 		GasPrice: (*hexutil.Big)(tx.GasPrice()),
 		Hash:     tx.Hash(),
@@ -1516,11 +1543,9 @@ func (args *SendTxArgs) setDefaults(ctx context.Context, b Backend) error {
 		if input == nil {
 			input = args.Data
 		}
-		af:=common.HexToAddress(args.From)
-		at:=common.HexToAddress(args.To)
 		callArgs := CallArgs{
-			From:     &af, // From shouldn't be nil
-			To:       &at,
+			From:     args.From, // From shouldn't be nil
+			To:       args.To,
 			GasPrice: args.GasPrice,
 			Value:    args.Value,
 			Data:     input,
@@ -1546,7 +1571,7 @@ func (args *SendTxArgs) toTransaction() *types.Transaction {
 	if args.To == "" {
 		return types.NewContractCreation(uint64(*args.Nonce), (*big.Int)(args.Value), uint64(*args.Gas), (*big.Int)(args.GasPrice), input)
 	}
-	return types.NewTransaction(uint64(*args.Nonce), common.HexToAddress(args.To), (*big.Int)(args.Value), uint64(*args.Gas), (*big.Int)(args.GasPrice), input)
+	return types.NewTransaction(uint64(*args.Nonce), args.To, (*big.Int)(args.Value), uint64(*args.Gas), (*big.Int)(args.GasPrice), input)
 }
 
 // SubmitTransaction is a helper function that submits tx to txPool and logs a message.
@@ -1559,7 +1584,7 @@ func SubmitTransaction(ctx context.Context, b Backend, tx *types.Transaction) (c
 	if err := b.SendTx(ctx, tx); err != nil {
 		return common.Hash{}, err
 	}
-	if tx.To() == nil {
+	if tx.To() == "" {
 		signer := types.MakeSigner(b.ChainConfig(), b.CurrentBlock().Number())
 		from, err := types.Sender(signer, tx)
 		if err != nil {
@@ -1754,8 +1779,7 @@ func (s *PublicTransactionPoolAPI) Resend(ctx context.Context, sendArgs SendTxAr
 			signer = types.NewEIP155Signer(p.ChainId())
 		}
 		wantSigHash := signer.Hash(matchTx)
-
-		if pFrom, err := types.Sender(signer, p); err == nil && pFrom == common.HexToAddress(sendArgs.From) && signer.Hash(p) == wantSigHash {
+		if pFrom, err := types.Sender(signer, p); err == nil &&pFrom == common.HexToAddress(sendArgs.From) && signer.Hash(p) == wantSigHash {
 			// Match. Re-sign and send the transaction.
 			if gasPrice != nil && (*big.Int)(gasPrice).Sign() != 0 {
 				sendArgs.GasPrice = gasPrice

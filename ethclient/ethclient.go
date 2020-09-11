@@ -152,7 +152,7 @@ func (ec *Client) getBlock(ctx context.Context, method string, args ...interface
 	txs := make([]*types.Transaction, len(body.Transactions))
 	for i, tx := range body.Transactions {
 		if tx.From != nil {
-			setSenderFromServer(tx.tx, *tx.From, body.Hash)
+			setSenderFromServer(tx.tx, common.HexToAddress(*tx.From), body.Hash)
 		}
 		txs[i] = tx.tx
 	}
@@ -188,7 +188,7 @@ type rpcTransaction struct {
 type txExtraInfo struct {
 	BlockNumber *string         `json:"blockNumber,omitempty"`
 	BlockHash   *common.Hash    `json:"blockHash,omitempty"`
-	From        *common.Address `json:"from,omitempty"`
+	From        *string `json:"from,omitempty"`
 }
 
 func (tx *rpcTransaction) UnmarshalJSON(msg []byte) error {
@@ -210,7 +210,7 @@ func (ec *Client) TransactionByHash(ctx context.Context, hash common.Hash) (tx *
 		return nil, false, fmt.Errorf("server returned transaction without signature")
 	}
 	if json.From != nil && json.BlockHash != nil {
-		setSenderFromServer(json.tx, *json.From, *json.BlockHash)
+		setSenderFromServer(json.tx, common.HexToAddress(*json.From), *json.BlockHash)
 	}
 	return json.tx, json.BlockNumber == nil, nil
 }
@@ -260,7 +260,7 @@ func (ec *Client) TransactionInBlock(ctx context.Context, blockHash common.Hash,
 		return nil, fmt.Errorf("server returned transaction without signature")
 	}
 	if json.From != nil && json.BlockHash != nil {
-		setSenderFromServer(json.tx, *json.From, *json.BlockHash)
+		setSenderFromServer(json.tx, common.HexToAddress(*json.From), *json.BlockHash)
 	}
 	return json.tx, err
 }
