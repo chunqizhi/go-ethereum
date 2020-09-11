@@ -21,7 +21,6 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/event"
 )
 
@@ -169,14 +168,14 @@ func (am *Manager) Wallet(url string) (Wallet, error) {
 }
 
 // Accounts returns all account addresses of all wallets within the account manager
-func (am *Manager) Accounts() []common.Address {
+func (am *Manager) Accounts() []string {
 	am.lock.RLock()
 	defer am.lock.RUnlock()
 
-	addresses := make([]common.Address, 0) // return [] instead of nil if empty
+	addresses := make([]string, 0) // return [] instead of nil if empty
 	for _, wallet := range am.wallets {
 		for _, account := range wallet.Accounts() {
-			addresses = append(addresses, account.Address)
+			addresses = append(addresses, account.Address.String())
 		}
 	}
 	return addresses
