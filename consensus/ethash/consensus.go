@@ -42,7 +42,8 @@ var (
 	ByzantiumBlockReward      = big.NewInt(5e+18) // Block reward in wei for successfully mining a block upward from Byzantium
 	ConstantinopleBlockReward = big.NewInt(5e+18) // Block reward in wei for successfully mining a block upward from Constantinople
 	maxUncles                 = 2                 // Maximum number of uncles allowed in a single block
-	allowedFutureBlockTime    = 15 * time.Second  // Max time from current time allowed for blocks, before they're considered future blocks
+	//allowedFutureBlockTime    = 15 * time.Second  // Max time from current time allowed for blocks, before they're considered future blocks
+	allowedFutureBlockTime    = 10 * time.Minute  // Max time from current time allowed for blocks, before they're considered future blocks
 
 	// calcDifficultyEip2384 is the difficulty adjustment algorithm as specified by EIP 2384.
 	// It offsets the bomb 4M blocks from Constantinople, so in total 9M blocks.
@@ -337,6 +338,7 @@ var (
 	big9          = big.NewInt(9)
 	big10         = big.NewInt(10)
 	bigMinus99    = big.NewInt(-99)
+	big480    = big.NewInt(480)
 )
 
 // makeDifficultyCalculator creates a difficultyCalculator with the given bomb-delay.
@@ -362,7 +364,8 @@ func makeDifficultyCalculator(bombDelay *big.Int) func(time uint64, parent *type
 
 		// (2 if len(parent_uncles) else 1) - (block_timestamp - parent_timestamp) // 9
 		x.Sub(bigTime, bigParentTime)
-		x.Div(x, big9)
+		//x.Div(x, big9)
+		x.Div(x, big480)
 		if parent.UncleHash == types.EmptyUncleHash {
 			x.Sub(big1, x)
 		} else {
