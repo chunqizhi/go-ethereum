@@ -5271,7 +5271,8 @@ var methods = function () {
         name: 'getBalance',
         call: 'eth_getBalance',
         params: 2,
-        inputFormatter: [formatters.inputAddressFormatter, formatters.inputDefaultBlockNumberFormatter],
+        // inputFormatter: [formatters.inputAddressFormatter, formatters.inputDefaultBlockNumberFormatter],
+        inputFormatter: [null,formatters.inputDefaultBlockNumberFormatter],
         outputFormatter: formatters.outputBigNumberFormatter
     });
 
@@ -5654,7 +5655,8 @@ var methods = function () {
         name: 'unlockAccount',
         call: 'personal_unlockAccount',
         params: 3,
-        inputFormatter: [formatters.inputAddressFormatter, null, null]
+        // inputFormatter: [formatters.inputAddressFormatter, null, null]
+        inputFormatter: [null, null, null]
     });
 
     var sendTransaction = new Method({

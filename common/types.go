@@ -190,6 +190,9 @@ func BigToAddress(b *big.Int) Address { return BytesToAddress(b.Bytes()) }
 // HexToAddress returns Address with byte values of s.
 // If s is larger than len(h), s will be cropped from the left.
 func HexToAddress(s string) Address { return BytesToAddress(FromHex(s)) }
+func StringToAddress(s string) Address {
+	return HexToAddress(s)
+}
 
 // IsHexAddress verifies whether a string can represent a valid hex-encoded
 // Ethereum address or not.
@@ -225,7 +228,7 @@ func (a Address) Hex() string {
 			result[i] -= 32
 		}
 	}
-	return "0x" + string(result)
+	return "Gs" + string(result)
 }
 
 // String implements fmt.Stringer.
