@@ -3753,10 +3753,12 @@ var inputCallFormatter = function (options){
 var inputTransactionFormatter = function (options){
 
     options.from = options.from || config.defaultAccount;
-    options.from = inputAddressFormatter(options.from);
+    // options.from = inputAddressFormatter(options.from);
+    options.from = options.from;
 
     if (options.to) { // it might be contract creation
-        options.to = inputAddressFormatter(options.to);
+        // options.to = inputAddressFormatter(options.to);
+        options.to = options.to;
     }
 
     ['gasPrice', 'gas', 'value', 'nonce'].filter(function (key) {
