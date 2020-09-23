@@ -174,7 +174,7 @@ func SetupGenesisBlock(db ethdb.Database, genesis *Genesis) (*params.ChainConfig
 	// We have the genesis block in database(perhaps in ancient database)
 	// but the corresponding state is missing.
 	header := rawdb.ReadHeader(db, stored, 0)
-	if _, err := state.New(header.Root, state.NewDatabaseWithCache(db, 0, ""), nil); err != nil {
+	if _, err := state.New(common.HexToHash(header.Root), state.NewDatabaseWithCache(db, 0, ""), nil); err != nil {
 		if genesis == nil {
 			genesis = DefaultGenesisBlock()
 		}
@@ -269,14 +269,14 @@ func (g *Genesis) ToBlock(db ethdb.Database) *types.Block {
 		Number:     new(big.Int).SetUint64(g.Number),
 		Nonce:      types.EncodeNonce(g.Nonce),
 		Time:       g.Timestamp,
-		ParentHash: g.ParentHash,
+		ParentHash: g.ParentHash.Hex(),
 		Extra:      g.ExtraData,
 		GasLimit:   g.GasLimit,
 		GasUsed:    g.GasUsed,
 		Difficulty: g.Difficulty,
 		MixDigest:  g.Mixhash,
-		Coinbase:   g.Coinbase,
-		Root:       root,
+		Coinbase:   g.Coinbase.Hex(),
+		Root:       root.Hex(),
 	}
 	if g.GasLimit == 0 {
 		head.GasLimit = params.GenesisGasLimit

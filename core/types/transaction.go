@@ -50,7 +50,7 @@ type txdata struct {
 	AccountNonce uint64          `json:"nonce"    gencodec:"required"`
 	Price        *big.Int        `json:"gasPrice" gencodec:"required"`
 	GasLimit     uint64          `json:"gas"      gencodec:"required"`
-	Recipient    *common.Address `json:"to"       rlp:"nil"` // nil means contract creation
+	Recipient    *string `json:"to"       rlp:"nil"` // nil means contract creation
 	Amount       *big.Int        `json:"value"    gencodec:"required"`
 	Payload      []byte          `json:"input"    gencodec:"required"`
 
@@ -60,7 +60,7 @@ type txdata struct {
 	S *big.Int `json:"s" gencodec:"required"`
 
 	// This is only used when marshaling to JSON.
-	Hash *common.Hash `json:"hash" rlp:"-"`
+	Hash *string `json:"hash" rlp:"-"`
 }
 
 type txdataMarshaling struct {
@@ -86,9 +86,10 @@ func newTransaction(nonce uint64, to *common.Address, amount *big.Int, gasLimit 
 	if len(data) > 0 {
 		data = common.CopyBytes(data)
 	}
+	toAddr := to.Hex()
 	d := txdata{
 		AccountNonce: nonce,
-		Recipient:    to,
+		Recipient:    &toAddr,
 		Payload:      data,
 		Amount:       new(big.Int),
 		GasLimit:     gasLimit,
@@ -146,7 +147,7 @@ func (tx *Transaction) DecodeRLP(s *rlp.Stream) error {
 
 // MarshalJSON encodes the web3 RPC transaction format.
 func (tx *Transaction) MarshalJSON() ([]byte, error) {
-	hash := tx.Hash()
+	hash := tx.Hash().Hex()
 	data := tx.data
 	data.Hash = &hash
 	return data.MarshalJSON()
@@ -198,7 +199,8 @@ func (tx *Transaction) To() *common.Address {
 		return nil
 	}
 	to := *tx.data.Recipient
-	return &to
+	toAddr := common.HexToAddress(to)
+	return &toAddr
 }
 
 // Hash hashes the RLP encoding of tx.
@@ -241,7 +243,9 @@ func (tx *Transaction) AsMessage(s Signer) (Message, error) {
 	}
 
 	var err error
-	msg.from, err = Sender(s, tx)
+	var from common.Address
+	from, err = Sender(s, tx)
+	msg.from = from.Hex()
 	return msg, err
 }
 
@@ -409,8 +413,8 @@ func (t *TransactionsByPriceAndNonce) Pop() {
 //
 // NOTE: In a future PR this will be removed.
 type Message struct {
-	to         *common.Address
-	from       common.Address
+	to         *string
+	from       string
 	nonce      uint64
 	amount     *big.Int
 	gasLimit   uint64
@@ -420,9 +424,10 @@ type Message struct {
 }
 
 func NewMessage(from common.Address, to *common.Address, nonce uint64, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte, checkNonce bool) Message {
+	toA := to.Hex()
 	return Message{
-		from:       from,
-		to:         to,
+		from:       from.Hex(),
+		to:         &toA,
 		nonce:      nonce,
 		amount:     amount,
 		gasLimit:   gasLimit,
@@ -432,8 +437,10 @@ func NewMessage(from common.Address, to *common.Address, nonce uint64, amount *b
 	}
 }
 
-func (m Message) From() common.Address { return m.from }
-func (m Message) To() *common.Address  { return m.to }
+func (m Message) From() common.Address { return common.HexToAddress(m.from) }
+func (m Message) To() *common.Address  {
+	to := common.HexToAddress(*m.to)
+return &to }
 func (m Message) GasPrice() *big.Int   { return m.gasPrice }
 func (m Message) Value() *big.Int      { return m.amount }
 func (m Message) Gas() uint64          { return m.gasLimit }

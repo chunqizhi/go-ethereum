@@ -998,8 +998,8 @@ func (bc *BlockChain) Rollback(chain []common.Hash) {
 		// to low, so it's safe the update in-memory markers directly.
 		currentHeader := bc.hc.CurrentHeader()
 		if currentHeader.Hash() == hash {
-			newHeadHeader := bc.GetHeader(currentHeader.ParentHash, currentHeader.Number.Uint64()-1)
-			rawdb.WriteHeadHeaderHash(batch, currentHeader.ParentHash)
+			newHeadHeader := bc.GetHeader(common.HexToHash(currentHeader.ParentHash), currentHeader.Number.Uint64()-1)
+			rawdb.WriteHeadHeaderHash(batch, common.HexToHash(currentHeader.ParentHash))
 			bc.hc.SetCurrentHeader(newHeadHeader)
 		}
 		if currentFastBlock := bc.CurrentFastBlock(); currentFastBlock.Hash() == hash {
@@ -1497,7 +1497,7 @@ func (bc *BlockChain) writeBlockWithState(block *types.Block, receipts []*types.
 						log.Info("State in memory for too long, committing", "time", bc.gcproc, "allowance", bc.cacheConfig.TrieTimeLimit, "optimum", float64(chosen-lastWrite)/TriesInMemory)
 					}
 					// Flush an entire trie and restart the counters
-					triedb.Commit(header.Root, true, nil)
+					triedb.Commit(common.HexToHash(header.Root), true, nil)
 					lastWrite = chosen
 					bc.gcproc = 0
 				}
@@ -1789,7 +1789,7 @@ func (bc *BlockChain) insertChain(chain types.Blocks, verifySeals bool) (int, er
 		if parent == nil {
 			parent = bc.GetHeader(block.ParentHash(), block.NumberU64()-1)
 		}
-		statedb, err := state.New(parent.Root, bc.stateCache, bc.snaps)
+		statedb, err := state.New(common.HexToHash(parent.Root), bc.stateCache, bc.snaps)
 		if err != nil {
 			return it.index, err
 		}
@@ -1798,7 +1798,7 @@ func (bc *BlockChain) insertChain(chain types.Blocks, verifySeals bool) (int, er
 		var followupInterrupt uint32
 		if !bc.cacheConfig.TrieCleanNoPrefetch {
 			if followup, err := it.peek(); followup != nil && err == nil {
-				throwaway, _ := state.New(parent.Root, bc.stateCache, bc.snaps)
+				throwaway, _ := state.New(common.HexToHash(parent.Root), bc.stateCache, bc.snaps)
 				go func(start time.Time, followup *types.Block, throwaway *state.StateDB, interrupt *uint32) {
 					bc.prefetcher.Prefetch(followup, throwaway, bc.vmConfig, &followupInterrupt)
 
@@ -1991,11 +1991,11 @@ func (bc *BlockChain) insertSideChain(block *types.Block, it *insertIterator) (i
 		numbers []uint64
 	)
 	parent := it.previous()
-	for parent != nil && !bc.HasState(parent.Root) {
+	for parent != nil && !bc.HasState(common.HexToHash(parent.Root)) {
 		hashes = append(hashes, parent.Hash())
 		numbers = append(numbers, parent.Number.Uint64())
 
-		parent = bc.GetHeader(parent.ParentHash, parent.Number.Uint64()-1)
+		parent = bc.GetHeader(common.HexToHash(parent.ParentHash), parent.Number.Uint64()-1)
 	}
 	if parent == nil {
 		return it.index, errors.New("missing parent")

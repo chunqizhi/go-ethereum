@@ -1099,7 +1099,7 @@ func (pool *TxPool) reset(oldHead, newHead *types.Header) {
 	// If we're reorging an old state, reinject all dropped transactions
 	var reinject types.Transactions
 
-	if oldHead != nil && oldHead.Hash() != newHead.ParentHash {
+	if oldHead != nil && oldHead.Hash().Hex() != newHead.ParentHash {
 		// If the reorg is too deep, avoid doing it (will happen during fast sync)
 		oldNum := oldHead.Number.Uint64()
 		newNum := newHead.Number.Uint64()
@@ -1162,7 +1162,7 @@ func (pool *TxPool) reset(oldHead, newHead *types.Header) {
 	if newHead == nil {
 		newHead = pool.chain.CurrentBlock().Header() // Special case during testing
 	}
-	statedb, err := pool.chain.StateAt(newHead.Root)
+	statedb, err := pool.chain.StateAt(common.HexToHash(newHead.Root))
 	if err != nil {
 		log.Error("Failed to reset txpool state", "err", err)
 		return

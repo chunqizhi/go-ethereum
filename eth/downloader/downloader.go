@@ -749,7 +749,7 @@ func (d *Downloader) findAncestor(p *peerConnection, remoteHeader *types.Header)
 				if floor >= int64(d.genesis)-1 {
 					break
 				}
-				header = d.lightchain.GetHeaderByHash(header.ParentHash)
+				header = d.lightchain.GetHeaderByHash(common.HexToHash(header.ParentHash))
 			}
 		}
 		// We already know the "genesis" block number, cap floor to that
@@ -1605,7 +1605,7 @@ func (d *Downloader) importBlockResults(results []*fetchResult) error {
 func (d *Downloader) processFastSyncContent(latest *types.Header) error {
 	// Start syncing state of the reported head block. This should get us most of
 	// the state of the pivot block.
-	sync := d.syncState(latest.Root)
+	sync := d.syncState(common.HexToHash(latest.Root))
 	defer sync.Cancel()
 	closeOnErr := func(s *stateSync) {
 		if err := s.Wait(); err != nil && err != errCancelStateFetch && err != errCanceled {
@@ -1665,7 +1665,7 @@ func (d *Downloader) processFastSyncContent(latest *types.Header) error {
 			if oldPivot != P {
 				sync.Cancel()
 
-				sync = d.syncState(P.Header.Root)
+				sync = d.syncState(common.HexToHash(P.Header.Root))
 				defer sync.Cancel()
 				go closeOnErr(sync)
 				oldPivot = P

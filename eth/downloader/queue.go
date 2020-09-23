@@ -301,7 +301,7 @@ func (q *queue) Schedule(headers []*types.Header, from uint64) []*types.Header {
 			log.Warn("Header broke chain ordering", "number", header.Number, "hash", hash, "expected", from)
 			break
 		}
-		if q.headerHead != (common.Hash{}) && q.headerHead != header.ParentHash {
+		if q.headerHead != (common.Hash{}) && q.headerHead.Hex() != header.ParentHash {
 			log.Warn("Header broke chain ancestry", "number", header.Number, "hash", hash)
 			break
 		}
@@ -716,7 +716,7 @@ func (q *queue) DeliverHeaders(id string, headers []*types.Header, headerProcCh 
 				accepted = false
 				break
 			}
-			if headers[i].Hash() != header.ParentHash {
+			if headers[i].Hash().Hex() != header.ParentHash {
 				log.Warn("Header broke chain ancestry", "peer", id, "number", header.Number, "hash", hash)
 				accepted = false
 				break
@@ -771,7 +771,7 @@ func (q *queue) DeliverBodies(id string, txLists [][]*types.Transaction, uncleLi
 	q.lock.Lock()
 	defer q.lock.Unlock()
 	validate := func(index int, header *types.Header) error {
-		if types.DeriveSha(types.Transactions(txLists[index])) != header.TxHash {
+		if types.DeriveSha(types.Transactions(txLists[index])).Hex() != header.TxHash {
 			return errInvalidBody
 		}
 		if types.CalcUncleHash(uncleLists[index]) != header.UncleHash {
@@ -796,7 +796,7 @@ func (q *queue) DeliverReceipts(id string, receiptList [][]*types.Receipt) (int,
 	q.lock.Lock()
 	defer q.lock.Unlock()
 	validate := func(index int, header *types.Header) error {
-		if types.DeriveSha(types.Receipts(receiptList[index])) != header.ReceiptHash {
+		if types.DeriveSha(types.Receipts(receiptList[index])).Hex() != header.ReceiptHash {
 			return errInvalidReceipt
 		}
 		return nil

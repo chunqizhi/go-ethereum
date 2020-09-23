@@ -344,8 +344,8 @@ func (lc *LightChain) Rollback(chain []common.Hash) {
 		// last step, however the direction of rollback is from high
 		// to low, so it's safe the update in-memory markers directly.
 		if head := lc.hc.CurrentHeader(); head.Hash() == hash {
-			rawdb.WriteHeadHeaderHash(batch, head.ParentHash)
-			lc.hc.SetCurrentHeader(lc.GetHeader(head.ParentHash, head.Number.Uint64()-1))
+			rawdb.WriteHeadHeaderHash(batch, common.HexToHash(head.ParentHash))
+			lc.hc.SetCurrentHeader(lc.GetHeader(common.HexToHash(head.ParentHash), head.Number.Uint64()-1))
 		}
 	}
 	if err := batch.Write(); err != nil {

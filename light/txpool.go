@@ -228,11 +228,11 @@ func (pool *TxPool) reorgOnNewHead(ctx context.Context, newHeader *types.Header)
 	for oldh.Hash() != newh.Hash() {
 		if oldh.Number.Uint64() >= newh.Number.Uint64() {
 			oldHashes = append(oldHashes, oldh.Hash())
-			oldh = pool.chain.GetHeader(oldh.ParentHash, oldh.Number.Uint64()-1)
+			oldh = pool.chain.GetHeader(common.HexToHash(oldh.ParentHash), oldh.Number.Uint64()-1)
 		}
 		if oldh.Number.Uint64() < newh.Number.Uint64() {
 			newHashes = append(newHashes, newh.Hash())
-			newh = pool.chain.GetHeader(newh.ParentHash, newh.Number.Uint64()-1)
+			newh = pool.chain.GetHeader(common.HexToHash(newh.ParentHash), newh.Number.Uint64()-1)
 			if newh == nil {
 				// happens when CHT syncing, nothing to do
 				newh = oldh

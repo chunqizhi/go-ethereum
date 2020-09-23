@@ -82,7 +82,7 @@ var (
 // Author implements consensus.Engine, returning the header's coinbase as the
 // proof-of-work verified author of the block.
 func (ethash *Ethash) Author(header *types.Header) (common.Address, error) {
-	return header.Coinbase, nil
+	return common.HexToAddress(header.Coinbase), nil
 }
 
 // VerifyHeader checks whether a header conforms to the consensus rules of the
@@ -97,7 +97,7 @@ func (ethash *Ethash) VerifyHeader(chain consensus.ChainHeaderReader, header *ty
 	if chain.GetHeader(header.Hash(), number) != nil {
 		return nil
 	}
-	parent := chain.GetHeader(header.ParentHash, number-1)
+	parent := chain.GetHeader(common.HexToHash(header.ParentHash), number-1)
 	if parent == nil {
 		return consensus.ErrUnknownAncestor
 	}
@@ -173,8 +173,8 @@ func (ethash *Ethash) VerifyHeaders(chain consensus.ChainHeaderReader, headers [
 func (ethash *Ethash) verifyHeaderWorker(chain consensus.ChainHeaderReader, headers []*types.Header, seals []bool, index int) error {
 	var parent *types.Header
 	if index == 0 {
-		parent = chain.GetHeader(headers[0].ParentHash, headers[0].Number.Uint64()-1)
-	} else if headers[index-1].Hash() == headers[index].ParentHash {
+		parent = chain.GetHeader(common.HexToHash(headers[0].ParentHash), headers[0].Number.Uint64()-1)
+	} else if headers[index-1].Hash().Hex() == headers[index].ParentHash {
 		parent = headers[index-1]
 	}
 	if parent == nil {
@@ -231,10 +231,10 @@ func (ethash *Ethash) VerifyUncles(chain consensus.ChainReader, block *types.Blo
 		if ancestors[hash] != nil {
 			return errUncleIsAncestor
 		}
-		if ancestors[uncle.ParentHash] == nil || uncle.ParentHash == block.ParentHash() {
+		if ancestors[common.HexToHash(uncle.ParentHash)] == nil || uncle.ParentHash == block.ParentHash().Hex() {
 			return errDanglingUncle
 		}
-		if err := ethash.verifyHeader(chain, uncle, ancestors[uncle.ParentHash], true, true); err != nil {
+		if err := ethash.verifyHeader(chain, uncle, ancestors[common.HexToHash(uncle.ParentHash)], true, true); err != nil {
 			return err
 		}
 	}
@@ -562,7 +562,7 @@ func (ethash *Ethash) verifySeal(chain consensus.ChainHeaderReader, header *type
 // Prepare implements consensus.Engine, initializing the difficulty field of a
 // header to conform to the ethash protocol. The changes are done inline.
 func (ethash *Ethash) Prepare(chain consensus.ChainHeaderReader, header *types.Header) error {
-	parent := chain.GetHeader(header.ParentHash, header.Number.Uint64()-1)
+	parent := chain.GetHeader(common.HexToHash(header.ParentHash), header.Number.Uint64()-1)
 	if parent == nil {
 		return consensus.ErrUnknownAncestor
 	}
@@ -575,7 +575,7 @@ func (ethash *Ethash) Prepare(chain consensus.ChainHeaderReader, header *types.H
 func (ethash *Ethash) Finalize(chain consensus.ChainHeaderReader, header *types.Header, state *state.StateDB, txs []*types.Transaction, uncles []*types.Header) {
 	// Accumulate any block and uncle rewards and commit the final state root
 	accumulateRewards(chain.Config(), state, header, uncles)
-	header.Root = state.IntermediateRoot(chain.Config().IsEIP158(header.Number))
+	header.Root = state.IntermediateRoot(chain.Config().IsEIP158(header.Number)).Hex()
 }
 
 // FinalizeAndAssemble implements consensus.Engine, accumulating the block and
@@ -583,7 +583,7 @@ func (ethash *Ethash) Finalize(chain consensus.ChainHeaderReader, header *types.
 func (ethash *Ethash) FinalizeAndAssemble(chain consensus.ChainHeaderReader, header *types.Header, state *state.StateDB, txs []*types.Transaction, uncles []*types.Header, receipts []*types.Receipt) (*types.Block, error) {
 	// Accumulate any block and uncle rewards and commit the final state root
 	accumulateRewards(chain.Config(), state, header, uncles)
-	header.Root = state.IntermediateRoot(chain.Config().IsEIP158(header.Number))
+	header.Root = state.IntermediateRoot(chain.Config().IsEIP158(header.Number)).Hex()
 
 	// Header seems complete, assemble into a block and return
 	return types.NewBlock(header, txs, uncles, receipts), nil
@@ -651,10 +651,10 @@ func accumulateRewards(config *params.ChainConfig, state *state.StateDB, header 
 		r.Sub(r, header.Number)
 		r.Mul(r, blockReward)
 		r.Div(r, big8)
-		state.AddBalance(uncle.Coinbase, r)
+		state.AddBalance(common.HexToAddress(uncle.Coinbase), r)
 
 		r.Div(blockReward, big32)
 		reward.Add(reward, r)
 	}
-	state.AddBalance(header.Coinbase, reward)
+	state.AddBalance(common.HexToAddress(header.Coinbase), reward)
 }

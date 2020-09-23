@@ -483,7 +483,7 @@ func (h *serverHandler) handleMsg(p *clientPeer, wg *sync.WaitGroup) error {
 					}
 					triedb := h.blockchain.StateCache().TrieDB()
 
-					account, err := h.getAccount(triedb, header.Root, common.BytesToHash(request.AccKey))
+					account, err := h.getAccount(triedb, common.HexToHash(header.Root), common.BytesToHash(request.AccKey))
 					if err != nil {
 						p.Log().Warn("Failed to retrieve account for code", "block", header.Number, "hash", header.Hash(), "account", common.BytesToHash(request.AccKey), "err", err)
 						p.bumpInvalid()
@@ -619,7 +619,7 @@ func (h *serverHandler) handleMsg(p *clientPeer, wg *sync.WaitGroup) error {
 							p.bumpInvalid()
 							continue
 						}
-						root = header.Root
+						root = common.HexToHash(header.Root)
 					}
 					// If a header lookup failed (non existent), ignore subsequent requests for the same header
 					if root == (common.Hash{}) {

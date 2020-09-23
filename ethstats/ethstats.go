@@ -541,17 +541,17 @@ func (s *Service) reportLatency(conn *connWrapper) error {
 // blockStats is the information to report about individual blocks.
 type blockStats struct {
 	Number     *big.Int       `json:"number"`
-	Hash       common.Hash    `json:"hash"`
-	ParentHash common.Hash    `json:"parentHash"`
+	Hash       string    `json:"hash"`
+	ParentHash string    `json:"parentHash"`
 	Timestamp  *big.Int       `json:"timestamp"`
-	Miner      common.Address `json:"miner"`
+	Miner      string `json:"miner"`
 	GasUsed    uint64         `json:"gasUsed"`
 	GasLimit   uint64         `json:"gasLimit"`
 	Diff       string         `json:"difficulty"`
 	TotalDiff  string         `json:"totalDifficulty"`
 	Txs        []txStats      `json:"transactions"`
-	TxHash     common.Hash    `json:"transactionsRoot"`
-	Root       common.Hash    `json:"stateRoot"`
+	TxHash     string    `json:"transactionsRoot"`
+	Root       string    `json:"stateRoot"`
 	Uncles     uncleStats     `json:"uncles"`
 }
 
@@ -630,10 +630,10 @@ func (s *Service) assembleBlockStats(block *types.Block) *blockStats {
 
 	return &blockStats{
 		Number:     header.Number,
-		Hash:       header.Hash(),
+		Hash:       header.Hash().Hex(),
 		ParentHash: header.ParentHash,
 		Timestamp:  new(big.Int).SetUint64(header.Time),
-		Miner:      author,
+		Miner:      author.Hex(),
 		GasUsed:    header.GasUsed,
 		GasLimit:   header.GasLimit,
 		Diff:       header.Difficulty.String(),

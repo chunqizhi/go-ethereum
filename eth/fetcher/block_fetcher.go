@@ -540,7 +540,7 @@ func (f *BlockFetcher) loop() {
 						announce.time = task.time
 
 						// If the block is empty (header only), short circuit into the final import queue
-						if header.TxHash == types.DeriveSha(types.Transactions{}) && header.UncleHash == types.CalcUncleHash([]*types.Header{}) {
+						if header.TxHash == types.DeriveSha(types.Transactions{}).Hex() && header.UncleHash == types.CalcUncleHash([]*types.Header{}) {
 							log.Trace("Block empty, skipping body retrieval", "peer", announce.origin, "number", header.Number, "hash", header.Hash())
 
 							block := types.NewBlockWithHeader(header)
@@ -613,15 +613,15 @@ func (f *BlockFetcher) loop() {
 							continue
 						}
 						if uncleHash == (common.Hash{}) {
-							uncleHash = types.CalcUncleHash(task.uncles[i])
+							uncleHash = common.HexToHash(types.CalcUncleHash(task.uncles[i]))
 						}
-						if uncleHash != announce.header.UncleHash {
+						if uncleHash.Hex() != announce.header.UncleHash {
 							continue
 						}
 						if txnHash == (common.Hash{}) {
 							txnHash = types.DeriveSha(types.Transactions(task.transactions[i]))
 						}
-						if txnHash != announce.header.TxHash {
+						if txnHash.Hex() != announce.header.TxHash {
 							continue
 						}
 						// Mark the body matched, reassemble if still unknown
@@ -752,7 +752,7 @@ func (f *BlockFetcher) importHeaders(peer string, header *types.Header) {
 	go func() {
 		defer func() { f.done <- hash }()
 		// If the parent's unknown, abort insertion
-		parent := f.getHeader(header.ParentHash)
+		parent := f.getHeader(common.HexToHash(header.ParentHash))
 		if parent == nil {
 			log.Debug("Unknown parent of propagated header", "peer", peer, "number", header.Number, "hash", hash, "parent", header.ParentHash)
 			return

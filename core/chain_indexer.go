@@ -222,7 +222,7 @@ func (c *ChainIndexer) eventLoop(currentHeader *types.Header, events chan ChainH
 				return
 			}
 			header := ev.Block.Header()
-			if header.ParentHash != prevHash {
+			if header.ParentHash != prevHash.Hex() {
 				// Reorg to the common ancestor if needed (might not exist in light sync mode, skip reorg then)
 				// TODO(karalabe, zsfelfoldi): This seems a bit brittle, can we detect this case explicitly?
 
@@ -402,7 +402,7 @@ func (c *ChainIndexer) processSection(section uint64, lastHead common.Hash) (com
 		header := rawdb.ReadHeader(c.chainDb, hash, number)
 		if header == nil {
 			return common.Hash{}, fmt.Errorf("block #%d [%x…] not found", number, hash[:4])
-		} else if header.ParentHash != lastHead {
+		} else if header.ParentHash != lastHead.Hex() {
 			return common.Hash{}, fmt.Errorf("chain reorged during section processing")
 		}
 		if err := c.backend.Process(c.ctx, header); err != nil {

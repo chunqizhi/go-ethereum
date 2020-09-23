@@ -349,7 +349,7 @@ type BlockType int
 type Block struct {
 	backend      ethapi.Backend
 	numberOrHash *rpc.BlockNumberOrHash
-	hash         common.Hash
+	hash         string
 	header       *types.Header
 	block        *types.Block
 	receipts     []*types.Receipt
@@ -370,7 +370,7 @@ func (b *Block) resolve(ctx context.Context) (*types.Block, error) {
 	if b.block != nil && b.header == nil {
 		b.header = b.block.Header()
 		if hash, ok := b.numberOrHash.Hash(); ok {
-			b.hash = hash
+			b.hash = hash.Hex()
 		}
 	}
 	return b.block, err
@@ -380,13 +380,13 @@ func (b *Block) resolve(ctx context.Context) (*types.Block, error) {
 // if necessary. Call this function instead of `resolve` unless you need the
 // additional data (transactions and uncles).
 func (b *Block) resolveHeader(ctx context.Context) (*types.Header, error) {
-	if b.numberOrHash == nil && b.hash == (common.Hash{}) {
+	if b.numberOrHash == nil && b.hash == (common.Hash{}).Hex() {
 		return nil, errBlockInvariant
 	}
 	var err error
 	if b.header == nil {
-		if b.hash != (common.Hash{}) {
-			b.header, err = b.backend.HeaderByHash(ctx, b.hash)
+		if b.hash != (common.Hash{}).Hex() {
+			b.header, err = b.backend.HeaderByHash(ctx, common.HexToHash(b.hash))
 		} else {
 			b.header, err = b.backend.HeaderByNumberOrHash(ctx, *b.numberOrHash)
 		}
@@ -399,14 +399,14 @@ func (b *Block) resolveHeader(ctx context.Context) (*types.Header, error) {
 func (b *Block) resolveReceipts(ctx context.Context) ([]*types.Receipt, error) {
 	if b.receipts == nil {
 		hash := b.hash
-		if hash == (common.Hash{}) {
+		if hash == (common.Hash{}).Hex() {
 			header, err := b.resolveHeader(ctx)
 			if err != nil {
 				return nil, err
 			}
-			hash = header.Hash()
+			hash = header.Hash().Hex()
 		}
-		receipts, err := b.backend.GetReceipts(ctx, hash)
+		receipts, err := b.backend.GetReceipts(ctx, common.HexToHash(hash))
 		if err != nil {
 			return nil, err
 		}
@@ -425,14 +425,14 @@ func (b *Block) Number(ctx context.Context) (hexutil.Uint64, error) {
 }
 
 func (b *Block) Hash(ctx context.Context) (common.Hash, error) {
-	if b.hash == (common.Hash{}) {
+	if b.hash == (common.Hash{}).Hex() {
 		header, err := b.resolveHeader(ctx)
 		if err != nil {
 			return common.Hash{}, err
 		}
-		b.hash = header.Hash()
+		b.hash = header.Hash().Hex()
 	}
-	return b.hash, nil
+	return common.HexToHash(b.hash), nil
 }
 
 func (b *Block) GasLimit(ctx context.Context) (hexutil.Uint64, error) {
@@ -506,7 +506,7 @@ func (b *Block) TransactionsRoot(ctx context.Context) (common.Hash, error) {
 	if err != nil {
 		return common.Hash{}, err
 	}
-	return header.TxHash, nil
+	return common.HexToHash(header.TxHash), nil
 }
 
 func (b *Block) StateRoot(ctx context.Context) (common.Hash, error) {
@@ -514,7 +514,7 @@ func (b *Block) StateRoot(ctx context.Context) (common.Hash, error) {
 	if err != nil {
 		return common.Hash{}, err
 	}
-	return header.Root, nil
+	return common.HexToHash(header.Root), nil
 }
 
 func (b *Block) ReceiptsRoot(ctx context.Context) (common.Hash, error) {
@@ -522,7 +522,7 @@ func (b *Block) ReceiptsRoot(ctx context.Context) (common.Hash, error) {
 	if err != nil {
 		return common.Hash{}, err
 	}
-	return header.ReceiptHash, nil
+	return common.HexToHash(header.ReceiptHash), nil
 }
 
 func (b *Block) OmmerHash(ctx context.Context) (common.Hash, error) {
@@ -530,7 +530,7 @@ func (b *Block) OmmerHash(ctx context.Context) (common.Hash, error) {
 	if err != nil {
 		return common.Hash{}, err
 	}
-	return header.UncleHash, nil
+	return common.HexToHash(header.UncleHash), nil
 }
 
 func (b *Block) OmmerCount(ctx context.Context) (*int32, error) {
@@ -577,14 +577,14 @@ func (b *Block) LogsBloom(ctx context.Context) (hexutil.Bytes, error) {
 
 func (b *Block) TotalDifficulty(ctx context.Context) (hexutil.Big, error) {
 	h := b.hash
-	if h == (common.Hash{}) {
+	if h == (common.Hash{}).Hex() {
 		header, err := b.resolveHeader(ctx)
 		if err != nil {
 			return hexutil.Big{}, err
 		}
-		h = header.Hash()
+		h = header.Hash().Hex()
 	}
-	return hexutil.Big(*b.backend.GetTd(ctx, h)), nil
+	return hexutil.Big(*b.backend.GetTd(ctx, common.HexToHash(h))), nil
 }
 
 // BlockNumberArgs encapsulates arguments to accessors that specify a block number.
@@ -618,7 +618,7 @@ func (b *Block) Miner(ctx context.Context, args BlockNumberArgs) (*Account, erro
 	}
 	return &Account{
 		backend:       b.backend,
-		address:       header.Coinbase,
+		address:       common.HexToAddress(header.Coinbase),
 		blockNrOrHash: args.NumberOrLatest(),
 	}, nil
 }
@@ -734,15 +734,15 @@ func (b *Block) Logs(ctx context.Context, args struct{ Filter BlockFilterCriteri
 		topics = *args.Filter.Topics
 	}
 	hash := b.hash
-	if hash == (common.Hash{}) {
+	if hash == (common.Hash{}).Hex() {
 		header, err := b.resolveHeader(ctx)
 		if err != nil {
 			return nil, err
 		}
-		hash = header.Hash()
+		hash = header.Hash().Hex()
 	}
 	// Construct the range filter
-	filter := filters.NewBlockFilter(b.backend, hash, addresses, topics)
+	filter := filters.NewBlockFilter(b.backend, common.HexToHash(hash), addresses, topics)
 
 	// Run the filter and return all the logs
 	return runFilter(ctx, b.backend, filter)

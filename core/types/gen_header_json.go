@@ -16,12 +16,12 @@ var _ = (*headerMarshaling)(nil)
 // MarshalJSON marshals as JSON.
 func (h Header) MarshalJSON() ([]byte, error) {
 	type Header struct {
-		ParentHash  common.Hash    `json:"parentHash"       gencodec:"required"`
-		UncleHash   common.Hash    `json:"sha3Uncles"       gencodec:"required"`
-		Coinbase    common.Address `json:"miner"            gencodec:"required"`
-		Root        common.Hash    `json:"stateRoot"        gencodec:"required"`
-		TxHash      common.Hash    `json:"transactionsRoot" gencodec:"required"`
-		ReceiptHash common.Hash    `json:"receiptsRoot"     gencodec:"required"`
+		ParentHash  string    `json:"parentHash"       gencodec:"required"`
+		UncleHash   string    `json:"sha3Uncles"       gencodec:"required"`
+		Coinbase    string `json:"miner"            gencodec:"required"`
+		Root        string    `json:"stateRoot"        gencodec:"required"`
+		TxHash      string    `json:"transactionsRoot" gencodec:"required"`
+		ReceiptHash string    `json:"receiptsRoot"     gencodec:"required"`
 		Bloom       Bloom          `json:"logsBloom"        gencodec:"required"`
 		Difficulty  *hexutil.Big   `json:"difficulty"       gencodec:"required"`
 		Number      *hexutil.Big   `json:"number"           gencodec:"required"`
@@ -31,7 +31,7 @@ func (h Header) MarshalJSON() ([]byte, error) {
 		Extra       hexutil.Bytes  `json:"extraData"        gencodec:"required"`
 		MixDigest   common.Hash    `json:"mixHash"`
 		Nonce       BlockNonce     `json:"nonce"`
-		Hash        common.Hash    `json:"hash"`
+		Hash        string    `json:"hash"`
 	}
 	var enc Header
 	enc.ParentHash = h.ParentHash
@@ -49,19 +49,19 @@ func (h Header) MarshalJSON() ([]byte, error) {
 	enc.Extra = h.Extra
 	enc.MixDigest = h.MixDigest
 	enc.Nonce = h.Nonce
-	enc.Hash = h.Hash()
+	enc.Hash = h.Hash().Hex()
 	return json.Marshal(&enc)
 }
 
 // UnmarshalJSON unmarshals from JSON.
 func (h *Header) UnmarshalJSON(input []byte) error {
 	type Header struct {
-		ParentHash  *common.Hash    `json:"parentHash"       gencodec:"required"`
-		UncleHash   *common.Hash    `json:"sha3Uncles"       gencodec:"required"`
-		Coinbase    *common.Address `json:"miner"            gencodec:"required"`
-		Root        *common.Hash    `json:"stateRoot"        gencodec:"required"`
-		TxHash      *common.Hash    `json:"transactionsRoot" gencodec:"required"`
-		ReceiptHash *common.Hash    `json:"receiptsRoot"     gencodec:"required"`
+		ParentHash  *string    `json:"parentHash"       gencodec:"required"`
+		UncleHash   *string    `json:"sha3Uncles"       gencodec:"required"`
+		Coinbase    *string `json:"miner"            gencodec:"required"`
+		Root        *string    `json:"stateRoot"        gencodec:"required"`
+		TxHash      *string    `json:"transactionsRoot" gencodec:"required"`
+		ReceiptHash *string    `json:"receiptsRoot"     gencodec:"required"`
 		Bloom       *Bloom          `json:"logsBloom"        gencodec:"required"`
 		Difficulty  *hexutil.Big    `json:"difficulty"       gencodec:"required"`
 		Number      *hexutil.Big    `json:"number"           gencodec:"required"`

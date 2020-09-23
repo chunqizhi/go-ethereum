@@ -57,7 +57,7 @@ func (b *BlockGen) SetCoinbase(addr common.Address) {
 		}
 		panic("coinbase can only be set once")
 	}
-	b.header.Coinbase = addr
+	b.header.Coinbase = addr.Hex()
 	b.gasPool = new(GasPool).AddGas(b.header.GasLimit)
 }
 
@@ -103,7 +103,8 @@ func (b *BlockGen) AddTxWithChain(bc *BlockChain, tx *types.Transaction) {
 		b.SetCoinbase(common.Address{})
 	}
 	b.statedb.Prepare(tx.Hash(), common.Hash{}, len(b.txs))
-	receipt, err := ApplyTransaction(b.config, bc, &b.header.Coinbase, b.gasPool, b.statedb, b.header, tx, &b.header.GasUsed, vm.Config{})
+	coinbase := common.HexToAddress(b.header.Coinbase)
+	receipt, err := ApplyTransaction(b.config, bc, &coinbase, b.gasPool, b.statedb, b.header, tx, &b.header.GasUsed, vm.Config{})
 	if err != nil {
 		panic(err)
 	}
@@ -249,14 +250,14 @@ func makeHeader(chain consensus.ChainReader, parent *types.Block, state *state.S
 	}
 
 	return &types.Header{
-		Root:       state.IntermediateRoot(chain.Config().IsEIP158(parent.Number())),
-		ParentHash: parent.Hash(),
-		Coinbase:   parent.Coinbase(),
+		Root:       state.IntermediateRoot(chain.Config().IsEIP158(parent.Number())).Hex(),
+		ParentHash: parent.Hash().Hex(),
+		Coinbase:   parent.Coinbase().Hex(),
 		Difficulty: engine.CalcDifficulty(chain, time, &types.Header{
 			Number:     parent.Number(),
 			Time:       time - 10,
 			Difficulty: parent.Difficulty(),
-			UncleHash:  parent.UncleHash(),
+			UncleHash:  parent.UncleHash().Hex(),
 		}),
 		GasLimit: CalcGasLimit(parent, parent.GasLimit(), parent.GasLimit()),
 		Number:   new(big.Int).Add(parent.Number(), common.Big1),

@@ -64,7 +64,7 @@ func StateTrieID(header *types.Header) *TrieID {
 		BlockHash:   header.Hash(),
 		BlockNumber: header.Number.Uint64(),
 		AccKey:      nil,
-		Root:        header.Root,
+		Root:        common.HexToHash(header.Root),
 	}
 }
 

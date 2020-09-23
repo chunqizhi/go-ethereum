@@ -450,7 +450,7 @@ func (f *lightFetcher) mainloop() {
 						break
 					}
 					untrusted = append(untrusted, hash)
-					head = f.chain.GetHeader(head.ParentHash, number-1)
+					head = f.chain.GetHeader(common.HexToHash(head.ParentHash), number-1)
 				}
 				if len(untrusted) > 0 {
 					for i, j := 0, len(untrusted)-1; i < j; i, j = i+1, j-1 {

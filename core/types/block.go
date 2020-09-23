@@ -35,8 +35,8 @@ import (
 )
 
 var (
-	EmptyRootHash  = DeriveSha(Transactions{})
-	EmptyUncleHash = rlpHash([]*Header(nil))
+	EmptyRootHash  = DeriveSha(Transactions{}).Hex()
+	EmptyUncleHash = rlpHash([]*Header(nil)).Hex()
 )
 
 // A BlockNonce is a 64-bit hash which proves (combined with the
@@ -70,12 +70,12 @@ func (n *BlockNonce) UnmarshalText(input []byte) error {
 
 // Header represents a block header in the Ethereum blockchain.
 type Header struct {
-	ParentHash  common.Hash    `json:"parentHash"       gencodec:"required"`
-	UncleHash   common.Hash    `json:"sha3Uncles"       gencodec:"required"`
-	Coinbase    common.Address `json:"miner"            gencodec:"required"`
-	Root        common.Hash    `json:"stateRoot"        gencodec:"required"`
-	TxHash      common.Hash    `json:"transactionsRoot" gencodec:"required"`
-	ReceiptHash common.Hash    `json:"receiptsRoot"     gencodec:"required"`
+	ParentHash  string    `json:"parentHash"       gencodec:"required"`
+	UncleHash   string    `json:"sha3Uncles"       gencodec:"required"`
+	Coinbase    string `json:"miner"            gencodec:"required"`
+	Root        string    `json:"stateRoot"        gencodec:"required"`
+	TxHash      string    `json:"transactionsRoot" gencodec:"required"`
+	ReceiptHash string    `json:"receiptsRoot"     gencodec:"required"`
 	Bloom       Bloom          `json:"logsBloom"        gencodec:"required"`
 	Difficulty  *big.Int       `json:"difficulty"       gencodec:"required"`
 	Number      *big.Int       `json:"number"           gencodec:"required"`
@@ -228,7 +228,7 @@ func NewBlock(header *Header, txs []*Transaction, uncles []*Header, receipts []*
 	if len(txs) == 0 {
 		b.header.TxHash = EmptyRootHash
 	} else {
-		b.header.TxHash = DeriveSha(Transactions(txs))
+		b.header.TxHash = DeriveSha(Transactions(txs)).Hex()
 		b.transactions = make(Transactions, len(txs))
 		copy(b.transactions, txs)
 	}
@@ -236,7 +236,7 @@ func NewBlock(header *Header, txs []*Transaction, uncles []*Header, receipts []*
 	if len(receipts) == 0 {
 		b.header.ReceiptHash = EmptyRootHash
 	} else {
-		b.header.ReceiptHash = DeriveSha(Receipts(receipts))
+		b.header.ReceiptHash = DeriveSha(Receipts(receipts)).Hex()
 		b.header.Bloom = CreateBloom(receipts)
 	}
 
@@ -332,12 +332,12 @@ func (b *Block) NumberU64() uint64        { return b.header.Number.Uint64() }
 func (b *Block) MixDigest() common.Hash   { return b.header.MixDigest }
 func (b *Block) Nonce() uint64            { return binary.BigEndian.Uint64(b.header.Nonce[:]) }
 func (b *Block) Bloom() Bloom             { return b.header.Bloom }
-func (b *Block) Coinbase() common.Address { return b.header.Coinbase }
-func (b *Block) Root() common.Hash        { return b.header.Root }
-func (b *Block) ParentHash() common.Hash  { return b.header.ParentHash }
-func (b *Block) TxHash() common.Hash      { return b.header.TxHash }
-func (b *Block) ReceiptHash() common.Hash { return b.header.ReceiptHash }
-func (b *Block) UncleHash() common.Hash   { return b.header.UncleHash }
+func (b *Block) Coinbase() common.Address {return common.HexToAddress(b.header.Coinbase) }
+func (b *Block) Root() common.Hash        { return common.HexToHash(b.header.Root) }
+func (b *Block) ParentHash() common.Hash  { return common.HexToHash(b.header.ParentHash) }
+func (b *Block) TxHash() common.Hash      { return common.HexToHash(b.header.TxHash) }
+func (b *Block) ReceiptHash() common.Hash { return common.HexToHash(b.header.ReceiptHash) }
+func (b *Block) UncleHash() common.Hash   { return common.HexToHash(b.header.UncleHash) }
 func (b *Block) Extra() []byte            { return common.CopyBytes(b.header.Extra) }
 
 func (b *Block) Header() *Header { return CopyHeader(b.header) }
@@ -370,11 +370,11 @@ func (c *writeCounter) Write(b []byte) (int, error) {
 	return len(b), nil
 }
 
-func CalcUncleHash(uncles []*Header) common.Hash {
+func CalcUncleHash(uncles []*Header) string {
 	if len(uncles) == 0 {
 		return EmptyUncleHash
 	}
-	return rlpHash(uncles)
+	return rlpHash(uncles).Hex()
 }
 
 // WithSeal returns a new block with the data from b but the header replaced with

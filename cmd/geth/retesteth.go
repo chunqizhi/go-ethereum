@@ -224,9 +224,9 @@ func (e *NoRewardEngine) accumulateRewards(config *params.ChainConfig, state *st
 	// Simply touch miner and uncle coinbase accounts
 	reward := big.NewInt(0)
 	for _, uncle := range uncles {
-		state.AddBalance(uncle.Coinbase, reward)
+		state.AddBalance(common.HexToAddress(uncle.Coinbase), reward)
 	}
-	state.AddBalance(header.Coinbase, reward)
+	state.AddBalance(common.HexToAddress(header.Coinbase), reward)
 }
 
 func (e *NoRewardEngine) Finalize(chain consensus.ChainHeaderReader, header *types.Header, statedb *state.StateDB, txs []*types.Transaction,
@@ -235,7 +235,7 @@ func (e *NoRewardEngine) Finalize(chain consensus.ChainHeaderReader, header *typ
 		e.inner.Finalize(chain, header, statedb, txs, uncles)
 	} else {
 		e.accumulateRewards(chain.Config(), statedb, header, uncles)
-		header.Root = statedb.IntermediateRoot(chain.Config().IsEIP158(header.Number))
+		header.Root = statedb.IntermediateRoot(chain.Config().IsEIP158(header.Number)).Hex()
 	}
 }
 
@@ -245,7 +245,7 @@ func (e *NoRewardEngine) FinalizeAndAssemble(chain consensus.ChainHeaderReader, 
 		return e.inner.FinalizeAndAssemble(chain, header, statedb, txs, uncles, receipts)
 	} else {
 		e.accumulateRewards(chain.Config(), statedb, header, uncles)
-		header.Root = statedb.IntermediateRoot(chain.Config().IsEIP158(header.Number))
+		header.Root = statedb.IntermediateRoot(chain.Config().IsEIP158(header.Number)).Hex()
 
 		// Header seems complete, assemble into a block and return
 		return types.NewBlock(header, txs, uncles, receipts), nil
@@ -470,13 +470,13 @@ func (api *RetestethAPI) mineBlock() error {
 	}
 	gasLimit := core.CalcGasLimit(parent, 9223372036854775807, 9223372036854775807)
 	header := &types.Header{
-		ParentHash: parent.Hash(),
+		ParentHash: parent.Hash().Hex(),
 		Number:     big.NewInt(int64(number + 1)),
 		GasLimit:   gasLimit,
 		Extra:      api.extraData,
 		Time:       timestamp,
 	}
-	header.Coinbase = api.author
+	header.Coinbase = api.author.Hex()
 	if api.engine != nil {
 		api.engine.Prepare(api.blockchain, header)
 	}
@@ -654,18 +654,18 @@ func (api *RetestethAPI) AccountRange(ctx context.Context,
 		block = api.blockchain.GetBlockByNumber(blockNumber)
 		//fmt.Printf("Account range: %d, txIndex %d, start: %x, maxResults: %d\n", blockNumber, txIndex, common.BigToHash((*big.Int)(addressHash)), maxResults)
 	}
-	parentHeader := api.blockchain.GetHeaderByHash(header.ParentHash)
+	parentHeader := api.blockchain.GetHeaderByHash(common.HexToHash(header.ParentHash))
 	var root common.Hash
 	var statedb *state.StateDB
 	var err error
 	if parentHeader == nil || int(txIndex) >= len(block.Transactions()) {
-		root = header.Root
+		root = common.HexToHash(header.Root)
 		statedb, err = api.blockchain.StateAt(root)
 		if err != nil {
 			return AccountRangeResult{}, err
 		}
 	} else {
-		root = parentHeader.Root
+		root = common.HexToHash(parentHeader.Root)
 		statedb, err = api.blockchain.StateAt(root)
 		if err != nil {
 			return AccountRangeResult{}, err
@@ -717,7 +717,7 @@ func (api *RetestethAPI) AccountRange(ctx context.Context,
 func (api *RetestethAPI) GetBalance(ctx context.Context, address common.Address, blockNr math.HexOrDecimal64) (*math.HexOrDecimal256, error) {
 	//fmt.Printf("GetBalance %x, block %d\n", address, blockNr)
 	header := api.blockchain.GetHeaderByNumber(uint64(blockNr))
-	statedb, err := api.blockchain.StateAt(header.Root)
+	statedb, err := api.blockchain.StateAt(common.HexToHash(header.Root))
 	if err != nil {
 		return nil, err
 	}
@@ -726,7 +726,7 @@ func (api *RetestethAPI) GetBalance(ctx context.Context, address common.Address,
 
 func (api *RetestethAPI) GetCode(ctx context.Context, address common.Address, blockNr math.HexOrDecimal64) (hexutil.Bytes, error) {
 	header := api.blockchain.GetHeaderByNumber(uint64(blockNr))
-	statedb, err := api.blockchain.StateAt(header.Root)
+	statedb, err := api.blockchain.StateAt(common.HexToHash(header.Root))
 	if err != nil {
 		return nil, err
 	}
@@ -735,7 +735,7 @@ func (api *RetestethAPI) GetCode(ctx context.Context, address common.Address, bl
 
 func (api *RetestethAPI) GetTransactionCount(ctx context.Context, address common.Address, blockNr math.HexOrDecimal64) (uint64, error) {
 	header := api.blockchain.GetHeaderByNumber(uint64(blockNr))
-	statedb, err := api.blockchain.StateAt(header.Root)
+	statedb, err := api.blockchain.StateAt(common.HexToHash(header.Root))
 	if err != nil {
 		return 0, err
 	}
@@ -764,18 +764,18 @@ func (api *RetestethAPI) StorageRangeAt(ctx context.Context,
 		//fmt.Printf("Storage range: %d, txIndex %d, addr: %x, start: %x, maxResults: %d\n",
 		//	blockNumber, txIndex, address, common.BigToHash((*big.Int)(begin)), maxResults)
 	}
-	parentHeader := api.blockchain.GetHeaderByHash(header.ParentHash)
+	parentHeader := api.blockchain.GetHeaderByHash(common.HexToHash(header.ParentHash))
 	var root common.Hash
 	var statedb *state.StateDB
 	var err error
 	if parentHeader == nil || int(txIndex) >= len(block.Transactions()) {
-		root = header.Root
+		root = common.HexToHash(header.Root)
 		statedb, err = api.blockchain.StateAt(root)
 		if err != nil {
 			return StorageRangeResult{}, err
 		}
 	} else {
-		root = parentHeader.Root
+		root = common.HexToHash(parentHeader.Root)
 		statedb, err = api.blockchain.StateAt(root)
 		if err != nil {
 			return StorageRangeResult{}, err

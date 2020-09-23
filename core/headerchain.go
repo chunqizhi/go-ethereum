@@ -145,7 +145,7 @@ func (hc *HeaderChain) WriteHeader(header *types.Header) (status WriteStatus, er
 		number = header.Number.Uint64()
 	)
 	// Calculate the total difficulty of the header
-	ptd := hc.GetTd(header.ParentHash, number-1)
+	ptd := hc.GetTd(common.HexToHash(header.ParentHash), number-1)
 	if ptd == nil {
 		return NonStatTy, consensus.ErrUnknownAncestor
 	}
@@ -194,14 +194,14 @@ func (hc *HeaderChain) WriteHeader(header *types.Header) (status WriteStatus, er
 		var (
 			headHash   = header.ParentHash
 			headNumber = header.Number.Uint64() - 1
-			headHeader = hc.GetHeader(headHash, headNumber)
+			headHeader = hc.GetHeader(common.HexToHash(headHash), headNumber)
 		)
-		for rawdb.ReadCanonicalHash(hc.chainDb, headNumber) != headHash {
-			rawdb.WriteCanonicalHash(markerBatch, headHash, headNumber)
+		for rawdb.ReadCanonicalHash(hc.chainDb, headNumber).Hex() != headHash {
+			rawdb.WriteCanonicalHash(markerBatch, common.HexToHash(headHash), headNumber)
 
 			headHash = headHeader.ParentHash
 			headNumber = headHeader.Number.Uint64() - 1
-			headHeader = hc.GetHeader(headHash, headNumber)
+			headHeader = hc.GetHeader(common.HexToHash(headHash), headNumber)
 		}
 		// Extend the canonical chain with the new header
 		rawdb.WriteCanonicalHash(markerBatch, hash, number)
@@ -234,7 +234,7 @@ type WhCallback func(*types.Header) error
 func (hc *HeaderChain) ValidateHeaderChain(chain []*types.Header, checkFreq int) (int, error) {
 	// Do a sanity check that the provided chain is actually ordered and linked
 	for i := 1; i < len(chain); i++ {
-		if chain[i].Number.Uint64() != chain[i-1].Number.Uint64()+1 || chain[i].ParentHash != chain[i-1].Hash() {
+		if chain[i].Number.Uint64() != chain[i-1].Number.Uint64()+1 || chain[i].ParentHash != chain[i-1].Hash().Hex() {
 			// Chain broke ancestry, log a message (programming error) and skip insertion
 			log.Error("Non contiguous header insert", "number", chain[i].Number, "hash", chain[i].Hash(),
 				"parent", chain[i].ParentHash, "prevnumber", chain[i-1].Number, "prevhash", chain[i-1].Hash())
@@ -345,10 +345,10 @@ func (hc *HeaderChain) GetBlockHashesFromHash(hash common.Hash, max uint64) []co
 	chain := make([]common.Hash, 0, max)
 	for i := uint64(0); i < max; i++ {
 		next := header.ParentHash
-		if header = hc.GetHeader(next, header.Number.Uint64()-1); header == nil {
+		if header = hc.GetHeader(common.HexToHash(next), header.Number.Uint64()-1); header == nil {
 			break
 		}
-		chain = append(chain, next)
+		chain = append(chain, common.HexToHash(next))
 		if header.Number.Sign() == 0 {
 			break
 		}
@@ -368,7 +368,7 @@ func (hc *HeaderChain) GetAncestor(hash common.Hash, number, ancestor uint64, ma
 	if ancestor == 1 {
 		// in this case it is cheaper to just read the header
 		if header := hc.GetHeader(hash, number); header != nil {
-			return header.ParentHash, number - 1
+			return common.HexToHash(header.ParentHash), number - 1
 		} else {
 			return common.Hash{}, 0
 		}
@@ -390,7 +390,7 @@ func (hc *HeaderChain) GetAncestor(hash common.Hash, number, ancestor uint64, ma
 		if header == nil {
 			return common.Hash{}, 0
 		}
-		hash = header.ParentHash
+		hash = common.HexToHash(header.ParentHash)
 		number--
 	}
 	return hash, number
@@ -507,11 +507,11 @@ func (hc *HeaderChain) SetHead(head uint64, updateFn UpdateHeadBlocksCallback, d
 		hash, num := hdr.Hash(), hdr.Number.Uint64()
 
 		// Rewind block chain to new head.
-		parent := hc.GetHeader(hdr.ParentHash, num-1)
+		parent := hc.GetHeader(common.HexToHash(hdr.ParentHash), num-1)
 		if parent == nil {
 			parent = hc.genesisHeader
 		}
-		parentHash = hdr.ParentHash
+		parentHash = common.HexToHash(hdr.ParentHash)
 		// Notably, since geth has the possibility for setting the head to a low
 		// height which is even lower than ancient head.
 		// In order to ensure that the head is always no higher than the data in

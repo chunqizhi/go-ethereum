@@ -587,7 +587,7 @@ func (s *PublicBlockChainAPI) GetProof(ctx context.Context, address common.Addre
 
 	// if we have a storageTrie, (which means the account exists), we can update the storagehash
 	if storageTrie != nil {
-		storageHash = storageTrie.Hash()
+		storageHash = storageTrie.Hash().Hex()
 	} else {
 		// no storageTrie means the account does not exist, so the codeHash is the hash of an empty bytearray.
 		codeHash = crypto.Keccak256Hash(nil)
@@ -618,7 +618,7 @@ func (s *PublicBlockChainAPI) GetProof(ctx context.Context, address common.Addre
 		Balance:      (*hexutil.Big)(state.GetBalance(address)),
 		CodeHash:     codeHash,
 		Nonce:        hexutil.Uint64(state.GetNonce(address)),
-		StorageHash:  storageHash,
+		StorageHash:  common.HexToHash(storageHash),
 		StorageProof: storageProof,
 	}, state.Error()
 }
@@ -1123,21 +1123,21 @@ func RPCMarshalHeader(head *types.Header) map[string]interface{} {
 	return map[string]interface{}{
 		"number":           (*hexutil.Big)(head.Number),
 		"hash":             head.Hash().String(),
-		"parentHash":       head.ParentHash.String(),
+		"parentHash":       head.ParentHash,
 		"nonce":            head.Nonce,
 		"mixHash":          head.MixDigest,
-		"sha3Uncles":       head.UncleHash.String(),
+		"sha3Uncles":       head.UncleHash,
 		"logsBloom":        head.Bloom,
-		"stateRoot":        head.Root.String(),
-		"miner":            head.Coinbase.String(),
+		"stateRoot":        head.Root,
+		"miner":            head.Coinbase,
 		"difficulty":       (*hexutil.Big)(head.Difficulty),
 		"extraData":        hexutil.Bytes(head.Extra),
 		"size":             hexutil.Uint64(head.Size()),
 		"gasLimit":         hexutil.Uint64(head.GasLimit),
 		"gasUsed":          hexutil.Uint64(head.GasUsed),
 		"timestamp":        hexutil.Uint64(head.Time),
-		"transactionsRoot": head.TxHash.String(),
-		"receiptsRoot":     head.ReceiptHash.String(),
+		"transactionsRoot": head.TxHash,
+		"receiptsRoot":     head.ReceiptHash,
 	}
 }
 
