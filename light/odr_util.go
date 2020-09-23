@@ -174,7 +174,7 @@ func GetBlockReceipts(ctx context.Context, odr OdrBackend, hash common.Hash, num
 		receipts = r.Receipts
 	}
 	// If the receipts are incomplete, fill the derived fields
-	if len(receipts) > 0 && receipts[0].TxHash == (common.Hash{}) {
+	if len(receipts) > 0 && receipts[0].TxHash == (common.Hash{}).Hex() {
 		block, err := GetBlock(ctx, odr, hash, number)
 		if err != nil {
 			return nil, err

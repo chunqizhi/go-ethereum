@@ -131,7 +131,7 @@ func ReadReceipt(db ethdb.Reader, hash common.Hash, config *params.ChainConfig) 
 	// Read all the receipts from the block and return the one with the matching hash
 	receipts := ReadReceipts(db, blockHash, *blockNumber, config)
 	for receiptIndex, receipt := range receipts {
-		if receipt.TxHash == hash {
+		if receipt.TxHash == hash.Hex() {
 			return receipt, blockHash, *blockNumber, uint64(receiptIndex)
 		}
 	}

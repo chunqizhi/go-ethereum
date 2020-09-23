@@ -1445,7 +1445,7 @@ func (s *PublicTransactionPoolAPI) GetTransactionReceipt(ctx context.Context, ha
 		fields["logs"] = [][]*types.Log{}
 	}
 	// If the ContractAddress is 20 0x0 bytes, assume it is not a contract creation
-	if receipt.ContractAddress != (common.Address{}) {
+	if receipt.ContractAddress != (common.Address{}).Hex() {
 		fields["contractAddress"] = receipt.ContractAddress
 	}
 	return fields, nil

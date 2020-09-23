@@ -31,7 +31,7 @@ import (
 type Log struct {
 	// Consensus fields:
 	// address of the contract that generated the event
-	Address common.Address `json:"address" gencodec:"required"`
+	Address string `json:"address" gencodec:"required"`
 	// list of topics provided by the contract.
 	Topics []common.Hash `json:"topics" gencodec:"required"`
 	// supplied by the contract, usually ABI-encoded
@@ -42,11 +42,11 @@ type Log struct {
 	// block in which the transaction was included
 	BlockNumber uint64 `json:"blockNumber"`
 	// hash of the transaction
-	TxHash common.Hash `json:"transactionHash" gencodec:"required"`
+	TxHash string `json:"transactionHash" gencodec:"required"`
 	// index of the transaction in the block
 	TxIndex uint `json:"transactionIndex"`
 	// hash of the block in which the transaction was included
-	BlockHash common.Hash `json:"blockHash"`
+	BlockHash string `json:"blockHash"`
 	// index of the log in the block
 	Index uint `json:"logIndex"`
 
@@ -63,7 +63,7 @@ type logMarshaling struct {
 }
 
 type rlpLog struct {
-	Address common.Address
+	Address string
 	Topics  []common.Hash
 	Data    []byte
 }
@@ -133,7 +133,7 @@ func (l *LogForStorage) DecodeRLP(s *rlp.Stream) error {
 		err = rlp.DecodeBytes(blob, &dec)
 		if err == nil {
 			*l = LogForStorage{
-				Address: dec.Address,
+				Address: dec.Address.Hex(),
 				Topics:  dec.Topics,
 				Data:    dec.Data,
 			}

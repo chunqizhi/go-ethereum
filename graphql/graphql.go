@@ -102,7 +102,7 @@ func (l *Log) Transaction(ctx context.Context) *Transaction {
 func (l *Log) Account(ctx context.Context, args BlockNumberArgs) *Account {
 	return &Account{
 		backend:       l.backend,
-		address:       l.log.Address,
+		address:       common.HexToAddress(l.log.Address),
 		blockNrOrHash: args.NumberOrLatest(),
 	}
 }
@@ -288,12 +288,12 @@ func (t *Transaction) CumulativeGasUsed(ctx context.Context) (*hexutil.Uint64, e
 
 func (t *Transaction) CreatedContract(ctx context.Context, args BlockNumberArgs) (*Account, error) {
 	receipt, err := t.getReceipt(ctx)
-	if err != nil || receipt == nil || receipt.ContractAddress == (common.Address{}) {
+	if err != nil || receipt == nil || receipt.ContractAddress == (common.Address{}).Hex() {
 		return nil, err
 	}
 	return &Account{
 		backend:       t.backend,
-		address:       receipt.ContractAddress,
+		address:       common.HexToAddress(receipt.ContractAddress),
 		blockNrOrHash: args.NumberOrLatest(),
 	}, nil
 }
@@ -717,7 +717,7 @@ func runFilter(ctx context.Context, be ethapi.Backend, filter *filters.Filter) (
 	for _, log := range logs {
 		ret = append(ret, &Log{
 			backend:     be,
-			transaction: &Transaction{backend: be, hash: log.TxHash},
+			transaction: &Transaction{backend: be, hash: common.HexToHash(log.TxHash)},
 			log:         log,
 		})
 	}

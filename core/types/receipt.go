@@ -57,13 +57,13 @@ type Receipt struct {
 
 	// Implementation fields: These fields are added by geth when processing a transaction.
 	// They are stored in the chain database.
-	TxHash          common.Hash    `json:"transactionHash" gencodec:"required"`
-	ContractAddress common.Address `json:"contractAddress"`
+	TxHash          string    `json:"transactionHash" gencodec:"required"`
+	ContractAddress string `json:"contractAddress"`
 	GasUsed         uint64         `json:"gasUsed" gencodec:"required"`
 
 	// Inclusion information: These fields provide information about the inclusion of the
 	// transaction corresponding to this receipt.
-	BlockHash        common.Hash `json:"blockHash,omitempty"`
+	BlockHash        string `json:"blockHash,omitempty"`
 	BlockNumber      *big.Int    `json:"blockNumber,omitempty"`
 	TransactionIndex uint        `json:"transactionIndex"`
 }
@@ -96,8 +96,8 @@ type storedReceiptRLP struct {
 type v4StoredReceiptRLP struct {
 	PostStateOrStatus []byte
 	CumulativeGasUsed uint64
-	TxHash            common.Hash
-	ContractAddress   common.Address
+	TxHash            string
+	ContractAddress   string
 	Logs              []*LogForStorage
 	GasUsed           uint64
 }
@@ -107,8 +107,8 @@ type v3StoredReceiptRLP struct {
 	PostStateOrStatus []byte
 	CumulativeGasUsed uint64
 	Bloom             Bloom
-	TxHash            common.Hash
-	ContractAddress   common.Address
+	TxHash            string
+	ContractAddress   string
 	Logs              []*LogForStorage
 	GasUsed           uint64
 }
@@ -303,10 +303,10 @@ func (r Receipts) DeriveFields(config *params.ChainConfig, hash common.Hash, num
 	}
 	for i := 0; i < len(r); i++ {
 		// The transaction hash can be retrieved from the transaction itself
-		r[i].TxHash = txs[i].Hash()
+		r[i].TxHash = txs[i].Hash().Hex()
 
 		// block location fields
-		r[i].BlockHash = hash
+		r[i].BlockHash = hash.Hex()
 		r[i].BlockNumber = new(big.Int).SetUint64(number)
 		r[i].TransactionIndex = uint(i)
 
@@ -314,7 +314,7 @@ func (r Receipts) DeriveFields(config *params.ChainConfig, hash common.Hash, num
 		if txs[i].To() == nil {
 			// Deriving the signer is expensive, only do if it's actually needed
 			from, _ := Sender(signer, txs[i])
-			r[i].ContractAddress = crypto.CreateAddress(from, txs[i].Nonce())
+			r[i].ContractAddress = crypto.CreateAddress(from, txs[i].Nonce()).Hex()
 		}
 		// The used gas can be calculated based on previous r
 		if i == 0 {
@@ -325,7 +325,7 @@ func (r Receipts) DeriveFields(config *params.ChainConfig, hash common.Hash, num
 		// The derived log fields can simply be set from the block and transaction
 		for j := 0; j < len(r[i].Logs); j++ {
 			r[i].Logs[j].BlockNumber = number
-			r[i].Logs[j].BlockHash = hash
+			r[i].Logs[j].BlockHash = hash.Hex()
 			r[i].Logs[j].TxHash = r[i].TxHash
 			r[i].Logs[j].TxIndex = uint(i)
 			r[i].Logs[j].Index = logIndex

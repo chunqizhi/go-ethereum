@@ -256,7 +256,7 @@ func (f *Filter) checkMatches(ctx context.Context, header *types.Header) (logs [
 	logs = filterLogs(unfiltered, nil, nil, f.addresses, f.topics)
 	if len(logs) > 0 {
 		// We have matching logs, check if we need to resolve full logs via the light client
-		if logs[0].TxHash == (common.Hash{}) {
+		if logs[0].TxHash == (common.Hash{}).Hex() {
 			receipts, err := f.backend.GetReceipts(ctx, header.Hash())
 			if err != nil {
 				return nil, err
@@ -294,7 +294,7 @@ Logs:
 			continue
 		}
 
-		if len(addresses) > 0 && !includes(addresses, log.Address) {
+		if len(addresses) > 0 && !includes(addresses, common.HexToAddress(log.Address)) {
 			continue
 		}
 		// If the to filtered topics is greater than the amount of topics in logs, skip.

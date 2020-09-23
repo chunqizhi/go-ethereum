@@ -186,8 +186,8 @@ func (s *StateDB) Reset(root common.Hash) error {
 func (s *StateDB) AddLog(log *types.Log) {
 	s.journal.append(addLogChange{txhash: s.thash})
 
-	log.TxHash = s.thash
-	log.BlockHash = s.bhash
+	log.TxHash = s.thash.Hex()
+	log.BlockHash = s.bhash.Hex()
 	log.TxIndex = uint(s.txIndex)
 	log.Index = s.logSize
 	s.logs[s.thash] = append(s.logs[s.thash], log)

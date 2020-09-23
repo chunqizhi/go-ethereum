@@ -18,6 +18,7 @@ package types
 
 import (
 	"fmt"
+	"github.com/chunqizhi/go-ethereum/common"
 	"math/big"
 
 	"github.com/chunqizhi/go-ethereum/common/hexutil"
@@ -103,7 +104,7 @@ func CreateBloom(receipts Receipts) Bloom {
 func LogsBloom(logs []*Log) *big.Int {
 	bin := new(big.Int)
 	for _, log := range logs {
-		bin.Or(bin, bloom9(log.Address.Bytes()))
+		bin.Or(bin, bloom9(common.HexToAddress(log.Address).Bytes()))
 		for _, b := range log.Topics {
 			bin.Or(bin, bloom9(b[:]))
 		}

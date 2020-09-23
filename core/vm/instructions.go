@@ -837,7 +837,7 @@ func makeLog(size int) executionFunc {
 
 		d := callContext.memory.GetCopy(int64(mStart.Uint64()), int64(mSize.Uint64()))
 		interpreter.evm.StateDB.AddLog(&types.Log{
-			Address: callContext.contract.Address(),
+			Address: callContext.contract.Address().Hex(),
 			Topics:  topics,
 			Data:    d,
 			// This is a non-consensus field, but assigned here because
