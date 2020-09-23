@@ -20,7 +20,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/chunqizhi/go-ethereum/params"
 	cli "gopkg.in/urfave/cli.v1"
 )
 
