@@ -90,7 +90,7 @@ func TestDiskLayerExternalInvalidationFullFlatten(t *testing.T) {
 	// Create an empty base layer and a snapshot tree out of it
 	base := &diskLayer{
 		diskdb: rawdb.NewMemoryDatabase(),
-		root:   common.HexToHash("0x01"),
+		root:   common.HexToHash("Gs01"),
 		cache:  fastcache.New(1024 * 500),
 	}
 	snaps := &Tree{
@@ -102,23 +102,23 @@ func TestDiskLayerExternalInvalidationFullFlatten(t *testing.T) {
 	ref := snaps.Snapshot(base.root)
 
 	accounts := map[common.Hash][]byte{
-		common.HexToHash("0xa1"): randomAccount(),
+		common.HexToHash("Gsa1"): randomAccount(),
 	}
-	if err := snaps.Update(common.HexToHash("0x02"), common.HexToHash("0x01"), nil, accounts, nil); err != nil {
+	if err := snaps.Update(common.HexToHash("Gs02"), common.HexToHash("Gs01"), nil, accounts, nil); err != nil {
 		t.Fatalf("failed to create a diff layer: %v", err)
 	}
 	if n := len(snaps.layers); n != 2 {
 		t.Errorf("pre-cap layer count mismatch: have %d, want %d", n, 2)
 	}
 	// Commit the diff layer onto the disk and ensure it's persisted
-	if err := snaps.Cap(common.HexToHash("0x02"), 0); err != nil {
+	if err := snaps.Cap(common.HexToHash("Gs02"), 0); err != nil {
 		t.Fatalf("failed to merge diff layer onto disk: %v", err)
 	}
 	// Since the base layer was modified, ensure that data retrieval on the external reference fail
-	if acc, err := ref.Account(common.HexToHash("0x01")); err != ErrSnapshotStale {
+	if acc, err := ref.Account(common.HexToHash("Gs01")); err != ErrSnapshotStale {
 		t.Errorf("stale reference returned account: %#x (err: %v)", acc, err)
 	}
-	if slot, err := ref.Storage(common.HexToHash("0xa1"), common.HexToHash("0xb1")); err != ErrSnapshotStale {
+	if slot, err := ref.Storage(common.HexToHash("Gsa1"), common.HexToHash("Gsb1")); err != ErrSnapshotStale {
 		t.Errorf("stale reference returned storage slot: %#x (err: %v)", slot, err)
 	}
 	if n := len(snaps.layers); n != 1 {
@@ -134,7 +134,7 @@ func TestDiskLayerExternalInvalidationPartialFlatten(t *testing.T) {
 	// Create an empty base layer and a snapshot tree out of it
 	base := &diskLayer{
 		diskdb: rawdb.NewMemoryDatabase(),
-		root:   common.HexToHash("0x01"),
+		root:   common.HexToHash("Gs01"),
 		cache:  fastcache.New(1024 * 500),
 	}
 	snaps := &Tree{
@@ -146,12 +146,12 @@ func TestDiskLayerExternalInvalidationPartialFlatten(t *testing.T) {
 	ref := snaps.Snapshot(base.root)
 
 	accounts := map[common.Hash][]byte{
-		common.HexToHash("0xa1"): randomAccount(),
+		common.HexToHash("Gsa1"): randomAccount(),
 	}
-	if err := snaps.Update(common.HexToHash("0x02"), common.HexToHash("0x01"), nil, accounts, nil); err != nil {
+	if err := snaps.Update(common.HexToHash("Gs02"), common.HexToHash("Gs01"), nil, accounts, nil); err != nil {
 		t.Fatalf("failed to create a diff layer: %v", err)
 	}
-	if err := snaps.Update(common.HexToHash("0x03"), common.HexToHash("0x02"), nil, accounts, nil); err != nil {
+	if err := snaps.Update(common.HexToHash("Gs03"), common.HexToHash("Gs02"), nil, accounts, nil); err != nil {
 		t.Fatalf("failed to create a diff layer: %v", err)
 	}
 	if n := len(snaps.layers); n != 3 {
@@ -161,14 +161,14 @@ func TestDiskLayerExternalInvalidationPartialFlatten(t *testing.T) {
 	defer func(memcap uint64) { aggregatorMemoryLimit = memcap }(aggregatorMemoryLimit)
 	aggregatorMemoryLimit = 0
 
-	if err := snaps.Cap(common.HexToHash("0x03"), 2); err != nil {
+	if err := snaps.Cap(common.HexToHash("Gs03"), 2); err != nil {
 		t.Fatalf("failed to merge diff layer onto disk: %v", err)
 	}
 	// Since the base layer was modified, ensure that data retrievald on the external reference fail
-	if acc, err := ref.Account(common.HexToHash("0x01")); err != ErrSnapshotStale {
+	if acc, err := ref.Account(common.HexToHash("Gs01")); err != ErrSnapshotStale {
 		t.Errorf("stale reference returned account: %#x (err: %v)", acc, err)
 	}
-	if slot, err := ref.Storage(common.HexToHash("0xa1"), common.HexToHash("0xb1")); err != ErrSnapshotStale {
+	if slot, err := ref.Storage(common.HexToHash("Gsa1"), common.HexToHash("Gsb1")); err != ErrSnapshotStale {
 		t.Errorf("stale reference returned storage slot: %#x (err: %v)", slot, err)
 	}
 	if n := len(snaps.layers); n != 2 {
@@ -184,7 +184,7 @@ func TestDiffLayerExternalInvalidationFullFlatten(t *testing.T) {
 	// Create an empty base layer and a snapshot tree out of it
 	base := &diskLayer{
 		diskdb: rawdb.NewMemoryDatabase(),
-		root:   common.HexToHash("0x01"),
+		root:   common.HexToHash("Gs01"),
 		cache:  fastcache.New(1024 * 500),
 	}
 	snaps := &Tree{
@@ -194,28 +194,28 @@ func TestDiffLayerExternalInvalidationFullFlatten(t *testing.T) {
 	}
 	// Commit two diffs on top and retrieve a reference to the bottommost
 	accounts := map[common.Hash][]byte{
-		common.HexToHash("0xa1"): randomAccount(),
+		common.HexToHash("Gsa1"): randomAccount(),
 	}
-	if err := snaps.Update(common.HexToHash("0x02"), common.HexToHash("0x01"), nil, accounts, nil); err != nil {
+	if err := snaps.Update(common.HexToHash("Gs02"), common.HexToHash("Gs01"), nil, accounts, nil); err != nil {
 		t.Fatalf("failed to create a diff layer: %v", err)
 	}
-	if err := snaps.Update(common.HexToHash("0x03"), common.HexToHash("0x02"), nil, accounts, nil); err != nil {
+	if err := snaps.Update(common.HexToHash("Gs03"), common.HexToHash("Gs02"), nil, accounts, nil); err != nil {
 		t.Fatalf("failed to create a diff layer: %v", err)
 	}
 	if n := len(snaps.layers); n != 3 {
 		t.Errorf("pre-cap layer count mismatch: have %d, want %d", n, 3)
 	}
-	ref := snaps.Snapshot(common.HexToHash("0x02"))
+	ref := snaps.Snapshot(common.HexToHash("Gs02"))
 
 	// Flatten the diff layer into the bottom accumulator
-	if err := snaps.Cap(common.HexToHash("0x03"), 1); err != nil {
+	if err := snaps.Cap(common.HexToHash("Gs03"), 1); err != nil {
 		t.Fatalf("failed to flatten diff layer into accumulator: %v", err)
 	}
 	// Since the accumulator diff layer was modified, ensure that data retrievald on the external reference fail
-	if acc, err := ref.Account(common.HexToHash("0x01")); err != ErrSnapshotStale {
+	if acc, err := ref.Account(common.HexToHash("Gs01")); err != ErrSnapshotStale {
 		t.Errorf("stale reference returned account: %#x (err: %v)", acc, err)
 	}
-	if slot, err := ref.Storage(common.HexToHash("0xa1"), common.HexToHash("0xb1")); err != ErrSnapshotStale {
+	if slot, err := ref.Storage(common.HexToHash("Gsa1"), common.HexToHash("Gsb1")); err != ErrSnapshotStale {
 		t.Errorf("stale reference returned storage slot: %#x (err: %v)", slot, err)
 	}
 	if n := len(snaps.layers); n != 2 {
@@ -231,7 +231,7 @@ func TestDiffLayerExternalInvalidationPartialFlatten(t *testing.T) {
 	// Create an empty base layer and a snapshot tree out of it
 	base := &diskLayer{
 		diskdb: rawdb.NewMemoryDatabase(),
-		root:   common.HexToHash("0x01"),
+		root:   common.HexToHash("Gs01"),
 		cache:  fastcache.New(1024 * 500),
 	}
 	snaps := &Tree{
@@ -241,39 +241,39 @@ func TestDiffLayerExternalInvalidationPartialFlatten(t *testing.T) {
 	}
 	// Commit three diffs on top and retrieve a reference to the bottommost
 	accounts := map[common.Hash][]byte{
-		common.HexToHash("0xa1"): randomAccount(),
+		common.HexToHash("Gsa1"): randomAccount(),
 	}
-	if err := snaps.Update(common.HexToHash("0x02"), common.HexToHash("0x01"), nil, accounts, nil); err != nil {
+	if err := snaps.Update(common.HexToHash("Gs02"), common.HexToHash("Gs01"), nil, accounts, nil); err != nil {
 		t.Fatalf("failed to create a diff layer: %v", err)
 	}
-	if err := snaps.Update(common.HexToHash("0x03"), common.HexToHash("0x02"), nil, accounts, nil); err != nil {
+	if err := snaps.Update(common.HexToHash("Gs03"), common.HexToHash("Gs02"), nil, accounts, nil); err != nil {
 		t.Fatalf("failed to create a diff layer: %v", err)
 	}
-	if err := snaps.Update(common.HexToHash("0x04"), common.HexToHash("0x03"), nil, accounts, nil); err != nil {
+	if err := snaps.Update(common.HexToHash("Gs04"), common.HexToHash("Gs03"), nil, accounts, nil); err != nil {
 		t.Fatalf("failed to create a diff layer: %v", err)
 	}
 	if n := len(snaps.layers); n != 4 {
 		t.Errorf("pre-cap layer count mismatch: have %d, want %d", n, 4)
 	}
-	ref := snaps.Snapshot(common.HexToHash("0x02"))
+	ref := snaps.Snapshot(common.HexToHash("Gs02"))
 
 	// Doing a Cap operation with many allowed layers should be a no-op
 	exp := len(snaps.layers)
-	if err := snaps.Cap(common.HexToHash("0x04"), 2000); err != nil {
+	if err := snaps.Cap(common.HexToHash("Gs04"), 2000); err != nil {
 		t.Fatalf("failed to flatten diff layer into accumulator: %v", err)
 	}
 	if got := len(snaps.layers); got != exp {
 		t.Errorf("layers modified, got %d exp %d", got, exp)
 	}
 	// Flatten the diff layer into the bottom accumulator
-	if err := snaps.Cap(common.HexToHash("0x04"), 2); err != nil {
+	if err := snaps.Cap(common.HexToHash("Gs04"), 2); err != nil {
 		t.Fatalf("failed to flatten diff layer into accumulator: %v", err)
 	}
 	// Since the accumulator diff layer was modified, ensure that data retrievald on the external reference fail
-	if acc, err := ref.Account(common.HexToHash("0x01")); err != ErrSnapshotStale {
+	if acc, err := ref.Account(common.HexToHash("Gs01")); err != ErrSnapshotStale {
 		t.Errorf("stale reference returned account: %#x (err: %v)", acc, err)
 	}
-	if slot, err := ref.Storage(common.HexToHash("0xa1"), common.HexToHash("0xb1")); err != ErrSnapshotStale {
+	if slot, err := ref.Storage(common.HexToHash("Gsa1"), common.HexToHash("Gsb1")); err != ErrSnapshotStale {
 		t.Errorf("stale reference returned storage slot: %#x (err: %v)", slot, err)
 	}
 	if n := len(snaps.layers); n != 3 {
@@ -294,7 +294,7 @@ func TestPostCapBasicDataAccess(t *testing.T) {
 	// Create a starting base layer and a snapshot tree out of it
 	base := &diskLayer{
 		diskdb: rawdb.NewMemoryDatabase(),
-		root:   common.HexToHash("0x01"),
+		root:   common.HexToHash("Gs01"),
 		cache:  fastcache.New(1024 * 500),
 	}
 	snaps := &Tree{
@@ -303,12 +303,12 @@ func TestPostCapBasicDataAccess(t *testing.T) {
 		},
 	}
 	// The lowest difflayer
-	snaps.Update(common.HexToHash("0xa1"), common.HexToHash("0x01"), nil, setAccount("0xa1"), nil)
-	snaps.Update(common.HexToHash("0xa2"), common.HexToHash("0xa1"), nil, setAccount("0xa2"), nil)
-	snaps.Update(common.HexToHash("0xb2"), common.HexToHash("0xa1"), nil, setAccount("0xb2"), nil)
+	snaps.Update(common.HexToHash("Gsa1"), common.HexToHash("Gs01"), nil, setAccount("Gsa1"), nil)
+	snaps.Update(common.HexToHash("Gsa2"), common.HexToHash("Gsa1"), nil, setAccount("Gsa2"), nil)
+	snaps.Update(common.HexToHash("Gsb2"), common.HexToHash("Gsa1"), nil, setAccount("Gsb2"), nil)
 
-	snaps.Update(common.HexToHash("0xa3"), common.HexToHash("0xa2"), nil, setAccount("0xa3"), nil)
-	snaps.Update(common.HexToHash("0xb3"), common.HexToHash("0xb2"), nil, setAccount("0xb3"), nil)
+	snaps.Update(common.HexToHash("Gsa3"), common.HexToHash("Gsa2"), nil, setAccount("Gsa3"), nil)
+	snaps.Update(common.HexToHash("Gsb3"), common.HexToHash("Gsb2"), nil, setAccount("Gsb3"), nil)
 
 	// checkExist verifies if an account exiss in a snapshot
 	checkExist := func(layer *diffLayer, key string) error {
@@ -325,47 +325,47 @@ func TestPostCapBasicDataAccess(t *testing.T) {
 		return nil
 	}
 	// check basics
-	snap := snaps.Snapshot(common.HexToHash("0xb3")).(*diffLayer)
+	snap := snaps.Snapshot(common.HexToHash("Gsb3")).(*diffLayer)
 
-	if err := checkExist(snap, "0xa1"); err != nil {
+	if err := checkExist(snap, "Gsa1"); err != nil {
 		t.Error(err)
 	}
-	if err := checkExist(snap, "0xb2"); err != nil {
+	if err := checkExist(snap, "Gsb2"); err != nil {
 		t.Error(err)
 	}
-	if err := checkExist(snap, "0xb3"); err != nil {
+	if err := checkExist(snap, "Gsb3"); err != nil {
 		t.Error(err)
 	}
 	// Cap to a bad root should fail
-	if err := snaps.Cap(common.HexToHash("0x1337"), 0); err == nil {
+	if err := snaps.Cap(common.HexToHash("Gs1337"), 0); err == nil {
 		t.Errorf("expected error, got none")
 	}
 	// Now, merge the a-chain
-	snaps.Cap(common.HexToHash("0xa3"), 0)
+	snaps.Cap(common.HexToHash("Gsa3"), 0)
 
 	// At this point, a2 got merged into a1. Thus, a1 is now modified, and as a1 is
 	// the parent of b2, b2 should no longer be able to iterate into parent.
 
 	// These should still be accessible
-	if err := checkExist(snap, "0xb2"); err != nil {
+	if err := checkExist(snap, "Gsb2"); err != nil {
 		t.Error(err)
 	}
-	if err := checkExist(snap, "0xb3"); err != nil {
+	if err := checkExist(snap, "Gsb3"); err != nil {
 		t.Error(err)
 	}
 	// But these would need iteration into the modified parent
-	if err := shouldErr(snap, "0xa1"); err != nil {
+	if err := shouldErr(snap, "Gsa1"); err != nil {
 		t.Error(err)
 	}
-	if err := shouldErr(snap, "0xa2"); err != nil {
+	if err := shouldErr(snap, "Gsa2"); err != nil {
 		t.Error(err)
 	}
-	if err := shouldErr(snap, "0xa3"); err != nil {
+	if err := shouldErr(snap, "Gsa3"); err != nil {
 		t.Error(err)
 	}
 	// Now, merge it again, just for fun. It should now error, since a3
 	// is a disk layer
-	if err := snaps.Cap(common.HexToHash("0xa3"), 0); err == nil {
+	if err := snaps.Cap(common.HexToHash("Gsa3"), 0); err == nil {
 		t.Error("expected error capping the disk layer, got none")
 	}
 }

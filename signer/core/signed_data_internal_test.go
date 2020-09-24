@@ -89,12 +89,12 @@ func TestParseBytes(t *testing.T) {
 		v   interface{}
 		exp []byte
 	}{
-		{"0x", []byte{}},
-		{"0x1234", []byte{0x12, 0x34}},
+		{"Gs", []byte{}},
+		{"Gs1234", []byte{0x12, 0x34}},
 		{[]byte{12, 34}, []byte{12, 34}},
 		{hexutil.Bytes([]byte{12, 34}), []byte{12, 34}},
 		{"1234", nil},    // not a proper hex-string
-		{"0x01233", nil}, // nibbles should be rejected
+		{"Gs01233", nil}, // nibbles should be rejected
 		{"not a hex string", nil},
 		{15, nil},
 		{nil, nil},
@@ -123,8 +123,8 @@ func TestParseInteger(t *testing.T) {
 	}{
 		{"uint32", "-123", nil},
 		{"int32", "-123", big.NewInt(-123)},
-		{"uint32", "0xff", big.NewInt(0xff)},
-		{"int8", "0xffff", nil},
+		{"uint32", "Gsff", big.NewInt(0xff)},
+		{"int8", "Gsffff", nil},
 	} {
 		res, err := parseInteger(tt.t, tt.v)
 		if tt.exp == nil && res == nil {

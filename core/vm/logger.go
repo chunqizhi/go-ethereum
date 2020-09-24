@@ -216,7 +216,7 @@ func (l *StructLogger) CaptureEnd(output []byte, gasUsed uint64, t time.Duration
 	l.output = output
 	l.err = err
 	if l.cfg.Debug {
-		fmt.Printf("0x%x\n", output)
+		fmt.Printf("Gs%x\n", output)
 		if err != nil {
 			fmt.Printf(" error: %v\n", err)
 		}
@@ -251,7 +251,7 @@ func WriteTrace(writer io.Writer, logs []StructLog) {
 		if len(log.ReturnStack) > 0 {
 			fmt.Fprintln(writer, "ReturnStack:")
 			for i := len(log.Stack) - 1; i >= 0; i-- {
-				fmt.Fprintf(writer, "%08d  0x%x (%d)\n", len(log.Stack)-i-1, log.ReturnStack[i], log.ReturnStack[i])
+				fmt.Fprintf(writer, "%08d  Gs%x (%d)\n", len(log.Stack)-i-1, log.ReturnStack[i], log.ReturnStack[i])
 			}
 		}
 		if len(log.Memory) > 0 {
@@ -303,11 +303,11 @@ func NewMarkdownLogger(cfg *LogConfig, writer io.Writer) *mdLogger {
 
 func (t *mdLogger) CaptureStart(from common.Address, to common.Address, create bool, input []byte, gas uint64, value *big.Int) error {
 	if !create {
-		fmt.Fprintf(t.out, "From: `%v`\nTo: `%v`\nData: `0x%x`\nGas: `%d`\nValue `%v` wei\n",
+		fmt.Fprintf(t.out, "From: `%v`\nTo: `%v`\nData: `Gs%x`\nGas: `%d`\nValue `%v` wei\n",
 			from.String(), to.String(),
 			input, gas, value)
 	} else {
-		fmt.Fprintf(t.out, "From: `%v`\nCreate at: `%v`\nData: `0x%x`\nGas: `%d`\nValue `%v` wei\n",
+		fmt.Fprintf(t.out, "From: `%v`\nCreate at: `%v`\nData: `Gs%x`\nGas: `%d`\nValue `%v` wei\n",
 			from.String(), to.String(),
 			input, gas, value)
 	}
@@ -354,7 +354,7 @@ func (t *mdLogger) CaptureFault(env *EVM, pc uint64, op OpCode, gas, cost uint64
 
 func (t *mdLogger) CaptureEnd(output []byte, gasUsed uint64, tm time.Duration, err error) error {
 	fmt.Fprintf(t.out, `
-Output: 0x%x
+Output: Gs%x
 Consumed gas: %d
 Error: %v
 `,

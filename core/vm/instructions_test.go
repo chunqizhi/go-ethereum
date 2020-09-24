@@ -587,46 +587,46 @@ func TestCreate2Addreses(t *testing.T) {
 
 	for i, tt := range []testcase{
 		{
-			origin:   "0x0000000000000000000000000000000000000000",
-			salt:     "0x0000000000000000000000000000000000000000",
-			code:     "0x00",
-			expected: "0x4d1a2e2bb4f88f0250f26ffff098b0b30b26bf38",
+			origin:   "Gs0000000000000000000000000000000000000000",
+			salt:     "Gs0000000000000000000000000000000000000000",
+			code:     "Gs00",
+			expected: "Gs4d1a2e2bb4f88f0250f26ffff098b0b30b26bf38",
 		},
 		{
-			origin:   "0xdeadbeef00000000000000000000000000000000",
-			salt:     "0x0000000000000000000000000000000000000000",
-			code:     "0x00",
-			expected: "0xB928f69Bb1D91Cd65274e3c79d8986362984fDA3",
+			origin:   "Gsdeadbeef00000000000000000000000000000000",
+			salt:     "Gs0000000000000000000000000000000000000000",
+			code:     "Gs00",
+			expected: "GsB928f69Bb1D91Cd65274e3c79d8986362984fDA3",
 		},
 		{
-			origin:   "0xdeadbeef00000000000000000000000000000000",
-			salt:     "0xfeed000000000000000000000000000000000000",
-			code:     "0x00",
-			expected: "0xD04116cDd17beBE565EB2422F2497E06cC1C9833",
+			origin:   "Gsdeadbeef00000000000000000000000000000000",
+			salt:     "Gsfeed000000000000000000000000000000000000",
+			code:     "Gs00",
+			expected: "GsD04116cDd17beBE565EB2422F2497E06cC1C9833",
 		},
 		{
-			origin:   "0x0000000000000000000000000000000000000000",
-			salt:     "0x0000000000000000000000000000000000000000",
-			code:     "0xdeadbeef",
-			expected: "0x70f2b2914A2a4b783FaEFb75f459A580616Fcb5e",
+			origin:   "Gs0000000000000000000000000000000000000000",
+			salt:     "Gs0000000000000000000000000000000000000000",
+			code:     "Gsdeadbeef",
+			expected: "Gs70f2b2914A2a4b783FaEFb75f459A580616Fcb5e",
 		},
 		{
-			origin:   "0x00000000000000000000000000000000deadbeef",
-			salt:     "0xcafebabe",
-			code:     "0xdeadbeef",
-			expected: "0x60f3f640a8508fC6a86d45DF051962668E1e8AC7",
+			origin:   "Gs00000000000000000000000000000000deadbeef",
+			salt:     "Gscafebabe",
+			code:     "Gsdeadbeef",
+			expected: "Gs60f3f640a8508fC6a86d45DF051962668E1e8AC7",
 		},
 		{
-			origin:   "0x00000000000000000000000000000000deadbeef",
-			salt:     "0xcafebabe",
-			code:     "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-			expected: "0x1d8bfDC5D46DC4f61D6b6115972536eBE6A8854C",
+			origin:   "Gs00000000000000000000000000000000deadbeef",
+			salt:     "Gscafebabe",
+			code:     "Gsdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+			expected: "Gs1d8bfDC5D46DC4f61D6b6115972536eBE6A8854C",
 		},
 		{
-			origin:   "0x0000000000000000000000000000000000000000",
-			salt:     "0x0000000000000000000000000000000000000000",
-			code:     "0x",
-			expected: "0xE33C0C7F7df4809055C3ebA6c09CFe4BaF1BD9e0",
+			origin:   "Gs0000000000000000000000000000000000000000",
+			salt:     "Gs0000000000000000000000000000000000000000",
+			code:     "Gs",
+			expected: "GsE33C0C7F7df4809055C3ebA6c09CFe4BaF1BD9e0",
 		},
 	} {
 
@@ -642,7 +642,7 @@ func TestCreate2Addreses(t *testing.T) {
 			stack.push(big.NewInt(0)) // memstart
 			stack.push(big.NewInt(0)) // value
 			gas, _ := gasCreate2(params.GasTable{}, nil, nil, stack, nil, 0)
-			fmt.Printf("Example %d\n* address `0x%x`\n* salt `0x%x`\n* init_code `0x%x`\n* gas (assuming no mem expansion): `%v`\n* result: `%s`\n\n", i,origin, salt, code, gas, address.String())
+			fmt.Printf("Example %d\n* address `Gs%x`\n* salt `Gs%x`\n* init_code `Gs%x`\n* gas (assuming no mem expansion): `%v`\n* result: `%s`\n\n", i,origin, salt, code, gas, address.String())
 		*/
 		expected := common.BytesToAddress(common.FromHex(tt.expected))
 		if !bytes.Equal(expected.Bytes(), address.Bytes()) {

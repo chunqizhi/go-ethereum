@@ -454,7 +454,7 @@ func TestPaddingAppendedToSymMessagesWithSignature(t *testing.T) {
 }
 
 func TestAesNonce(t *testing.T) {
-	key := hexutil.MustDecode("0x03ca634cae0d49acb401d8a4c6b6fe8c55b70d115bf400769cc1400f3258cd31")
+	key := hexutil.MustDecode("Gs03ca634cae0d49acb401d8a4c6b6fe8c55b70d115bf400769cc1400f3258cd31")
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		t.Fatalf("NewCipher failed: %s", err)

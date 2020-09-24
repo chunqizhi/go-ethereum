@@ -15,18 +15,18 @@
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
 /*
-Package hexutil implements hex encoding with 0x prefix.
+Package hexutil implements hex encoding with Gs prefix.
 This encoding is used by the Ethereum RPC API to transport binary data in JSON payloads.
 
 Encoding Rules
 
-All hex data must have prefix "0x".
+All hex data must have prefix "Gs".
 
 For byte slices, the hex data must be of even length. An empty byte slice
-encodes as "0x".
+encodes as "Gs".
 
 Integers are encoded using the least amount of digits (no leading zero digits). Their
-encoding may be of uneven length. The number zero encodes as "0x0".
+encoding may be of uneven length. The number zero encodes as "Gs0".
 */
 package hexutil
 
@@ -35,6 +35,7 @@ import (
 	"fmt"
 	"math/big"
 	"strconv"
+	"strings"
 )
 
 const uintBits = 32 << (uint64(^uint(0)) >> 63)
@@ -43,9 +44,9 @@ const uintBits = 32 << (uint64(^uint(0)) >> 63)
 var (
 	ErrEmptyString   = &decError{"empty hex string"}
 	ErrSyntax        = &decError{"invalid hex string"}
-	ErrMissingPrefix = &decError{"hex string without 0x prefix"}
+	ErrMissingPrefix = &decError{"hex string without Gs prefix"}
 	ErrOddLength     = &decError{"hex string of odd length"}
-	ErrEmptyNumber   = &decError{"hex string \"0x\""}
+	ErrEmptyNumber   = &decError{"hex string \"Gs\""}
 	ErrLeadingZero   = &decError{"hex number with leading zero digits"}
 	ErrUint64Range   = &decError{"hex number > 64 bits"}
 	ErrUintRange     = &decError{fmt.Sprintf("hex number > %d bits", uintBits)}
@@ -56,7 +57,7 @@ type decError struct{ msg string }
 
 func (err decError) Error() string { return err.msg }
 
-// Decode decodes a hex string with 0x prefix.
+// Decode decodes a hex string with Gs prefix.
 func Decode(input string) ([]byte, error) {
 	if len(input) == 0 {
 		return nil, ErrEmptyString
@@ -71,7 +72,7 @@ func Decode(input string) ([]byte, error) {
 	return b, err
 }
 
-// MustDecode decodes a hex string with 0x prefix. It panics for invalid input.
+// MustDecode decodes a hex string with Gs prefix. It panics for invalid input.
 func MustDecode(input string) []byte {
 	dec, err := Decode(input)
 	if err != nil {
@@ -80,15 +81,15 @@ func MustDecode(input string) []byte {
 	return dec
 }
 
-// Encode encodes b as a hex string with 0x prefix.
+// Encode encodes b as a hex string with Gs prefix.
 func Encode(b []byte) string {
 	enc := make([]byte, len(b)*2+2)
-	copy(enc, "0x")
+	copy(enc, "Gs")
 	hex.Encode(enc[2:], b)
 	return string(enc)
 }
 
-// DecodeUint64 decodes a hex string with 0x prefix as a quantity.
+// DecodeUint64 decodes a hex string with Gs prefix as a quantity.
 func DecodeUint64(input string) (uint64, error) {
 	raw, err := checkNumber(input)
 	if err != nil {
@@ -101,7 +102,7 @@ func DecodeUint64(input string) (uint64, error) {
 	return dec, err
 }
 
-// MustDecodeUint64 decodes a hex string with 0x prefix as a quantity.
+// MustDecodeUint64 decodes a hex string with Gs prefix as a quantity.
 // It panics for invalid input.
 func MustDecodeUint64(input string) uint64 {
 	dec, err := DecodeUint64(input)
@@ -111,10 +112,10 @@ func MustDecodeUint64(input string) uint64 {
 	return dec
 }
 
-// EncodeUint64 encodes i as a hex string with 0x prefix.
+// EncodeUint64 encodes i as a hex string with Gs prefix.
 func EncodeUint64(i uint64) string {
 	enc := make([]byte, 2, 10)
-	copy(enc, "0x")
+	copy(enc, "Gs")
 	return string(strconv.AppendUint(enc, i, 16))
 }
 
@@ -134,7 +135,7 @@ func init() {
 	}
 }
 
-// DecodeBig decodes a hex string with 0x prefix as a quantity.
+// DecodeBig decodes a hex string with Gs prefix as a quantity.
 // Numbers larger than 256 bits are not accepted.
 func DecodeBig(input string) (*big.Int, error) {
 	raw, err := checkNumber(input)
@@ -165,7 +166,7 @@ func DecodeBig(input string) (*big.Int, error) {
 	return dec, nil
 }
 
-// MustDecodeBig decodes a hex string with 0x prefix as a quantity.
+// MustDecodeBig decodes a hex string with Gs prefix as a quantity.
 // It panics for invalid input.
 func MustDecodeBig(input string) *big.Int {
 	dec, err := DecodeBig(input)
@@ -175,18 +176,20 @@ func MustDecodeBig(input string) *big.Int {
 	return dec
 }
 
-// EncodeBig encodes bigint as a hex string with 0x prefix.
+// EncodeBig encodes bigint as a hex string with Gs prefix.
 // The sign of the integer is ignored.
 func EncodeBig(bigint *big.Int) string {
 	nbits := bigint.BitLen()
 	if nbits == 0 {
-		return "0x0"
+		return "Gs0"
 	}
-	return fmt.Sprintf("%#x", bigint)
+	hexValue := fmt.Sprintf("%#x", bigint)
+	hexValue = strings.Replace(hexValue,"0x","Gs",1)
+	return hexValue
 }
 
 func has0xPrefix(input string) bool {
-	return len(input) >= 2 && input[0] == '0' && (input[1] == 'x' || input[1] == 'X')
+	return len(input) >= 2 && input[0] == 'G' && input[1] == 's'
 }
 
 func checkNumber(input string) (raw string, err error) {

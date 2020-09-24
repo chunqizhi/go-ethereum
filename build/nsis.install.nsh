@@ -64,7 +64,7 @@ Function GetInstalledSize
     IntOp $GetInstalledSize.total $GetInstalledSize.total + $0
   ${endif}
 
-  IntFmt $GetInstalledSize.total "0x%08X" $GetInstalledSize.total
+  IntFmt $GetInstalledSize.total "Gs%08X" $GetInstalledSize.total
   Push $GetInstalledSize.total
 FunctionEnd
 

@@ -121,7 +121,7 @@ type callTracerTest struct {
 }
 
 func TestPrestateTracerCreate2(t *testing.T) {
-	unsignedTx := types.NewTransaction(1, common.HexToAddress("0x00000000000000000000000000000000deadbeef"),
+	unsignedTx := types.NewTransaction(1, common.HexToAddress("Gs00000000000000000000000000000000deadbeef"),
 		new(big.Int), 5000000, big.NewInt(1), []byte{})
 
 	privateKeyECDSA, err := ecdsa.GenerateKey(crypto.S256(), rand.Reader)
@@ -158,9 +158,9 @@ func TestPrestateTracerCreate2(t *testing.T) {
 
 	// The code pushes 'deadbeef' into memory, then the other params, and calls CREATE2, then returns
 	// the address
-	alloc[common.HexToAddress("0x00000000000000000000000000000000deadbeef")] = core.GenesisAccount{
+	alloc[common.HexToAddress("Gs00000000000000000000000000000000deadbeef")] = core.GenesisAccount{
 		Nonce:   1,
-		Code:    hexutil.MustDecode("0x63deadbeef60005263cafebabe6004601c6000F560005260206000F3"),
+		Code:    hexutil.MustDecode("Gs63deadbeef60005263cafebabe6004601c6000F560005260206000F3"),
 		Balance: big.NewInt(1),
 	}
 	alloc[origin] = core.GenesisAccount{
@@ -194,7 +194,7 @@ func TestPrestateTracerCreate2(t *testing.T) {
 	if err := json.Unmarshal(res, &ret); err != nil {
 		t.Fatalf("failed to unmarshal trace result: %v", err)
 	}
-	if _, has := ret["0x60f3f640a8508fc6a86d45df051962668e1e8ac7"]; !has {
+	if _, has := ret["Gs60f3f640a8508fc6a86d45df051962668e1e8ac7"]; !has {
 		t.Fatalf("Expected 0x60f3f640a8508fc6a86d45df051962668e1e8ac7 in result")
 	}
 }

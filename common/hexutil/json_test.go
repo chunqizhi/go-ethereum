@@ -65,18 +65,18 @@ var unmarshalBytesTests = []unmarshalTest{
 	{input: "null", wantErr: errNonString(bytesT)},
 	{input: "10", wantErr: errNonString(bytesT)},
 	{input: `"0"`, wantErr: wrapTypeError(ErrMissingPrefix, bytesT)},
-	{input: `"0x0"`, wantErr: wrapTypeError(ErrOddLength, bytesT)},
-	{input: `"0xxx"`, wantErr: wrapTypeError(ErrSyntax, bytesT)},
-	{input: `"0x01zz01"`, wantErr: wrapTypeError(ErrSyntax, bytesT)},
+	{input: `"Gs0"`, wantErr: wrapTypeError(ErrOddLength, bytesT)},
+	{input: `"Gsxx"`, wantErr: wrapTypeError(ErrSyntax, bytesT)},
+	{input: `"Gs01zz01"`, wantErr: wrapTypeError(ErrSyntax, bytesT)},
 
 	// valid encoding
 	{input: `""`, want: referenceBytes("")},
-	{input: `"0x"`, want: referenceBytes("")},
-	{input: `"0x02"`, want: referenceBytes("02")},
-	{input: `"0X02"`, want: referenceBytes("02")},
-	{input: `"0xffffffffff"`, want: referenceBytes("ffffffffff")},
+	{input: `"Gs"`, want: referenceBytes("")},
+	{input: `"Gs02"`, want: referenceBytes("02")},
+	{input: `"Gs02"`, want: referenceBytes("02")},
+	{input: `"Gsffffffffff"`, want: referenceBytes("ffffffffff")},
 	{
-		input: `"0xffffffffffffffffffffffffffffffffffff"`,
+		input: `"Gsffffffffffffffffffffffffffffffffffff"`,
 		want:  referenceBytes("ffffffffffffffffffffffffffffffffffff"),
 	},
 }
@@ -96,7 +96,7 @@ func TestUnmarshalBytes(t *testing.T) {
 }
 
 func BenchmarkUnmarshalBytes(b *testing.B) {
-	input := []byte(`"0x123456789abcdef123456789abcdef"`)
+	input := []byte(`"Gs123456789abcdef123456789abcdef"`)
 	for i := 0; i < b.N; i++ {
 		var v Bytes
 		if err := v.UnmarshalJSON(input); err != nil {
@@ -130,34 +130,34 @@ var unmarshalBigTests = []unmarshalTest{
 	{input: "null", wantErr: errNonString(bigT)},
 	{input: "10", wantErr: errNonString(bigT)},
 	{input: `"0"`, wantErr: wrapTypeError(ErrMissingPrefix, bigT)},
-	{input: `"0x"`, wantErr: wrapTypeError(ErrEmptyNumber, bigT)},
-	{input: `"0x01"`, wantErr: wrapTypeError(ErrLeadingZero, bigT)},
-	{input: `"0xx"`, wantErr: wrapTypeError(ErrSyntax, bigT)},
-	{input: `"0x1zz01"`, wantErr: wrapTypeError(ErrSyntax, bigT)},
+	{input: `"Gs"`, wantErr: wrapTypeError(ErrEmptyNumber, bigT)},
+	{input: `"Gs01"`, wantErr: wrapTypeError(ErrLeadingZero, bigT)},
+	{input: `"Gsx"`, wantErr: wrapTypeError(ErrSyntax, bigT)},
+	{input: `"Gs1zz01"`, wantErr: wrapTypeError(ErrSyntax, bigT)},
 	{
-		input:   `"0x10000000000000000000000000000000000000000000000000000000000000000"`,
+		input:   `"Gs10000000000000000000000000000000000000000000000000000000000000000"`,
 		wantErr: wrapTypeError(ErrBig256Range, bigT),
 	},
 
 	// valid encoding
 	{input: `""`, want: big.NewInt(0)},
-	{input: `"0x0"`, want: big.NewInt(0)},
-	{input: `"0x2"`, want: big.NewInt(0x2)},
-	{input: `"0x2F2"`, want: big.NewInt(0x2f2)},
-	{input: `"0X2F2"`, want: big.NewInt(0x2f2)},
-	{input: `"0x1122aaff"`, want: big.NewInt(0x1122aaff)},
-	{input: `"0xbBb"`, want: big.NewInt(0xbbb)},
-	{input: `"0xfffffffff"`, want: big.NewInt(0xfffffffff)},
+	{input: `"Gs0"`, want: big.NewInt(0)},
+	{input: `"Gs2"`, want: big.NewInt(0x2)},
+	{input: `"Gs2F2"`, want: big.NewInt(0x2f2)},
+	{input: `"Gs2F2"`, want: big.NewInt(0x2f2)},
+	{input: `"Gs1122aaff"`, want: big.NewInt(0x1122aaff)},
+	{input: `"GsbBb"`, want: big.NewInt(0xbbb)},
+	{input: `"Gsfffffffff"`, want: big.NewInt(0xfffffffff)},
 	{
-		input: `"0x112233445566778899aabbccddeeff"`,
+		input: `"Gs112233445566778899aabbccddeeff"`,
 		want:  referenceBig("112233445566778899aabbccddeeff"),
 	},
 	{
-		input: `"0xffffffffffffffffffffffffffffffffffff"`,
+		input: `"Gsffffffffffffffffffffffffffffffffffff"`,
 		want:  referenceBig("ffffffffffffffffffffffffffffffffffff"),
 	},
 	{
-		input: `"0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"`,
+		input: `"Gsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"`,
 		want:  referenceBig("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"),
 	},
 }
@@ -177,7 +177,7 @@ func TestUnmarshalBig(t *testing.T) {
 }
 
 func BenchmarkUnmarshalBig(b *testing.B) {
-	input := []byte(`"0x123456789abcdef123456789abcdef"`)
+	input := []byte(`"Gs123456789abcdef123456789abcdef"`)
 	for i := 0; i < b.N; i++ {
 		var v Big
 		if err := v.UnmarshalJSON(input); err != nil {
@@ -211,21 +211,21 @@ var unmarshalUint64Tests = []unmarshalTest{
 	{input: "null", wantErr: errNonString(uint64T)},
 	{input: "10", wantErr: errNonString(uint64T)},
 	{input: `"0"`, wantErr: wrapTypeError(ErrMissingPrefix, uint64T)},
-	{input: `"0x"`, wantErr: wrapTypeError(ErrEmptyNumber, uint64T)},
-	{input: `"0x01"`, wantErr: wrapTypeError(ErrLeadingZero, uint64T)},
-	{input: `"0xfffffffffffffffff"`, wantErr: wrapTypeError(ErrUint64Range, uint64T)},
-	{input: `"0xx"`, wantErr: wrapTypeError(ErrSyntax, uint64T)},
-	{input: `"0x1zz01"`, wantErr: wrapTypeError(ErrSyntax, uint64T)},
+	{input: `"Gs"`, wantErr: wrapTypeError(ErrEmptyNumber, uint64T)},
+	{input: `"Gs01"`, wantErr: wrapTypeError(ErrLeadingZero, uint64T)},
+	{input: `"Gsfffffffffffffffff"`, wantErr: wrapTypeError(ErrUint64Range, uint64T)},
+	{input: `"Gsx"`, wantErr: wrapTypeError(ErrSyntax, uint64T)},
+	{input: `"Gs1zz01"`, wantErr: wrapTypeError(ErrSyntax, uint64T)},
 
 	// valid encoding
 	{input: `""`, want: uint64(0)},
-	{input: `"0x0"`, want: uint64(0)},
-	{input: `"0x2"`, want: uint64(0x2)},
-	{input: `"0x2F2"`, want: uint64(0x2f2)},
-	{input: `"0X2F2"`, want: uint64(0x2f2)},
-	{input: `"0x1122aaff"`, want: uint64(0x1122aaff)},
-	{input: `"0xbbb"`, want: uint64(0xbbb)},
-	{input: `"0xffffffffffffffff"`, want: uint64(0xffffffffffffffff)},
+	{input: `"Gs0"`, want: uint64(0)},
+	{input: `"Gs2"`, want: uint64(0x2)},
+	{input: `"Gs2F2"`, want: uint64(0x2f2)},
+	{input: `"Gs2F2"`, want: uint64(0x2f2)},
+	{input: `"Gs1122aaff"`, want: uint64(0x1122aaff)},
+	{input: `"Gsbbb"`, want: uint64(0xbbb)},
+	{input: `"Gsffffffffffffffff"`, want: uint64(0xffffffffffffffff)},
 }
 
 func TestUnmarshalUint64(t *testing.T) {
@@ -243,7 +243,7 @@ func TestUnmarshalUint64(t *testing.T) {
 }
 
 func BenchmarkUnmarshalUint64(b *testing.B) {
-	input := []byte(`"0x123456789abcdf"`)
+	input := []byte(`"Gs123456789abcdf"`)
 	for i := 0; i < b.N; i++ {
 		var v Uint64
 		v.UnmarshalJSON(input)
@@ -301,23 +301,23 @@ var unmarshalUintTests = []unmarshalTest{
 	{input: "null", wantErr: errNonString(uintT)},
 	{input: "10", wantErr: errNonString(uintT)},
 	{input: `"0"`, wantErr: wrapTypeError(ErrMissingPrefix, uintT)},
-	{input: `"0x"`, wantErr: wrapTypeError(ErrEmptyNumber, uintT)},
-	{input: `"0x01"`, wantErr: wrapTypeError(ErrLeadingZero, uintT)},
-	{input: `"0x100000000"`, want: uint(maxUint33bits), wantErr32bit: wrapTypeError(ErrUintRange, uintT)},
-	{input: `"0xfffffffffffffffff"`, wantErr: wrapTypeError(ErrUintRange, uintT)},
-	{input: `"0xx"`, wantErr: wrapTypeError(ErrSyntax, uintT)},
-	{input: `"0x1zz01"`, wantErr: wrapTypeError(ErrSyntax, uintT)},
+	{input: `"Gs"`, wantErr: wrapTypeError(ErrEmptyNumber, uintT)},
+	{input: `"Gs01"`, wantErr: wrapTypeError(ErrLeadingZero, uintT)},
+	{input: `"Gs100000000"`, want: uint(maxUint33bits), wantErr32bit: wrapTypeError(ErrUintRange, uintT)},
+	{input: `"Gsfffffffffffffffff"`, wantErr: wrapTypeError(ErrUintRange, uintT)},
+	{input: `"Gsx"`, wantErr: wrapTypeError(ErrSyntax, uintT)},
+	{input: `"Gs1zz01"`, wantErr: wrapTypeError(ErrSyntax, uintT)},
 
 	// valid encoding
 	{input: `""`, want: uint(0)},
-	{input: `"0x0"`, want: uint(0)},
-	{input: `"0x2"`, want: uint(0x2)},
-	{input: `"0x2F2"`, want: uint(0x2f2)},
-	{input: `"0X2F2"`, want: uint(0x2f2)},
-	{input: `"0x1122aaff"`, want: uint(0x1122aaff)},
-	{input: `"0xbbb"`, want: uint(0xbbb)},
-	{input: `"0xffffffff"`, want: uint(0xffffffff)},
-	{input: `"0xffffffffffffffff"`, want: uint(maxUint64bits), wantErr32bit: wrapTypeError(ErrUintRange, uintT)},
+	{input: `"Gs0"`, want: uint(0)},
+	{input: `"Gs2"`, want: uint(0x2)},
+	{input: `"Gs2F2"`, want: uint(0x2f2)},
+	{input: `"Gs2F2"`, want: uint(0x2f2)},
+	{input: `"Gs1122aaff"`, want: uint(0x1122aaff)},
+	{input: `"Gsbbb"`, want: uint(0xbbb)},
+	{input: `"Gsffffffff"`, want: uint(0xffffffff)},
+	{input: `"Gsffffffffffffffff"`, want: uint(maxUint64bits), wantErr32bit: wrapTypeError(ErrUintRange, uintT)},
 }
 
 func TestUnmarshalUint(t *testing.T) {
@@ -344,16 +344,16 @@ func TestUnmarshalFixedUnprefixedText(t *testing.T) {
 		want    []byte
 		wantErr error
 	}{
-		{input: "0x2", wantErr: ErrOddLength},
+		{input: "Gs2", wantErr: ErrOddLength},
 		{input: "2", wantErr: ErrOddLength},
 		{input: "4444", wantErr: errors.New("hex string has length 4, want 8 for x")},
 		{input: "4444", wantErr: errors.New("hex string has length 4, want 8 for x")},
 		// check that output is not modified for partially correct input
 		{input: "444444gg", wantErr: ErrSyntax, want: []byte{0, 0, 0, 0}},
-		{input: "0x444444gg", wantErr: ErrSyntax, want: []byte{0, 0, 0, 0}},
+		{input: "Gs444444gg", wantErr: ErrSyntax, want: []byte{0, 0, 0, 0}},
 		// valid inputs
 		{input: "44444444", want: []byte{0x44, 0x44, 0x44, 0x44}},
-		{input: "0x44444444", want: []byte{0x44, 0x44, 0x44, 0x44}},
+		{input: "Gs44444444", want: []byte{0x44, 0x44, 0x44, 0x44}},
 	}
 
 	for _, test := range tests {

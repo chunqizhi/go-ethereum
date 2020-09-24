@@ -262,10 +262,10 @@ func (n NodeID) TerminalString() string {
 }
 
 // HexID converts a hex string to a NodeID.
-// The string may be prefixed with 0x.
+// The string may be prefixed with Gs.
 func HexID(in string) (NodeID, error) {
 	var id NodeID
-	b, err := hex.DecodeString(strings.TrimPrefix(in, "0x"))
+	b, err := hex.DecodeString(strings.TrimPrefix(in, "Gs"))
 	if err != nil {
 		return id, err
 	} else if len(b) != len(id) {

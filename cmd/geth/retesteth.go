@@ -588,7 +588,7 @@ func (api *RetestethAPI) RewindToBlock(ctx context.Context, newHead uint64) (boo
 	return true, nil
 }
 
-var emptyListHash common.Hash = common.HexToHash("0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347")
+var emptyListHash common.Hash = common.HexToHash("Gs1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347")
 
 func (api *RetestethAPI) GetLogHash(ctx context.Context, txHash common.Hash) (common.Hash, error) {
 	receipt, _, _, _ := rawdb.ReadReceipt(api.ethDb, txHash, api.chainConfig)
@@ -632,7 +632,7 @@ func (api *RetestethAPI) GetBlockByHash(ctx context.Context, blockHash common.Ha
 		response["totalDifficulty"] = (*hexutil.Big)(api.blockchain.GetTd(block.Hash(), block.Number().Uint64()))
 		return response, err
 	}
-	return nil, fmt.Errorf("block 0x%x not found", blockHash)
+	return nil, fmt.Errorf("block Gs%x not found", blockHash)
 }
 
 func (api *RetestethAPI) AccountRange(ctx context.Context,

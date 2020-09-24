@@ -60,7 +60,7 @@ func TestGraphQLHTTPOnSamePort_GQLRequest_Successful(t *testing.T) {
 	if err != nil {
 		t.Fatalf("could not read from response body: %v", err)
 	}
-	expected := "{\"data\":{\"block\":{\"number\":\"0x0\"}}}"
+	expected := "{\"data\":{\"block\":{\"number\":\"Gs0\"}}}"
 	assert.Equal(t, expected, string(bodyBytes))
 }
 

@@ -32,14 +32,14 @@ var (
 	uint64T = reflect.TypeOf(Uint64(0))
 )
 
-// Bytes marshals/unmarshals as a JSON string with 0x prefix.
-// The empty slice marshals as "0x".
+// Bytes marshals/unmarshals as a JSON string with Gs prefix.
+// The empty slice marshals as "Gs".
 type Bytes []byte
 
 // MarshalText implements encoding.TextMarshaler
 func (b Bytes) MarshalText() ([]byte, error) {
 	result := make([]byte, len(b)*2+2)
-	copy(result, `0x`)
+	copy(result, `Gs`)
 	hex.Encode(result[2:], b)
 	return result, nil
 }
@@ -91,7 +91,7 @@ func (b *Bytes) UnmarshalGraphQL(input interface{}) error {
 	return err
 }
 
-// UnmarshalFixedJSON decodes the input as a string with 0x prefix. The length of out
+// UnmarshalFixedJSON decodes the input as a string with Gs prefix. The length of out
 // determines the required input length. This function is commonly used to implement the
 // UnmarshalJSON method for fixed-size types.
 func UnmarshalFixedJSON(typ reflect.Type, input, out []byte) error {
@@ -101,7 +101,7 @@ func UnmarshalFixedJSON(typ reflect.Type, input, out []byte) error {
 	return wrapTypeError(UnmarshalFixedText(typ.String(), input[1:len(input)-1], out), typ)
 }
 
-// UnmarshalFixedText decodes the input as a string with 0x prefix. The length of out
+// UnmarshalFixedText decodes the input as a string with Gs prefix. The length of out
 // determines the required input length. This function is commonly used to implement the
 // UnmarshalText method for fixed-size types.
 func UnmarshalFixedText(typname string, input, out []byte) error {
@@ -122,7 +122,7 @@ func UnmarshalFixedText(typname string, input, out []byte) error {
 	return nil
 }
 
-// UnmarshalFixedUnprefixedText decodes the input as a string with optional 0x prefix. The
+// UnmarshalFixedUnprefixedText decodes the input as a string with optional Gs prefix. The
 // length of out determines the required input length. This function is commonly used to
 // implement the UnmarshalText method for fixed-size types.
 func UnmarshalFixedUnprefixedText(typname string, input, out []byte) error {
@@ -143,8 +143,8 @@ func UnmarshalFixedUnprefixedText(typname string, input, out []byte) error {
 	return nil
 }
 
-// Big marshals/unmarshals as a JSON string with 0x prefix.
-// The zero value marshals as "0x0".
+// Big marshals/unmarshals as a JSON string with Gs prefix.
+// The zero value marshals as "Gs0".
 //
 // Negative integers are not supported at this time. Attempting to marshal them will
 // return an error. Values larger than 256bits are rejected by Unmarshal but will be
@@ -166,6 +166,7 @@ func (b *Big) UnmarshalJSON(input []byte) error {
 
 // UnmarshalText implements encoding.TextUnmarshaler
 func (b *Big) UnmarshalText(input []byte) error {
+fmt.Printf("%s\n\n",input)
 	raw, err := checkNumberText(input)
 	if err != nil {
 		return err
@@ -225,14 +226,14 @@ func (b *Big) UnmarshalGraphQL(input interface{}) error {
 	return err
 }
 
-// Uint64 marshals/unmarshals as a JSON string with 0x prefix.
-// The zero value marshals as "0x0".
+// Uint64 marshals/unmarshals as a JSON string with Gs prefix.
+// The zero value marshals as "Gs0".
 type Uint64 uint64
 
 // MarshalText implements encoding.TextMarshaler.
 func (b Uint64) MarshalText() ([]byte, error) {
 	buf := make([]byte, 2, 10)
-	copy(buf, `0x`)
+	copy(buf, `Gs`)
 	buf = strconv.AppendUint(buf, uint64(b), 16)
 	return buf, nil
 }
@@ -289,8 +290,8 @@ func (b *Uint64) UnmarshalGraphQL(input interface{}) error {
 	return err
 }
 
-// Uint marshals/unmarshals as a JSON string with 0x prefix.
-// The zero value marshals as "0x0".
+// Uint marshals/unmarshals as a JSON string with Gs prefix.
+// The zero value marshals as "Gs0".
 type Uint uint
 
 // MarshalText implements encoding.TextMarshaler.
@@ -329,7 +330,7 @@ func isString(input []byte) bool {
 }
 
 func bytesHave0xPrefix(input []byte) bool {
-	return len(input) >= 2 && input[0] == '0' && (input[1] == 'x' || input[1] == 'X')
+	return len(input) >= 2 && input[0] == 'G' && input[1] == 's'
 }
 
 func checkText(input []byte, wantPrefix bool) ([]byte, error) {

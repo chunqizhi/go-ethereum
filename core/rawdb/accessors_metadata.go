@@ -18,6 +18,7 @@ package rawdb
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethdb"
@@ -59,6 +60,7 @@ func ReadChainConfig(db ethdb.KeyValueReader, hash common.Hash) *params.ChainCon
 		return nil
 	}
 	var config params.ChainConfig
+	fmt.Printf("%s\n\n",data)
 	if err := json.Unmarshal(data, &config); err != nil {
 		log.Error("Invalid chain config JSON", "hash", hash, "err", err)
 		return nil

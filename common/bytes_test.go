@@ -59,7 +59,7 @@ func TestRightPadBytes(t *testing.T) {
 }
 
 func TestFromHex(t *testing.T) {
-	input := "0x01"
+	input := "Gs01"
 	expected := []byte{1}
 	result := FromHex(input)
 	if !bytes.Equal(expected, result) {
@@ -77,9 +77,9 @@ func TestIsHex(t *testing.T) {
 		{"00", true},
 		{"a9e67e", true},
 		{"A9E67E", true},
-		{"0xa9e67e", false},
+		{"Gsa9e67e", false},
 		{"a9e67e001", false},
-		{"0xHELLO_MY_NAME_IS_STEVEN_@#$^&*", false},
+		{"GsHELLO_MY_NAME_IS_STEVEN_@#$^&*", false},
 	}
 	for _, test := range tests {
 		if ok := isHex(test.input); ok != test.ok {
@@ -89,7 +89,7 @@ func TestIsHex(t *testing.T) {
 }
 
 func TestFromHexOddLength(t *testing.T) {
-	input := "0x1"
+	input := "Gs1"
 	expected := []byte{1}
 	result := FromHex(input)
 	if !bytes.Equal(expected, result) {
@@ -111,11 +111,11 @@ func TestTrimRightZeroes(t *testing.T) {
 		arr []byte
 		exp []byte
 	}{
-		{FromHex("0x00ffff00ff0000"), FromHex("0x00ffff00ff")},
-		{FromHex("0x00000000000000"), []byte{}},
-		{FromHex("0xff"), FromHex("0xff")},
+		{FromHex("Gs00ffff00ff0000"), FromHex("Gs00ffff00ff")},
+		{FromHex("Gs00000000000000"), []byte{}},
+		{FromHex("Gsff"), FromHex("Gsff")},
 		{[]byte{}, []byte{}},
-		{FromHex("0x00ffffffffffff"), FromHex("0x00ffffffffffff")},
+		{FromHex("Gs00ffffffffffff"), FromHex("Gs00ffffffffffff")},
 	}
 	for i, test := range tests {
 		got := TrimRightZeroes(test.arr)

@@ -137,7 +137,6 @@ func (c *Client) sendHTTP(ctx context.Context, op *requestOp, msg interface{}) e
 	if respBody != nil {
 		defer respBody.Close()
 	}
-
 	if err != nil {
 		if respBody != nil {
 			buf := new(bytes.Buffer)

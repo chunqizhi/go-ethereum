@@ -103,7 +103,7 @@ func TestExecute(t *testing.T) {
 
 func TestCall(t *testing.T) {
 	state, _ := state.New(common.Hash{}, state.NewDatabase(rawdb.NewMemoryDatabase()), nil)
-	address := common.HexToAddress("0x0a")
+	address := common.HexToAddress("Gs0a")
 	state.SetCode(address, []byte{
 		byte(vm.PUSH1), 10,
 		byte(vm.PUSH1), 0,
@@ -213,7 +213,7 @@ func BenchmarkEVM_CREATE2_1200(bench *testing.B) {
 
 func fakeHeader(n uint64, parentHash common.Hash) *types.Header {
 	header := types.Header{
-		Coinbase:   common.HexToAddress("0x00000000000000000000000000000000deadbeef"),
+		Coinbase:   common.HexToAddress("Gs00000000000000000000000000000000deadbeef"),
 		Number:     big.NewInt(int64(n)),
 		ParentHash: parentHash,
 		Time:       1000,
@@ -347,7 +347,7 @@ func (s *stepCounter) CaptureEnd(output []byte, gasUsed uint64, t time.Duration,
 
 func TestJumpSub1024Limit(t *testing.T) {
 	state, _ := state.New(common.Hash{}, state.NewDatabase(rawdb.NewMemoryDatabase()), nil)
-	address := common.HexToAddress("0x0a")
+	address := common.HexToAddress("Gs0a")
 	// Code is
 	// 0 beginsub
 	// 1 push 0
@@ -384,7 +384,7 @@ func TestJumpSub1024Limit(t *testing.T) {
 
 func TestReturnSubShallow(t *testing.T) {
 	state, _ := state.New(common.Hash{}, state.NewDatabase(rawdb.NewMemoryDatabase()), nil)
-	address := common.HexToAddress("0x0a")
+	address := common.HexToAddress("Gs0a")
 	// The code does returnsub without having anything on the returnstack.
 	// It should not panic, but just fail after one step
 	state.SetCode(address, []byte{
@@ -474,14 +474,14 @@ func DisabledTestEipExampleCases(t *testing.T) {
 		it := asm.NewInstructionIterator(code)
 		for it.Next() {
 			if it.Arg() != nil && 0 < len(it.Arg()) {
-				instrs = append(instrs, fmt.Sprintf("%v 0x%x", it.Op(), it.Arg()))
+				instrs = append(instrs, fmt.Sprintf("%v Gs%x", it.Op(), it.Arg()))
 			} else {
 				instrs = append(instrs, fmt.Sprintf("%v", it.Op()))
 			}
 		}
 		ops := strings.Join(instrs, ", ")
 
-		fmt.Printf("%v\nBytecode: `0x%x` (`%v`)\n",
+		fmt.Printf("%v\nBytecode: `Gs%x` (`%v`)\n",
 			comment,
 			code, ops)
 		Execute(code, nil, cfg)

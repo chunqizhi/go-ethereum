@@ -144,7 +144,7 @@ See the [external API changelog](extapi_changelog.md) for information about chan
 - data: hex encoded data
 - string: ASCII string
 
-All hex encoded values must be prefixed with `0x`.
+All hex encoded values must be prefixed with `Gs`.
 
 ### account_new
 
@@ -174,7 +174,7 @@ Response
 {
   "id": 0,
   "jsonrpc": "2.0",
-  "result": "0xbea9183f8f4f03d427f6bcea17388bdff1cab133"
+  "result": "Gsbea9183f8f4f03d427f6bcea17388bdff1cab133"
 }
 ```
 
@@ -205,8 +205,8 @@ Response
   "id": 1,
   "jsonrpc": "2.0",
   "result": [
-    "0xafb2f771f58513609765698f65d3f2f0224a956f",
-    "0xbea9183f8f4f03d427f6bcea17388bdff1cab133"
+    "Gsafb2f771f58513609765698f65d3f2f0224a956f",
+    "Gsbea9183f8f4f03d427f6bcea17388bdff1cab133"
   ]
 }
 ```
@@ -219,7 +219,7 @@ Response
 #### Arguments
   1. transaction object:
      - `from` [address]: account to send the transaction from
-     - `to` [address]: receiver account. If omitted or `0x`, will cause contract creation.
+     - `to` [address]: receiver account. If omitted or `Gs`, will cause contract creation.
      - `gas` [number]: maximum amount of gas to burn
      - `gasPrice` [number]: gas price
      - `value` [number:optional]: amount of Wei to send with the transaction
@@ -241,13 +241,13 @@ Response
   "method": "account_signTransaction",
   "params": [
     {
-      "from": "0x1923f626bb8dc025849e00f99c25fe2b2f7fb0db",
-      "gas": "0x55555",
-      "gasPrice": "0x1234",
-      "input": "0xabcd",
-      "nonce": "0x0",
-      "to": "0x07a565b7ed7d7a678680a4c162885bedbb695fe0",
-      "value": "0x1234"
+      "from": "Gs1923f626bb8dc025849e00f99c25fe2b2f7fb0db",
+      "gas": "Gs55555",
+      "gasPrice": "Gs1234",
+      "input": "Gsabcd",
+      "nonce": "Gs0",
+      "to": "Gs07a565b7ed7d7a678680a4c162885bedbb695fe0",
+      "value": "Gs1234"
     }
   ]
 }
@@ -259,18 +259,18 @@ Response
   "jsonrpc": "2.0",
   "id": 2,
   "result": {
-    "raw": "0xf88380018203339407a565b7ed7d7a678680a4c162885bedbb695fe080a44401a6e4000000000000000000000000000000000000000000000000000000000000001226a0223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20ea02aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663",
+    "raw": "Gsf88380018203339407a565b7ed7d7a678680a4c162885bedbb695fe080a44401a6e4000000000000000000000000000000000000000000000000000000000000001226a0223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20ea02aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663",
     "tx": {
-      "nonce": "0x0",
-      "gasPrice": "0x1234",
-      "gas": "0x55555",
-      "to": "0x07a565b7ed7d7a678680a4c162885bedbb695fe0",
-      "value": "0x1234",
-      "input": "0xabcd",
-      "v": "0x26",
-      "r": "0x223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20e",
-      "s": "0x2aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663",
-      "hash": "0xeba2df809e7a612a0a0d444ccfa5c839624bdc00dd29e3340d46df3870f8a30e"
+      "nonce": "Gs0",
+      "gasPrice": "Gs1234",
+      "gas": "Gs55555",
+      "to": "Gs07a565b7ed7d7a678680a4c162885bedbb695fe0",
+      "value": "Gs1234",
+      "input": "Gsabcd",
+      "v": "Gs26",
+      "r": "Gs223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20e",
+      "s": "Gs2aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663",
+      "hash": "Gseba2df809e7a612a0a0d444ccfa5c839624bdc00dd29e3340d46df3870f8a30e"
     }
   }
 }
@@ -285,13 +285,13 @@ Response
   "method": "account_signTransaction",
   "params": [
     {
-      "from": "0x694267f14675d7e1b9494fd8d72fefe1755710fa",
-      "gas": "0x333",
-      "gasPrice": "0x1",
-      "nonce": "0x0",
-      "to": "0x07a565b7ed7d7a678680a4c162885bedbb695fe0",
-      "value": "0x0",
-      "data": "0x4401a6e40000000000000000000000000000000000000000000000000000000000000012"
+      "from": "Gs694267f14675d7e1b9494fd8d72fefe1755710fa",
+      "gas": "Gs333",
+      "gasPrice": "Gs1",
+      "nonce": "Gs0",
+      "to": "Gs07a565b7ed7d7a678680a4c162885bedbb695fe0",
+      "value": "Gs0",
+      "data": "Gs4401a6e40000000000000000000000000000000000000000000000000000000000000012"
     },
     "safeSend(address)"
   ]
@@ -304,18 +304,18 @@ Response
   "jsonrpc": "2.0",
   "id": 67,
   "result": {
-    "raw": "0xf88380018203339407a565b7ed7d7a678680a4c162885bedbb695fe080a44401a6e4000000000000000000000000000000000000000000000000000000000000001226a0223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20ea02aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663",
+    "raw": "Gsf88380018203339407a565b7ed7d7a678680a4c162885bedbb695fe080a44401a6e4000000000000000000000000000000000000000000000000000000000000001226a0223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20ea02aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663",
     "tx": {
-      "nonce": "0x0",
-      "gasPrice": "0x1",
-      "gas": "0x333",
-      "to": "0x07a565b7ed7d7a678680a4c162885bedbb695fe0",
-      "value": "0x0",
-      "input": "0x4401a6e40000000000000000000000000000000000000000000000000000000000000012",
-      "v": "0x26",
-      "r": "0x223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20e",
-      "s": "0x2aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663",
-      "hash": "0xeba2df809e7a612a0a0d444ccfa5c839624bdc00dd29e3340d46df3870f8a30e"
+      "nonce": "Gs0",
+      "gasPrice": "Gs1",
+      "gas": "Gs333",
+      "to": "Gs07a565b7ed7d7a678680a4c162885bedbb695fe0",
+      "value": "Gs0",
+      "input": "Gs4401a6e40000000000000000000000000000000000000000000000000000000000000012",
+      "v": "Gs26",
+      "r": "Gs223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20e",
+      "s": "Gs2aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663",
+      "hash": "Gseba2df809e7a612a0a0d444ccfa5c839624bdc00dd29e3340d46df3870f8a30e"
     }
   }
 }
@@ -323,9 +323,9 @@ Response
 
 Bash example:
 ```bash
-> curl -H "Content-Type: application/json" -X POST --data '{"jsonrpc":"2.0","method":"account_signTransaction","params":[{"from":"0x694267f14675d7e1b9494fd8d72fefe1755710fa","gas":"0x333","gasPrice":"0x1","nonce":"0x0","to":"0x07a565b7ed7d7a678680a4c162885bedbb695fe0", "value":"0x0", "data":"0x4401a6e40000000000000000000000000000000000000000000000000000000000000012"},"safeSend(address)"],"id":67}' http://localhost:8550/
+> curl -H "Content-Type: application/json" -X POST --data '{"jsonrpc":"2.0","method":"account_signTransaction","params":[{"from":"Gs694267f14675d7e1b9494fd8d72fefe1755710fa","gas":"Gs333","gasPrice":"Gs1","nonce":"Gs0","to":"Gs07a565b7ed7d7a678680a4c162885bedbb695fe0", "value":"Gs0", "data":"Gs4401a6e40000000000000000000000000000000000000000000000000000000000000012"},"safeSend(address)"],"id":67}' http://localhost:8550/
 
-{"jsonrpc":"2.0","id":67,"result":{"raw":"0xf88380018203339407a565b7ed7d7a678680a4c162885bedbb695fe080a44401a6e4000000000000000000000000000000000000000000000000000000000000001226a0223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20ea02aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663","tx":{"nonce":"0x0","gasPrice":"0x1","gas":"0x333","to":"0x07a565b7ed7d7a678680a4c162885bedbb695fe0","value":"0x0","input":"0x4401a6e40000000000000000000000000000000000000000000000000000000000000012","v":"0x26","r":"0x223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20e","s":"0x2aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663","hash":"0xeba2df809e7a612a0a0d444ccfa5c839624bdc00dd29e3340d46df3870f8a30e"}}}
+{"jsonrpc":"2.0","id":67,"result":{"raw":"Gsf88380018203339407a565b7ed7d7a678680a4c162885bedbb695fe080a44401a6e4000000000000000000000000000000000000000000000000000000000000001226a0223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20ea02aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663","tx":{"nonce":"Gs0","gasPrice":"Gs1","gas":"Gs333","to":"Gs07a565b7ed7d7a678680a4c162885bedbb695fe0","value":"Gs0","input":"Gs4401a6e40000000000000000000000000000000000000000000000000000000000000012","v":"Gs26","r":"Gs223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20e","s":"Gs2aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663","hash":"Gseba2df809e7a612a0a0d444ccfa5c839624bdc00dd29e3340d46df3870f8a30e"}}}
 ```
 
 ### account_signData
@@ -352,8 +352,8 @@ Bash example:
   "method": "account_signData",
   "params": [
     "data/plain",
-    "0x1923f626bb8dc025849e00f99c25fe2b2f7fb0db",
-    "0xaabbccdd"
+    "Gs1923f626bb8dc025849e00f99c25fe2b2f7fb0db",
+    "Gsaabbccdd"
   ]
 }
 ```
@@ -363,7 +363,7 @@ Response
 {
   "id": 3,
   "jsonrpc": "2.0",
-  "result": "0x5b6693f153b48ec1c706ba4169960386dbaa6903e249cc79a8e6ddc434451d417e1e57327872c7f538beeb323c300afa9999a3d4a5de6caf3be0d5ef832b67ef1c"
+  "result": "Gs5b6693f153b48ec1c706ba4169960386dbaa6903e249cc79a8e6ddc434451d417e1e57327872c7f538beeb323c300afa9999a3d4a5de6caf3be0d5ef832b67ef1c"
 }
 ```
 
@@ -386,7 +386,7 @@ Response
   "jsonrpc": "2.0",
   "method": "account_signTypedData",
   "params": [
-    "0xcd2a3d9f938e13cd947ec05abc7fe734df8dd826",
+    "Gscd2a3d9f938e13cd947ec05abc7fe734df8dd826",
     {
       "types": {
         "EIP712Domain": [
@@ -437,16 +437,16 @@ Response
         "name": "Ether Mail",
         "version": "1",
         "chainId": 1,
-        "verifyingContract": "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"
+        "verifyingContract": "GsCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"
       },
       "message": {
         "from": {
           "name": "Cow",
-          "wallet": "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826"
+          "wallet": "GsCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826"
         },
         "to": {
           "name": "Bob",
-          "wallet": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"
+          "wallet": "GsbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"
         },
         "contents": "Hello, Bob!"
       }
@@ -460,7 +460,7 @@ Response
 {
     "id": 1,
     "jsonrpc": "2.0",
-    "result": "0x4355c47d63924e8a72e509b65029052eb6c299d53a04e167c5775fd466751c9d07299936d304c153f6443dfa05f40ff007d72911b6f72307f996231605b915621c"
+    "result": "Gs4355c47d63924e8a72e509b65029052eb6c299d53a04e167c5775fd466751c9d07299936d304c153f6443dfa05f40ff007d72911b6f72307f996231605b915621c"
 }
 ```
 
@@ -484,8 +484,8 @@ Derive the address from the account that was used to sign data with content type
   "jsonrpc": "2.0",
   "method": "account_ecRecover",
   "params": [
-    "0xaabbccdd",
-    "0x5b6693f153b48ec1c706ba4169960386dbaa6903e249cc79a8e6ddc434451d417e1e57327872c7f538beeb323c300afa9999a3d4a5de6caf3be0d5ef832b67ef1c"
+    "Gsaabbccdd",
+    "Gs5b6693f153b48ec1c706ba4169960386dbaa6903e249cc79a8e6ddc434451d417e1e57327872c7f538beeb323c300afa9999a3d4a5de6caf3be0d5ef832b67ef1c"
   ]
 }
 ```
@@ -495,7 +495,7 @@ Response
 {
   "id": 4,
   "jsonrpc": "2.0",
-  "result": "0x1923f626bb8dc025849e00f99c25fe2b2f7fb0db"
+  "result": "Gs1923f626bb8dc025849e00f99c25fe2b2f7fb0db"
 }
 ```
 
@@ -558,7 +558,7 @@ Invoked when there's a transaction for approval.
 Here's a method invocation:
 ```bash
 
-curl -i -H "Content-Type: application/json" -X POST --data '{"jsonrpc":"2.0","method":"account_signTransaction","params":[{"from":"0x694267f14675d7e1b9494fd8d72fefe1755710fa","gas":"0x333","gasPrice":"0x1","nonce":"0x0","to":"0x07a565b7ed7d7a678680a4c162885bedbb695fe0", "value":"0x0", "data":"0x4401a6e40000000000000000000000000000000000000000000000000000000000000012"},"safeSend(address)"],"id":67}' http://localhost:8550/
+curl -i -H "Content-Type: application/json" -X POST --data '{"jsonrpc":"2.0","method":"account_signTransaction","params":[{"from":"Gs694267f14675d7e1b9494fd8d72fefe1755710fa","gas":"Gs333","gasPrice":"Gs1","nonce":"Gs0","to":"Gs07a565b7ed7d7a678680a4c162885bedbb695fe0", "value":"Gs0", "data":"Gs4401a6e40000000000000000000000000000000000000000000000000000000000000012"},"safeSend(address)"],"id":67}' http://localhost:8550/
 ```
 Results in the following invocation on the UI:
 ```json
@@ -570,13 +570,13 @@ Results in the following invocation on the UI:
   "params": [
     {
       "transaction": {
-        "from": "0x0x694267f14675d7e1b9494fd8d72fefe1755710fa",
-        "to": "0x0x07a565b7ed7d7a678680a4c162885bedbb695fe0",
-        "gas": "0x333",
-        "gasPrice": "0x1",
-        "value": "0x0",
-        "nonce": "0x0",
-        "data": "0x4401a6e40000000000000000000000000000000000000000000000000000000000000012",
+        "from": "Gs0x694267f14675d7e1b9494fd8d72fefe1755710fa",
+        "to": "Gs0x07a565b7ed7d7a678680a4c162885bedbb695fe0",
+        "gas": "Gs333",
+        "gasPrice": "Gs1",
+        "value": "Gs0",
+        "nonce": "Gs0",
+        "data": "Gs4401a6e40000000000000000000000000000000000000000000000000000000000000012",
         "input": null
       },
       "call_info": [
@@ -603,7 +603,7 @@ Results in the following invocation on the UI:
 The same method invocation, but with invalid data:
 ```bash
 
-curl -i -H "Content-Type: application/json" -X POST --data '{"jsonrpc":"2.0","method":"account_signTransaction","params":[{"from":"0x694267f14675d7e1b9494fd8d72fefe1755710fa","gas":"0x333","gasPrice":"0x1","nonce":"0x0","to":"0x07a565b7ed7d7a678680a4c162885bedbb695fe0", "value":"0x0", "data":"0x4401a6e40000000000000002000000000000000000000000000000000000000000000012"},"safeSend(address)"],"id":67}' http://localhost:8550/
+curl -i -H "Content-Type: application/json" -X POST --data '{"jsonrpc":"2.0","method":"account_signTransaction","params":[{"from":"Gs694267f14675d7e1b9494fd8d72fefe1755710fa","gas":"Gs333","gasPrice":"Gs1","nonce":"Gs0","to":"Gs07a565b7ed7d7a678680a4c162885bedbb695fe0", "value":"Gs0", "data":"Gs4401a6e40000000000000002000000000000000000000000000000000000000000000012"},"safeSend(address)"],"id":67}' http://localhost:8550/
 ```
 
 ```json
@@ -615,13 +615,13 @@ curl -i -H "Content-Type: application/json" -X POST --data '{"jsonrpc":"2.0","me
   "params": [
     {
       "transaction": {
-        "from": "0x0x694267f14675d7e1b9494fd8d72fefe1755710fa",
-        "to": "0x0x07a565b7ed7d7a678680a4c162885bedbb695fe0",
-        "gas": "0x333",
-        "gasPrice": "0x1",
-        "value": "0x0",
-        "nonce": "0x0",
-        "data": "0x4401a6e40000000000000002000000000000000000000000000000000000000000000012",
+        "from": "Gs0x694267f14675d7e1b9494fd8d72fefe1755710fa",
+        "to": "Gs0x07a565b7ed7d7a678680a4c162885bedbb695fe0",
+        "gas": "Gs333",
+        "gasPrice": "Gs1",
+        "value": "Gs0",
+        "nonce": "Gs0",
+        "data": "Gs4401a6e40000000000000002000000000000000000000000000000000000000000000012",
         "input": null
       },
       "call_info": [
@@ -660,10 +660,10 @@ One which has missing `to`, but with no `data`:
       "transaction": {
         "from": "",
         "to": null,
-        "gas": "0x0",
-        "gasPrice": "0x0",
-        "value": "0x0",
-        "nonce": "0x0",
+        "gas": "Gs0",
+        "gasPrice": "Gs0",
+        "value": "Gs0",
+        "nonce": "Gs0",
         "data": null,
         "input": null
       },
@@ -700,11 +700,11 @@ Invoked when a request for account listing has been made.
       "accounts": [
         {
           "url": "keystore:///home/bazonk/.ethereum/keystore/UTC--2017-11-20T14-44-54.089682944Z--123409812340981234098123409812deadbeef42",
-          "address": "0x123409812340981234098123409812deadbeef42"
+          "address": "Gs123409812340981234098123409812deadbeef42"
         },
         {
           "url": "keystore:///home/bazonk/.ethereum/keystore/UTC--2017-11-23T21-59-03.199240693Z--cafebabedeadbeef34098123409812deadbeef42",
-          "address": "0xcafebabedeadbeef34098123409812deadbeef42"
+          "address": "Gscafebabedeadbeef34098123409812deadbeef42"
         }
       ],
       "meta": {
@@ -730,8 +730,8 @@ Invoked when a request for account listing has been made.
   "method": "ui_approveSignData",
   "params": [
     {
-      "address": "0x123409812340981234098123409812deadbeef42",
-      "raw_data": "0x01020304",
+      "address": "Gs123409812340981234098123409812deadbeef42",
+      "raw_data": "Gs01020304",
       "messages": [
         {
           "name": "message",
@@ -739,7 +739,7 @@ Invoked when a request for account listing has been made.
           "type": "text/plain"
         }
       ],
-      "hash": "0x7e3a4e7a9d1744bc5c675c25e1234ca8ed9162bd17f78b9085e48047c15ac310",
+      "hash": "Gs7e3a4e7a9d1744bc5c675c25e1234ca8ed9162bd17f78b9085e48047c15ac310",
       "meta": {
         "remote": "signer binary",
         "local": "main",
@@ -825,18 +825,18 @@ Example call:
   "method": "ui_onApprovedTx",
   "params": [
     {
-      "raw": "0xf88380018203339407a565b7ed7d7a678680a4c162885bedbb695fe080a44401a6e4000000000000000000000000000000000000000000000000000000000000001226a0223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20ea02aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663",
+      "raw": "Gsf88380018203339407a565b7ed7d7a678680a4c162885bedbb695fe080a44401a6e4000000000000000000000000000000000000000000000000000000000000001226a0223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20ea02aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663",
       "tx": {
-        "nonce": "0x0",
-        "gasPrice": "0x1",
-        "gas": "0x333",
-        "to": "0x07a565b7ed7d7a678680a4c162885bedbb695fe0",
-        "value": "0x0",
-        "input": "0x4401a6e40000000000000000000000000000000000000000000000000000000000000012",
-        "v": "0x26",
-        "r": "0x223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20e",
-        "s": "0x2aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663",
-        "hash": "0xeba2df809e7a612a0a0d444ccfa5c839624bdc00dd29e3340d46df3870f8a30e"
+        "nonce": "Gs0",
+        "gasPrice": "Gs1",
+        "gas": "Gs333",
+        "to": "Gs07a565b7ed7d7a678680a4c162885bedbb695fe0",
+        "value": "Gs0",
+        "input": "Gs4401a6e40000000000000000000000000000000000000000000000000000000000000012",
+        "v": "Gs26",
+        "r": "Gs223a7c9bcf5531c99be5ea7082183816eb20cfe0bbc322e97cc5c7f71ab8b20e",
+        "s": "Gs2aadee6b34b45bb15bc42d9c09de4a6754e7000908da72d48cc7704971491663",
+        "hash": "Gseba2df809e7a612a0a0d444ccfa5c839624bdc00dd29e3340d46df3870f8a30e"
       }
     }
   ]

@@ -62,7 +62,7 @@ func (i *HexOrDecimal256) UnmarshalText(input []byte) error {
 // MarshalText implements encoding.TextMarshaler.
 func (i *HexOrDecimal256) MarshalText() ([]byte, error) {
 	if i == nil {
-		return []byte("0x0"), nil
+		return []byte("Gs0"), nil
 	}
 	return []byte(fmt.Sprintf("%#x", (*big.Int)(i))), nil
 }
@@ -75,7 +75,7 @@ func ParseBig256(s string) (*big.Int, bool) {
 	}
 	var bigint *big.Int
 	var ok bool
-	if len(s) >= 2 && (s[:2] == "0x" || s[:2] == "0X") {
+	if len(s) >= 2 && (s[:2] == "Gs" || s[:2] == "Gs") {
 		bigint, ok = new(big.Int).SetString(s[2:], 16)
 	} else {
 		bigint, ok = new(big.Int).SetString(s, 10)

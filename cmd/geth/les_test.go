@@ -121,7 +121,7 @@ func initGeth(t *testing.T) string {
 func startLightServer(t *testing.T) *gethrpc {
 	datadir := initGeth(t)
 	runGeth(t, "--datadir", datadir, "--password", "./testdata/password.txt", "account", "import", "./testdata/key.prv").WaitExit()
-	account := "0x02f0d131f1f97aef08aec6e3291b957d9efe7105"
+	account := "Gs02f0d131f1f97aef08aec6e3291b957d9efe7105"
 	server := startGethWithRpc(t, "lightserver", "--allow-insecure-unlock", "--datadir", datadir, "--password", "./testdata/password.txt", "--unlock", account, "--mine", "--light.serve=100", "--light.maxpeers=1", "--nodiscover", "--nat=extip:127.0.0.1")
 	return server
 }

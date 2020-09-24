@@ -38,7 +38,7 @@ var nodeDBKeyTests = []struct {
 		key:   []byte{0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e}, // field
 	},
 	{
-		id:    MustHexID("0x1dd9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
+		id:    MustHexID("Gs1dd9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
 		field: ":discover",
 		key: []byte{0x6e, 0x3a, // prefix
 			0x1d, 0xd9, 0xd6, 0x5c, 0x45, 0x52, 0xb5, 0xeb, // node id
@@ -57,14 +57,14 @@ var nodeDBKeyTests = []struct {
 func TestNodeDBKeys(t *testing.T) {
 	for i, tt := range nodeDBKeyTests {
 		if key := makeKey(tt.id, tt.field); !bytes.Equal(key, tt.key) {
-			t.Errorf("make test %d: key mismatch: have 0x%x, want 0x%x", i, key, tt.key)
+			t.Errorf("make test %d: key mismatch: have Gs%x, want Gs%x", i, key, tt.key)
 		}
 		id, field := splitKey(tt.key)
 		if !bytes.Equal(id[:], tt.id[:]) {
-			t.Errorf("split test %d: id mismatch: have 0x%x, want 0x%x", i, id, tt.id)
+			t.Errorf("split test %d: id mismatch: have Gs%x, want Gs%x", i, id, tt.id)
 		}
 		if field != tt.field {
-			t.Errorf("split test %d: field mismatch: have 0x%x, want 0x%x", i, field, tt.field)
+			t.Errorf("split test %d: field mismatch: have Gs%x, want Gs%x", i, field, tt.field)
 		}
 	}
 }
@@ -103,7 +103,7 @@ func TestNodeDBInt64(t *testing.T) {
 
 func TestNodeDBFetchStore(t *testing.T) {
 	node := NewNode(
-		MustHexID("0x1dd9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
+		MustHexID("Gs1dd9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
 		net.IP{192, 168, 0, 1},
 		30303,
 		30303,
@@ -166,7 +166,7 @@ var nodeDBSeedQueryNodes = []struct {
 	// pong time is too far in the past.
 	{
 		node: NewNode(
-			MustHexID("0x84d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
+			MustHexID("Gs84d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
 			net.IP{127, 0, 0, 3},
 			30303,
 			30303,
@@ -177,7 +177,7 @@ var nodeDBSeedQueryNodes = []struct {
 	// nodeID is the local node's ID.
 	{
 		node: NewNode(
-			MustHexID("0x57d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
+			MustHexID("Gs57d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
 			net.IP{127, 0, 0, 3},
 			30303,
 			30303,
@@ -188,7 +188,7 @@ var nodeDBSeedQueryNodes = []struct {
 	// These should be in the result set.
 	{
 		node: NewNode(
-			MustHexID("0x22d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
+			MustHexID("Gs22d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
 			net.IP{127, 0, 0, 1},
 			30303,
 			30303,
@@ -197,7 +197,7 @@ var nodeDBSeedQueryNodes = []struct {
 	},
 	{
 		node: NewNode(
-			MustHexID("0x44d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
+			MustHexID("Gs44d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
 			net.IP{127, 0, 0, 2},
 			30303,
 			30303,
@@ -206,7 +206,7 @@ var nodeDBSeedQueryNodes = []struct {
 	},
 	{
 		node: NewNode(
-			MustHexID("0xe2d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
+			MustHexID("Gse2d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
 			net.IP{127, 0, 0, 3},
 			30303,
 			30303,
@@ -304,7 +304,7 @@ var nodeDBExpirationNodes = []struct {
 }{
 	{
 		node: NewNode(
-			MustHexID("0x01d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
+			MustHexID("Gs01d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
 			net.IP{127, 0, 0, 1},
 			30303,
 			30303,
@@ -313,7 +313,7 @@ var nodeDBExpirationNodes = []struct {
 		exp:  false,
 	}, {
 		node: NewNode(
-			MustHexID("0x02d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
+			MustHexID("Gs02d9d65c4552b5eb43d5ad55a2ee3f56c6cbc1c64a5c8d659f51fcd51bace24351232b8d7821617d2b29b54b81cdefb9b3e9c37d7fd5f63270bcc9e1a6f6a439"),
 			net.IP{127, 0, 0, 2},
 			30303,
 			30303,

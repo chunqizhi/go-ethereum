@@ -9,7 +9,7 @@ Example:
 ```json
 {
   "content_type": "text/plain",
-  "address": "0xDEADbEeF000000000000000000000000DeaDbeEf",
+  "address": "GsDEADbEeF000000000000000000000000DeaDbeEf",
   "raw_data": "GUV0aGVyZXVtIFNpZ25lZCBNZXNzYWdlOgoxMWhlbGxvIHdvcmxk",
   "messages": [
     {
@@ -18,7 +18,7 @@ Example:
       "type": "text/plain"
     }
   ],
-  "hash": "0xd9eba16ed0ecae432b71fe008c98cc872bb4cc214d3220a36f365326cf807d68",
+  "hash": "Gsd9eba16ed0ecae432b71fe008c98cc872bb4cc214d3220a36f365326cf807d68",
   "meta": {
     "remote": "localhost:9999",
     "local": "localhost:8545",
@@ -60,13 +60,13 @@ Example:
 ```json
 {
   "transaction": {
-    "from": "0xDEADbEeF000000000000000000000000DeaDbeEf",
+    "from": "GsDEADbEeF000000000000000000000000DeaDbeEf",
     "to": null,
-    "gas": "0x3e8",
-    "gasPrice": "0x5",
-    "value": "0x6",
-    "nonce": "0x1",
-    "data": "0x01020304"
+    "gas": "Gs3e8",
+    "gasPrice": "Gs5",
+    "value": "Gs6",
+    "nonce": "Gs1",
+    "data": "Gs01020304"
   },
   "call_info": [
     {
@@ -95,13 +95,13 @@ Example:
 ```json
 {
   "transaction": {
-    "from": "0xDEADbEeF000000000000000000000000DeaDbeEf",
+    "from": "GsDEADbEeF000000000000000000000000DeaDbeEf",
     "to": null,
-    "gas": "0x3e8",
-    "gasPrice": "0x5",
-    "value": "0x6",
-    "nonce": "0x4",
-    "data": "0x04030201"
+    "gas": "Gs3e8",
+    "gasPrice": "Gs5",
+    "value": "Gs6",
+    "nonce": "Gs4",
+    "data": "Gs04030201"
   },
   "approved": true
 }
@@ -114,12 +114,12 @@ Example:
 ```json
 {
   "transaction": {
-    "from": "0x",
+    "from": "Gs",
     "to": null,
-    "gas": "0x0",
-    "gasPrice": "0x0",
-    "value": "0x0",
-    "nonce": "0x0",
+    "gas": "Gs0",
+    "gasPrice": "Gs0",
+    "value": "Gs0",
+    "nonce": "Gs0",
     "data": null
   },
   "approved": false
@@ -140,18 +140,18 @@ The `OnApproved` method cannot be responded to, it's purely informative
 Example:
 ```json
 {
-  "raw": "0xf85d640101948a8eafb1cf62bfbeb1741769dae1a9dd47996192018026a0716bd90515acb1e68e5ac5867aa11a1e65399c3349d479f5fb698554ebc6f293a04e8a4ebfff434e971e0ef12c5bf3a881b06fd04fc3f8b8a7291fb67a26a1d4ed",
+  "raw": "Gsf85d640101948a8eafb1cf62bfbeb1741769dae1a9dd47996192018026a0716bd90515acb1e68e5ac5867aa11a1e65399c3349d479f5fb698554ebc6f293a04e8a4ebfff434e971e0ef12c5bf3a881b06fd04fc3f8b8a7291fb67a26a1d4ed",
   "tx": {
-    "nonce": "0x64",
-    "gasPrice": "0x1",
-    "gas": "0x1",
-    "to": "0x8a8eafb1cf62bfbeb1741769dae1a9dd47996192",
-    "value": "0x1",
-    "input": "0x",
-    "v": "0x26",
-    "r": "0x716bd90515acb1e68e5ac5867aa11a1e65399c3349d479f5fb698554ebc6f293",
-    "s": "0x4e8a4ebfff434e971e0ef12c5bf3a881b06fd04fc3f8b8a7291fb67a26a1d4ed",
-    "hash": "0x662f6d772692dd692f1b5e8baa77a9ff95bbd909362df3fc3d301aafebde5441"
+    "nonce": "Gs64",
+    "gasPrice": "Gs1",
+    "gas": "Gs1",
+    "to": "Gs8a8eafb1cf62bfbeb1741769dae1a9dd47996192",
+    "value": "Gs1",
+    "input": "Gs",
+    "v": "Gs26",
+    "r": "Gs716bd90515acb1e68e5ac5867aa11a1e65399c3349d479f5fb698554ebc6f293",
+    "s": "Gs4e8a4ebfff434e971e0ef12c5bf3a881b06fd04fc3f8b8a7291fb67a26a1d4ed",
+    "hash": "Gs662f6d772692dd692f1b5e8baa77a9ff95bbd909362df3fc3d301aafebde5441"
   }
 }
 ```
@@ -186,11 +186,11 @@ Example:
 {
   "accounts": [
     {
-      "address": "0xdeadbeef000000000000000000000000deadbeef",
+      "address": "Gsdeadbeef000000000000000000000000deadbeef",
       "url": "keystore:///path/to/keyfile/a"
     },
     {
-      "address": "0x1111111122222222222233333333334444444444",
+      "address": "Gs1111111122222222222233333333334444444444",
       "url": "keystore:///path/to/keyfile/b"
     }
   ],
@@ -212,11 +212,11 @@ Example:
 {
   "accounts": [
     {
-      "address": "0x0000000000000000000000000000000000000000",
+      "address": "Gs0000000000000000000000000000000000000000",
       "url": ".. ignored .."
     },
     {
-      "address": "0xffffffffffffffffffffffffffffffffffffffff",
+      "address": "Gsffffffffffffffffffffffffffffffffffffffff",
       "url": ""
     }
   ]

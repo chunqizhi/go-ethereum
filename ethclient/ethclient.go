@@ -409,7 +409,7 @@ func toFilterArg(q ethereum.FilterQuery) (interface{}, error) {
 		}
 	} else {
 		if q.FromBlock == nil {
-			arg["fromBlock"] = "0x0"
+			arg["fromBlock"] = "Gs0"
 		} else {
 			arg["fromBlock"] = toBlockNumArg(q.FromBlock)
 		}
