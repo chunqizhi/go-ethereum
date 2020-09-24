@@ -9,9 +9,9 @@
 	"constantinopleBlock": 0
     },
   "alloc"      : {},
-  "difficulty" : "0x400000",
+  "difficulty" : "0x77359400",
   "extraData"  : "",
   "gasLimit"   : "0x7A1200",
   "parentHash" : "0x0000000000000000000000000000000000000000000000000000000000000000",
-  "timestamp"  : "0x00"
+  "timestamp"  : "0x5F6C650D"
 }
