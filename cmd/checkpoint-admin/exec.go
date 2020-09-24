@@ -25,17 +25,17 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/ethereum/go-ethereum/cmd/utils"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/contracts/checkpointoracle"
-	"github.com/ethereum/go-ethereum/contracts/checkpointoracle/contract"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/chunqizhi/go-ethereum/accounts"
+	"github.com/chunqizhi/go-ethereum/cmd/utils"
+	"github.com/chunqizhi/go-ethereum/common"
+	"github.com/chunqizhi/go-ethereum/common/hexutil"
+	"github.com/chunqizhi/go-ethereum/contracts/checkpointoracle"
+	"github.com/chunqizhi/go-ethereum/contracts/checkpointoracle/contract"
+	"github.com/chunqizhi/go-ethereum/crypto"
+	"github.com/chunqizhi/go-ethereum/ethclient"
+	"github.com/chunqizhi/go-ethereum/log"
+	"github.com/chunqizhi/go-ethereum/params"
+	"github.com/chunqizhi/go-ethereum/rpc"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -256,7 +256,7 @@ func publish(ctx *cli.Context) error {
 	// Gather the signatures from the CLI
 	var sigs [][]byte
 	for _, sig := range strings.Split(ctx.String(signaturesFlag.Name), ",") {
-		trimmed := strings.TrimPrefix(strings.TrimSpace(sig), "0x")
+		trimmed := strings.TrimPrefix(strings.TrimSpace(sig), "Gs")
 		if len(trimmed) != 130 {
 			utils.Fatalf("Invalid signature in --signature: '%s'", trimmed)
 		} else {

@@ -18,13 +18,11 @@ package rawdb
 
 import (
 	"encoding/json"
-	"fmt"
-
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/chunqizhi/go-ethereum/common"
+	"github.com/chunqizhi/go-ethereum/ethdb"
+	"github.com/chunqizhi/go-ethereum/log"
+	"github.com/chunqizhi/go-ethereum/params"
+	"github.com/chunqizhi/go-ethereum/rlp"
 )
 
 // ReadDatabaseVersion retrieves the version number of the database.
@@ -60,7 +58,6 @@ func ReadChainConfig(db ethdb.KeyValueReader, hash common.Hash) *params.ChainCon
 		return nil
 	}
 	var config params.ChainConfig
-	fmt.Printf("%s\n\n",data)
 	if err := json.Unmarshal(data, &config); err != nil {
 		log.Error("Invalid chain config JSON", "hash", hash, "err", err)
 		return nil

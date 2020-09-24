@@ -166,7 +166,6 @@ func (b *Big) UnmarshalJSON(input []byte) error {
 
 // UnmarshalText implements encoding.TextUnmarshaler
 func (b *Big) UnmarshalText(input []byte) error {
-fmt.Printf("%s\n\n",input)
 	raw, err := checkNumberText(input)
 	if err != nil {
 		return err

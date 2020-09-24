@@ -29,11 +29,11 @@ import (
 	"syscall"
 
 	"github.com/dop251/goja"
-	"github.com/ethereum/go-ethereum/console/prompt"
-	"github.com/ethereum/go-ethereum/internal/jsre"
-	"github.com/ethereum/go-ethereum/internal/jsre/deps"
-	"github.com/ethereum/go-ethereum/internal/web3ext"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/chunqizhi/go-ethereum/console/prompt"
+	"github.com/chunqizhi/go-ethereum/internal/jsre"
+	"github.com/chunqizhi/go-ethereum/internal/jsre/deps"
+	"github.com/chunqizhi/go-ethereum/internal/web3ext"
+	"github.com/chunqizhi/go-ethereum/rpc"
 	"github.com/mattn/go-colorable"
 	"github.com/peterh/liner"
 )
@@ -302,12 +302,26 @@ func (c *Console) Welcome() {
 	message := "Welcome to the Geth JavaScript console!\n\n"
 
 	// Print some generic Geth metadata
+	//if res, err := c.jsre.Run(`
+	//	var message = "instance: " + web3.version.node + "\n";
+	//	try {
+	//		message += "coinbase: " + eth.coinbase + "\n";
+	//	} catch (err) {}
+	//	message += "at block: " + eth.blockNumber + " (" + new Date(1000 * eth.getBlock(eth.blockNumber).timestamp) + ")\n";
+	//	try {
+	//		message += " datadir: " + admin.datadir + "\n";
+	//	} catch (err) {}
+	//	message
+	//`); err == nil {
+	//	message += res.String()
+	//}
+
 	if res, err := c.jsre.Run(`
 		var message = "instance: " + web3.version.node + "\n";
 		try {
 			message += "coinbase: " + eth.coinbase + "\n";
 		} catch (err) {}
-		message += "at block: " + eth.blockNumber + " (" + new Date(1000 * eth.getBlock(eth.blockNumber).timestamp) + ")\n";
+		message += "at block: " + eth.blockNumber + "\n";
 		try {
 			message += " datadir: " + admin.datadir + "\n";
 		} catch (err) {}
