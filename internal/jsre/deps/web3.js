@@ -1084,7 +1084,7 @@ var formatOutputBool = function (param) {
 var formatOutputBytes = function (param, name) {
     var matches = name.match(/^bytes([0-9]*)/);
     var size = parseInt(matches[1]);
-    return '0x' + param.staticPart().slice(0, 2 * size);
+    return 'zc' + param.staticPart().slice(0, 2 * size);
 };
 
 /**
@@ -1096,7 +1096,7 @@ var formatOutputBytes = function (param, name) {
  */
 var formatOutputDynamicBytes = function (param) {
     var length = (new BigNumber(param.dynamicPart().slice(0, 64), 16)).toNumber() * 2;
-    return '0x' + param.dynamicPart().substr(64, length);
+    return 'zc' + param.dynamicPart().substr(64, length);
 };
 
 /**
@@ -1120,7 +1120,7 @@ var formatOutputString = function (param) {
  */
 var formatOutputAddress = function (param) {
     var value = param.staticPart();
-    return "0x" + value.slice(value.length - 40, value.length);
+    return "zc" + value.slice(value.length - 40, value.length);
 };
 
 module.exports = {
@@ -1591,8 +1591,8 @@ SolidityType.prototype.decode = function (bytes, offset, name) {
     if (this.isDynamicArray(name)) {
 
         return (function () {
-            var arrayOffset = parseInt('0x' + bytes.substr(offset * 2, 64)); // in bytes
-            var length = parseInt('0x' + bytes.substr(arrayOffset * 2, 64)); // in int
+            var arrayOffset = parseInt('zc' + bytes.substr(offset * 2, 64)); // in bytes
+            var length = parseInt('zc' + bytes.substr(arrayOffset * 2, 64)); // in int
             var arrayStart = arrayOffset + 32; // array starts after length; // in bytes
 
             var nestedName = self.nestedName(name);
@@ -1627,8 +1627,8 @@ SolidityType.prototype.decode = function (bytes, offset, name) {
     } else if (this.isDynamicType(name)) {
 
         return (function () {
-            var dynamicOffset = parseInt('0x' + bytes.substr(offset * 2, 64));      // in bytes
-            var length = parseInt('0x' + bytes.substr(dynamicOffset * 2, 64));      // in bytes
+            var dynamicOffset = parseInt('zc' + bytes.substr(offset * 2, 64));      // in bytes
+            var length = parseInt('zc' + bytes.substr(dynamicOffset * 2, 64));      // in bytes
             var roundedLength = Math.floor((length + 31) / 32);                     // in int
             var param = new SolidityParam(bytes.substr(dynamicOffset * 2, ( 1 + roundedLength) * 64), 0);
             return self._outputFormatter(param, name);
@@ -1830,7 +1830,7 @@ var sha3 = require('crypto-js/sha3');
 
 module.exports = function (value, options) {
     if (options && options.encoding === 'hex') {
-        if (value.length > 2 && value.substr(0, 2) === '0x') {
+        if (value.length > 2 && value.substr(0, 2) === 'zc') {
             value = value.substr(2);
         }
         value = CryptoJS.enc.Hex.parse(value);
@@ -1950,7 +1950,7 @@ var toUtf8 = function(hex) {
 // Find termination
     var str = "";
     var i = 0, l = hex.length;
-    if (hex.substring(0, 2) === '0x') {
+    if (hex.substring(0, 2) === 'zc') {
         i = 2;
     }
     for (; i < l; i+=2) {
@@ -1974,7 +1974,7 @@ var toAscii = function(hex) {
 // Find termination
     var str = "";
     var i = 0, l = hex.length;
-    if (hex.substring(0, 2) === '0x') {
+    if (hex.substring(0, 2) === 'zc') {
         i = 2;
     }
     for (; i < l; i+=2) {
@@ -1986,7 +1986,7 @@ var toAscii = function(hex) {
 };
 
 /**
- * Should be called to get hex representation (prefixed by 0x) of utf8 string
+ * Should be called to get hex representation (prefixed by zc) of utf8 string
  *
  * @method fromUtf8
  * @param {String} string
@@ -2004,11 +2004,11 @@ var fromUtf8 = function(str) {
         hex += n.length < 2 ? '0' + n : n;
     }
 
-    return "0x" + hex;
+    return "zc" + hex;
 };
 
 /**
- * Should be called to get hex representation (prefixed by 0x) of ascii string
+ * Should be called to get hex representation (prefixed by zc) of ascii string
  *
  * @method fromAscii
  * @param {String} string
@@ -2023,7 +2023,7 @@ var fromAscii = function(str) {
         hex += n.length < 2 ? '0' + n : n;
     }
 
-    return "0x" + hex;
+    return "zc" + hex;
 };
 
 /**
@@ -2083,7 +2083,7 @@ var fromDecimal = function (value) {
     var number = toBigNumber(value);
     var result = number.toString(16);
 
-    return number.lessThan(0) ? '-0x' + result.substr(1) : '0x' + result;
+    return number.lessThan(0) ? '-zc' + result.substr(1) : 'zc' + result;
 };
 
 /**
@@ -2109,9 +2109,9 @@ var toHex = function (val) {
 
     // if its a negative number, pass it through fromDecimal
     if (isString(val)) {
-        if (val.indexOf('-0x') === 0)
+        if (val.indexOf('-zc') === 0)
             return fromDecimal(val);
-        else if(val.indexOf('0x') === 0)
+        else if(val.indexOf('zc') === 0)
             return val;
         else if (!isFinite(val))
             return fromAscii(val);
@@ -2201,6 +2201,7 @@ var toWei = function(number, unit) {
 */
 var toBigNumber = function(number) {
     /*jshint maxcomplexity:5 */
+
     number = number || 0;
     if (isBigNumber(number))
         return number;
@@ -2235,7 +2236,7 @@ var toTwosComplement = function (number) {
  * @return {Boolean}
 */
 var isStrictAddress = function (address) {
-    return /^0x[0-9a-f]{40}$/i.test(address);
+    return /^zc[0-9a-f]{40}$/i.test(address);
 };
 
 /**
@@ -2246,10 +2247,10 @@ var isStrictAddress = function (address) {
  * @return {Boolean}
 */
 var isAddress = function (address) {
-    if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
+    if (!/^(zc)?[0-9a-f]{40}$/i.test(address)) {
         // check if it has the basic requirements of an address
         return false;
-    } else if (/^(0x)?[0-9a-f]{40}$/.test(address) || /^(0x)?[0-9A-F]{40}$/.test(address)) {
+    } else if (/^(zc)?[0-9a-f]{40}$/.test(address) || /^(zc)?[0-9A-F]{40}$/.test(address)) {
         // If it's all small caps or all caps, return true
         return true;
     } else {
@@ -2267,7 +2268,7 @@ var isAddress = function (address) {
 */
 var isChecksumAddress = function (address) {
     // Check each case
-    address = address.replace('0x','');
+    address = address.replace('zc','');
     var addressHash = sha3(address.toLowerCase());
 
     for (var i = 0; i < 40; i++ ) {
@@ -2291,9 +2292,9 @@ var isChecksumAddress = function (address) {
 var toChecksumAddress = function (address) {
     if (typeof address === 'undefined') return '';
 
-    address = address.toLowerCase().replace('0x','');
+    address = address.toLowerCase().replace('zc','');
     var addressHash = sha3(address);
-    var checksumAddress = '0x';
+    var checksumAddress = 'zc';
 
     for (var i = 0; i < address.length; i++ ) {
         // If ith character is 9 to f then make it uppercase
@@ -2307,7 +2308,7 @@ var toChecksumAddress = function (address) {
 };
 
 /**
- * Transforms given string to valid 20 bytes-length addres with 0x prefix
+ * Transforms given string to valid 20 bytes-length addres with zc prefix
  *
  * @method toAddress
  * @param {String} address
@@ -2319,10 +2320,10 @@ var toAddress = function (address) {
     }
 
     if (/^[0-9a-f]{40}$/.test(address)) {
-        return '0x' + address;
+        return 'zc' + address;
     }
 
-    return '0x' + padLeft(toHex(address).substr(2), 40);
+    return 'zc' + padLeft(toHex(address).substr(2), 40);
 };
 
 /**
@@ -2416,9 +2417,9 @@ var isJson = function (str) {
  * @return {Boolean}
  */
 var isBloom = function (bloom) {
-    if (!/^(0x)?[0-9a-f]{512}$/i.test(bloom)) {
+    if (!/^(zc)?[0-9a-f]{512}$/i.test(bloom)) {
         return false;
-    } else if (/^(0x)?[0-9a-f]{512}$/.test(bloom) || /^(0x)?[0-9A-F]{512}$/.test(bloom)) {
+    } else if (/^(zc)?[0-9a-f]{512}$/.test(bloom) || /^(zc)?[0-9A-F]{512}$/.test(bloom)) {
         return true;
     }
     return false;
@@ -2432,9 +2433,9 @@ var isBloom = function (bloom) {
  * @return {Boolean}
  */
 var isTopic = function (topic) {
-    if (!/^(0x)?[0-9a-f]{64}$/i.test(topic)) {
+    if (!/^(zc)?[0-9a-f]{64}$/i.test(topic)) {
         return false;
-    } else if (/^(0x)?[0-9a-f]{64}$/.test(topic) || /^(0x)?[0-9A-F]{64}$/.test(topic)) {
+    } else if (/^(zc)?[0-9a-f]{64}$/.test(topic) || /^(zc)?[0-9A-F]{64}$/.test(topic)) {
         return true;
     }
     return false;
@@ -2586,7 +2587,7 @@ Web3.prototype.padRight = utils.padRight;
 
 
 Web3.prototype.sha3 = function(string, options) {
-    return '0x' + sha3(string, options);
+    return 'zc' + sha3(string, options);
 };
 
 /**
@@ -3256,7 +3257,7 @@ SolidityEvent.prototype.encode = function (indexed, options) {
 
     result.address = this._address;
     if (!this._anonymous) {
-        result.topics.push('0x' + this.signature());
+        result.topics.push('zc' + this.signature());
     }
 
     var indexedTopics = this._params.filter(function (i) {
@@ -3269,10 +3270,10 @@ SolidityEvent.prototype.encode = function (indexed, options) {
 
         if (utils.isArray(value)) {
             return value.map(function (v) {
-                return '0x' + coder.encodeParam(i.type, v);
+                return 'zc' + coder.encodeParam(i.type, v);
             });
         }
-        return '0x' + coder.encodeParam(i.type, value);
+        return 'zc' + coder.encodeParam(i.type, value);
     });
 
     result.topics = result.topics.concat(indexedTopics);
@@ -3450,7 +3451,7 @@ var toTopic = function(value){
 
     value = String(value);
 
-    if(value.indexOf('0x') === 0)
+    if(value.indexOf('zc') === 0)
         return value;
     else
         return utils.fromUtf8(value);
@@ -3881,7 +3882,7 @@ var inputPostFormatter = function(post) {
     // format the following options
     post.topics = post.topics.map(function(topic){
         // convert only if not hex
-        return (topic.indexOf('0x') === 0) ? topic : utils.fromUtf8(topic);
+        return (topic.indexOf('zc') === 0) ? topic : utils.fromUtf8(topic);
     });
 
     return post;
@@ -3921,11 +3922,11 @@ var outputPostFormatter = function(post){
 var inputAddressFormatter = function (address) {
     var iban = new Iban(address);
     if (iban.isValid() && iban.isDirect()) {
-        return '0x' + iban.address();
+        return 'zc' + iban.address();
     } else if (utils.isStrictAddress(address)) {
         return address;
     } else if (utils.isAddress(address)) {
-        return '0x' + address;
+        return 'zc' + address;
     }
     throw new Error('invalid address');
 };
@@ -4056,7 +4057,7 @@ SolidityFunction.prototype.toPayload = function (args) {
     }
     this.validateArgs(args);
     options.to = this._address;
-    options.data = '0x' + this.signature() + coder.encodeParams(this._inputTypes, args);
+    options.data = 'zc' + this.signature() + coder.encodeParams(this._inputTypes, args);
     return options;
 };
 
@@ -5207,23 +5208,23 @@ var Iban = require('../iban');
 var transfer = require('../transfer');
 
 var blockCall = function (args) {
-    return (utils.isString(args[0]) && args[0].indexOf('0x') === 0) ? "eth_getBlockByHash" : "eth_getBlockByNumber";
+    return (utils.isString(args[0]) && args[0].indexOf('zc') === 0) ? "eth_getBlockByHash" : "eth_getBlockByNumber";
 };
 
 var transactionFromBlockCall = function (args) {
-    return (utils.isString(args[0]) && args[0].indexOf('0x') === 0) ? 'eth_getTransactionByBlockHashAndIndex' : 'eth_getTransactionByBlockNumberAndIndex';
+    return (utils.isString(args[0]) && args[0].indexOf('zc') === 0) ? 'eth_getTransactionByBlockHashAndIndex' : 'eth_getTransactionByBlockNumberAndIndex';
 };
 
 var uncleCall = function (args) {
-    return (utils.isString(args[0]) && args[0].indexOf('0x') === 0) ? 'eth_getUncleByBlockHashAndIndex' : 'eth_getUncleByBlockNumberAndIndex';
+    return (utils.isString(args[0]) && args[0].indexOf('zc') === 0) ? 'eth_getUncleByBlockHashAndIndex' : 'eth_getUncleByBlockNumberAndIndex';
 };
 
 var getBlockTransactionCountCall = function (args) {
-    return (utils.isString(args[0]) && args[0].indexOf('0x') === 0) ? 'eth_getBlockTransactionCountByHash' : 'eth_getBlockTransactionCountByNumber';
+    return (utils.isString(args[0]) && args[0].indexOf('zc') === 0) ? 'eth_getBlockTransactionCountByHash' : 'eth_getBlockTransactionCountByNumber';
 };
 
 var uncleCountCall = function (args) {
-    return (utils.isString(args[0]) && args[0].indexOf('0x') === 0) ? 'eth_getUncleCountByBlockHash' : 'eth_getUncleCountByBlockNumber';
+    return (utils.isString(args[0]) && args[0].indexOf('zc') === 0) ? 'eth_getUncleCountByBlockHash' : 'eth_getUncleCountByBlockNumber';
 };
 
 function Eth(web3) {

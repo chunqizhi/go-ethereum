@@ -56,7 +56,7 @@ func (n BlockNonce) Uint64() uint64 {
 	return binary.BigEndian.Uint64(n[:])
 }
 
-// MarshalText encodes n as a hex string with 0x prefix.
+// MarshalText encodes n as a hex string with zc prefix.
 func (n BlockNonce) MarshalText() ([]byte, error) {
 	return hexutil.Bytes(n[:]).MarshalText()
 }

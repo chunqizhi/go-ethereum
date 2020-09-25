@@ -19,7 +19,7 @@ package common
 
 import "encoding/hex"
 
-// ToHex returns the hex representation of b, prefixed with '0x'.
+// ToHex returns the hex representation of b, prefixed with 'zc'.
 // For empty slices, the return value is "0x0".
 //
 // Deprecated: use hexutil.Encode instead.
@@ -28,7 +28,7 @@ func ToHex(b []byte) string {
 	if len(hex) == 0 {
 		hex = "0"
 	}
-	return "0x" + hex
+	return "zc" + hex
 }
 
 // ToHexArray creates a array of hex-string based on []byte
@@ -41,7 +41,7 @@ func ToHexArray(b [][]byte) []string {
 }
 
 // FromHex returns the bytes represented by the hexadecimal string s.
-// s may be prefixed with "0x".
+// s may be prefixed with "zc".
 func FromHex(s string) []byte {
 	if has0xPrefix(s) {
 		s = s[2:]
@@ -63,9 +63,9 @@ func CopyBytes(b []byte) (copiedBytes []byte) {
 	return
 }
 
-// has0xPrefix validates str begins with '0x' or '0X'.
+// has0xPrefix validates str begins with 'zc' or 'zc'.
 func has0xPrefix(str string) bool {
-	return len(str) >= 2 && str[0] == '0' && (str[1] == 'x' || str[1] == 'X')
+	return len(str) >= 2 && str[0] == 'z' && str[1] == 'c'
 }
 
 // isHexCharacter returns bool of c being a valid hexadecimal.

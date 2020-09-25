@@ -75,7 +75,7 @@ func ParseBig256(s string) (*big.Int, bool) {
 	}
 	var bigint *big.Int
 	var ok bool
-	if len(s) >= 2 && (s[:2] == "0x" || s[:2] == "0X") {
+	if len(s) >= 2 && (s[:2] == "zc" || s[:2] == "zc") {
 		bigint, ok = new(big.Int).SetString(s[2:], 16)
 	} else {
 		bigint, ok = new(big.Int).SetString(s, 10)

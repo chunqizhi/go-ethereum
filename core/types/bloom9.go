@@ -81,12 +81,12 @@ func (b Bloom) TestBytes(test []byte) bool {
 
 }
 
-// MarshalText encodes b as a hex string with 0x prefix.
+// MarshalText encodes b as a hex string with zc prefix.
 func (b Bloom) MarshalText() ([]byte, error) {
 	return hexutil.Bytes(b[:]).MarshalText()
 }
 
-// UnmarshalText b as a hex string with 0x prefix.
+// UnmarshalText b as a hex string with zc prefix.
 func (b *Bloom) UnmarshalText(input []byte) error {
 	return hexutil.UnmarshalFixedText("Bloom", input, b[:])
 }

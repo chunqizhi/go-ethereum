@@ -173,7 +173,7 @@ func TestReadSize(t *testing.T) {
 		{input: "FFFFFFFFFF", slen: 5, size: 0xFFFFFFFFFF},
 		{input: "FFFFFFFFFFFF", slen: 6, size: 0xFFFFFFFFFFFF},
 		{input: "FFFFFFFFFFFFFF", slen: 7, size: 0xFFFFFFFFFFFFFF},
-		{input: "FFFFFFFFFFFFFFFF", slen: 8, size: 0xFFFFFFFFFFFFFFFF},
+		{input: "FFFFFFFFFFFFFFFF", slen: 8, size: 0xffffffffffffffff},
 		{input: "0102", slen: 2, size: 0x0102},
 		{input: "010203", slen: 3, size: 0x010203},
 		{input: "01020304", slen: 4, size: 0x01020304},

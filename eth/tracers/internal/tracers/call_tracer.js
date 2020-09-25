@@ -49,7 +49,7 @@
 				input:   toHex(log.memory.slice(inOff, inEnd)),
 				gasIn:   log.getGas(),
 				gasCost: log.getCost(),
-				value:   '0x' + log.stack.peek(0).toString(16)
+				value:   'zc' + log.stack.peek(0).toString(16)
 			};
 			this.callstack.push(call);
 			this.descended = true
@@ -88,7 +88,7 @@
 				outLen:  log.stack.peek(5 + off).valueOf()
 			};
 			if (op != 'DELEGATECALL' && op != 'STATICCALL') {
-				call.value = '0x' + log.stack.peek(2).toString(16);
+				call.value = 'zc' + log.stack.peek(2).toString(16);
 			}
 			this.callstack.push(call);
 			this.descended = true
@@ -118,7 +118,7 @@
 
 			if (call.type == 'CREATE' || call.type == "CREATE2") {
 				// If the call was a CREATE, retrieve the contract address and output code
-				call.gasUsed = '0x' + bigInt(call.gasIn - call.gasCost - log.getGas()).toString(16);
+				call.gasUsed = 'zc' + bigInt(call.gasIn - call.gasCost - log.getGas()).toString(16);
 				delete call.gasIn; delete call.gasCost;
 
 				var ret = log.stack.peek(0);
@@ -131,7 +131,7 @@
 			} else {
 				// If the call was a contract call, retrieve the gas usage and output
 				if (call.gas !== undefined) {
-					call.gasUsed = '0x' + bigInt(call.gasIn - call.gasCost + call.gas - log.getGas()).toString(16);
+					call.gasUsed = 'zc' + bigInt(call.gasIn - call.gasCost + call.gas - log.getGas()).toString(16);
 
 					var ret = log.stack.peek(0);
 					if (!ret.equals(0)) {
@@ -144,7 +144,7 @@
 				delete call.outOff; delete call.outLen;
 			}
 			if (call.gas !== undefined) {
-				call.gas = '0x' + bigInt(call.gas).toString(16);
+				call.gas = 'zc' + bigInt(call.gas).toString(16);
 			}
 			// Inject the call into the previous one
 			var left = this.callstack.length;
@@ -167,7 +167,7 @@
 
 		// Consume all available gas and clean any leftovers
 		if (call.gas !== undefined) {
-			call.gas = '0x' + bigInt(call.gas).toString(16);
+			call.gas = 'zc' + bigInt(call.gas).toString(16);
 			call.gasUsed = call.gas
 		}
 		delete call.gasIn; delete call.gasCost;
@@ -193,9 +193,9 @@
 			type:    ctx.type,
 			from:    toHex(ctx.from),
 			to:      toHex(ctx.to),
-			value:   '0x' + ctx.value.toString(16),
-			gas:     '0x' + bigInt(ctx.gas).toString(16),
-			gasUsed: '0x' + bigInt(ctx.gasUsed).toString(16),
+			value:   'zc' + ctx.value.toString(16),
+			gas:     'zc' + bigInt(ctx.gas).toString(16),
+			gasUsed: 'zc' + bigInt(ctx.gasUsed).toString(16),
 			input:   toHex(ctx.input),
 			output:  toHex(ctx.output),
 			time:    ctx.time,

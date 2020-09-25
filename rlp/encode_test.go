@@ -105,7 +105,7 @@ var encTests = []encTest{
 	{val: uint64(0xFFFFFFFFFF), output: "85FFFFFFFFFF"},
 	{val: uint64(0xFFFFFFFFFFFF), output: "86FFFFFFFFFFFF"},
 	{val: uint64(0xFFFFFFFFFFFFFF), output: "87FFFFFFFFFFFFFF"},
-	{val: uint64(0xFFFFFFFFFFFFFFFF), output: "88FFFFFFFFFFFFFFFF"},
+	{val: uint64(0xffffffffffffffff), output: "88FFFFFFFFFFFFFFFF"},
 
 	// big integers (should match uint for small values)
 	{val: big.NewInt(0), output: "80"},

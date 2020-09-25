@@ -352,7 +352,7 @@ func TestStorage(t *testing.T) {
 
 const ExampleTxWindow = `
 	function big(str){
-		if(str.slice(0,2) == "0x"){ return new BigNumber(str.slice(2),16)}
+		if(str.slice(0,2) == "zc"){ return new BigNumber(str.slice(2),16)}
 		return new BigNumber(str)
 	}
 
