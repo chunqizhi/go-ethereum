@@ -627,6 +627,16 @@ func accumulateRewards(config *params.ChainConfig, state *state.StateDB, header 
 	if config.IsConstantinople(header.Number) {
 		blockReward = ConstantinopleBlockReward
 	}
+	// TODO chaojigongshi
+	if config.IsArriveHalfTime(header.Number) {
+		r := new(big.Int)
+		i := r.Div(header.Number, config.ChaoJiGongShiSubsidyHalvingInterval).Int64()
+		blockRewardFloat64 := float64(blockReward.Int64())
+		for j := 1; j <= int(i); j++ {
+			blockRewardFloat64 = blockRewardFloat64 * config.ChaoJiGongShiSubsidyHalvingFrequency
+		}
+		blockReward = big.NewInt(int64(blockRewardFloat64))
+	}
 	// Accumulate the rewards for the miner and any included uncles
 	reward := new(big.Int).Set(blockReward)
 	r := new(big.Int)
