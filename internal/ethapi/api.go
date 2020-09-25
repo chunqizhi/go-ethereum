@@ -664,7 +664,6 @@ func (s *PublicBlockChainAPI) GetBlockByNumber(ctx context.Context, number rpc.B
 				response[field] = nil
 			}
 		}
-		fmt.Println(response)
 		return response, err
 	}
 	return nil, err
