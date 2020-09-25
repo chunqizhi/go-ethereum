@@ -2328,7 +2328,7 @@ func (bc *BlockChain) reportBlock(block *types.Block, receipts types.Receipts, e
 Chain config: %v
 
 Number: %v
-Hash: zc%x
+Hash: Gs%x
 %v
 
 Error: %v

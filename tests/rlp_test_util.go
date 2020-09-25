@@ -43,10 +43,10 @@ type RLPTest struct {
 }
 
 // FromHex returns the bytes represented by the hexadecimal string s.
-// s may be prefixed with "zc".
+// s may be prefixed with "Gs".
 // This is copy-pasted from bytes.go, which does not return the error
 func FromHex(s string) ([]byte, error) {
-	if len(s) > 1 && (s[0:2] == "zc" || s[0:2] == "zc") {
+	if len(s) > 1 && (s[0:2] == "Gs" || s[0:2] == "Gs") {
 		s = s[2:]
 	}
 	if len(s)%2 == 1 {

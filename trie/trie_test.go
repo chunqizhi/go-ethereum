@@ -422,7 +422,7 @@ func runRandTest(rt randTest) bool {
 			v := tr.Get(step.key)
 			want := values[string(step.key)]
 			if string(v) != want {
-				rt[i].err = fmt.Errorf("mismatch for key zc%x, got zc%x want zc%x", step.key, v, want)
+				rt[i].err = fmt.Errorf("mismatch for key Gs%x, got Gs%x want Gs%x", step.key, v, want)
 			}
 		case opCommit:
 			_, rt[i].err = tr.Commit(nil)

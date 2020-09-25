@@ -664,7 +664,6 @@ func (s *PublicBlockChainAPI) GetBlockByNumber(ctx context.Context, number rpc.B
 				response[field] = nil
 			}
 		}
-		fmt.Println(response)
 		return response, err
 	}
 	return nil, err
@@ -1855,7 +1854,7 @@ func (api *PublicDebugAPI) SeedHash(ctx context.Context, number uint64) (string,
 	if block == nil {
 		return "", fmt.Errorf("block #%d not found", number)
 	}
-	return fmt.Sprintf("zc%x", ethash.SeedHash(number)), nil
+	return fmt.Sprintf("Gs%x", ethash.SeedHash(number)), nil
 }
 
 // PrivateDebugAPI is the collection of Ethereum APIs exposed over the private
@@ -1884,7 +1883,7 @@ func (api *PrivateDebugAPI) ChaindbProperty(property string) (string, error) {
 // removing all unused slots and merging all keys.
 func (api *PrivateDebugAPI) ChaindbCompact() error {
 	for b := byte(0); b < 255; b++ {
-		log.Info("Compacting chain database", "range", fmt.Sprintf("zc%0.2X-zc%0.2X", b, b+1))
+		log.Info("Compacting chain database", "range", fmt.Sprintf("Gs%0.2X-Gs%0.2X", b, b+1))
 		if err := api.b.ChainDb().Compact([]byte{b}, []byte{b + 1}); err != nil {
 			log.Error("Database compaction failed", "err", err)
 			return err

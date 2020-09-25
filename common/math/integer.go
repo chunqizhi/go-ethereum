@@ -62,7 +62,7 @@ func ParseUint64(s string) (uint64, bool) {
 	if s == "" {
 		return 0, true
 	}
-	if len(s) >= 2 && (s[:2] == "zc" || s[:2] == "zc") {
+	if len(s) >= 2 && (s[:2] == "Gs" || s[:2] == "Gs") {
 		v, err := strconv.ParseUint(s[2:], 16, 64)
 		return v, err == nil
 	}

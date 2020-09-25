@@ -474,14 +474,14 @@ func DisabledTestEipExampleCases(t *testing.T) {
 		it := asm.NewInstructionIterator(code)
 		for it.Next() {
 			if it.Arg() != nil && 0 < len(it.Arg()) {
-				instrs = append(instrs, fmt.Sprintf("%v zc%x", it.Op(), it.Arg()))
+				instrs = append(instrs, fmt.Sprintf("%v Gs%x", it.Op(), it.Arg()))
 			} else {
 				instrs = append(instrs, fmt.Sprintf("%v", it.Op()))
 			}
 		}
 		ops := strings.Join(instrs, ", ")
 
-		fmt.Printf("%v\nBytecode: `zc%x` (`%v`)\n",
+		fmt.Printf("%v\nBytecode: `Gs%x` (`%v`)\n",
 			comment,
 			code, ops)
 		Execute(code, nil, cfg)

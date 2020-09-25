@@ -1124,7 +1124,7 @@ func TestTransactionFetcherDropRescheduling(t *testing.T) {
 // This test reproduces a crash caught by the fuzzer. The root cause was a
 // dangling transaction timing out and clashing on readd with a concurrently
 // announced one.
-func TestTransactionFetcherFuzzCrash01(t *testing.T) {
+func TestTransactionFetcherFuzGsrash01(t *testing.T) {
 	testTransactionFetcherParallel(t, txFetcherTest{
 		init: func() *TxFetcher {
 			return NewTxFetcher(
@@ -1151,7 +1151,7 @@ func TestTransactionFetcherFuzzCrash01(t *testing.T) {
 // This test reproduces a crash caught by the fuzzer. The root cause was a
 // dangling transaction getting peer-dropped and clashing on readd with a
 // concurrently announced one.
-func TestTransactionFetcherFuzzCrash02(t *testing.T) {
+func TestTransactionFetcherFuzGsrash02(t *testing.T) {
 	testTransactionFetcherParallel(t, txFetcherTest{
 		init: func() *TxFetcher {
 			return NewTxFetcher(
@@ -1180,7 +1180,7 @@ func TestTransactionFetcherFuzzCrash02(t *testing.T) {
 // This test reproduces a crash caught by the fuzzer. The root cause was a
 // dangling transaction getting rescheduled via a partial delivery, clashing
 // with a concurrent notify.
-func TestTransactionFetcherFuzzCrash03(t *testing.T) {
+func TestTransactionFetcherFuzGsrash03(t *testing.T) {
 	testTransactionFetcherParallel(t, txFetcherTest{
 		init: func() *TxFetcher {
 			return NewTxFetcher(
@@ -1210,7 +1210,7 @@ func TestTransactionFetcherFuzzCrash03(t *testing.T) {
 // This test reproduces a crash caught by the fuzzer. The root cause was a
 // dangling transaction getting rescheduled via a disconnect, clashing with
 // a concurrent notify.
-func TestTransactionFetcherFuzzCrash04(t *testing.T) {
+func TestTransactionFetcherFuzGsrash04(t *testing.T) {
 	// Create a channel to control when tx requests can fail
 	proceed := make(chan struct{})
 

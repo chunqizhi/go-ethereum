@@ -144,7 +144,7 @@ See the [external API changelog](extapi_changelog.md) for information about chan
 - data: hex encoded data
 - string: ASCII string
 
-All hex encoded values must be prefixed with `zc`.
+All hex encoded values must be prefixed with `Gs`.
 
 ### account_new
 
@@ -219,7 +219,7 @@ Response
 #### Arguments
   1. transaction object:
      - `from` [address]: account to send the transaction from
-     - `to` [address]: receiver account. If omitted or `zc`, will cause contract creation.
+     - `to` [address]: receiver account. If omitted or `Gs`, will cause contract creation.
      - `gas` [number]: maximum amount of gas to burn
      - `gasPrice` [number]: gas price
      - `value` [number:optional]: amount of Wei to send with the transaction

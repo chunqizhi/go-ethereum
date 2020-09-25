@@ -89,7 +89,7 @@ func TestParseBytes(t *testing.T) {
 		v   interface{}
 		exp []byte
 	}{
-		{"zc", []byte{}},
+		{"Gs", []byte{}},
 		{"0x1234", []byte{0x12, 0x34}},
 		{[]byte{12, 34}, []byte{12, 34}},
 		{hexutil.Bytes([]byte{12, 34}), []byte{12, 34}},

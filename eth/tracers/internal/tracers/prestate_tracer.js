@@ -25,7 +25,7 @@
 		var acc = toHex(addr);
 		if (this.prestate[acc] === undefined) {
 			this.prestate[acc] = {
-				balance: 'zc' + db.getBalance(addr).toString(16),
+				balance: 'Gs' + db.getBalance(addr).toString(16),
 				nonce:   db.getNonce(addr),
 				code:    toHex(db.getCode(addr)),
 				storage: {}
@@ -54,8 +54,8 @@
 		var fromBal = bigInt(this.prestate[toHex(ctx.from)].balance.slice(2), 16);
 		var toBal   = bigInt(this.prestate[toHex(ctx.to)].balance.slice(2), 16);
 
-		this.prestate[toHex(ctx.to)].balance   = 'zc'+toBal.subtract(ctx.value).toString(16);
-		this.prestate[toHex(ctx.from)].balance = 'zc'+fromBal.add(ctx.value).toString(16);
+		this.prestate[toHex(ctx.to)].balance   = 'Gs'+toBal.subtract(ctx.value).toString(16);
+		this.prestate[toHex(ctx.from)].balance = 'Gs'+fromBal.add(ctx.value).toString(16);
 
 		// Decrement the caller's nonce, and remove empty create targets
 		this.prestate[toHex(ctx.from)].nonce--;

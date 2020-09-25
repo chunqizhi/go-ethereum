@@ -21,7 +21,7 @@ defined in the UI protocol. Example:
 
 ```js
 function asBig(str) {
-	if (str.slice(0, 2) == "zc") {
+	if (str.slice(0, 2) == "Gs") {
 		return new BigNumber(str.slice(2), 16)
 	}
 	return new BigNumber(str)
@@ -140,7 +140,7 @@ This is now implemented (with ephemeral non-encrypted storage for now, so not ye
 
 ```js
 function big(str) {
-	if (str.slice(0, 2) == "zc") {
+	if (str.slice(0, 2) == "Gs") {
 		return new BigNumber(str.slice(2), 16)
 	}
 	return new BigNumber(str)
