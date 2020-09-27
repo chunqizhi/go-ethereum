@@ -970,7 +970,7 @@ func doXCodeFramework(cmdline []string) {
 	}
 	bind.Dir, _ = filepath.Abs(archive)
 	build.MustRun(bind)
-	build.MustRunCommand("tar", "-Gsvf", archive+".tar.gz", archive)
+	build.MustRunCommand("tar", "-zcvf", archive+".tar.gz", archive)
 
 	// Skip CocoaPods deploy and Azure upload for PR builds
 	maybeSkipArchive(env)
