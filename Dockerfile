@@ -11,9 +11,10 @@ RUN cd /go-ethereum && make geth
 FROM alpine:latest
 
 RUN apk add --no-cache ca-certificates
-COPY --from=builder /go-ethereum/build/bin/geth /usr/local/bin/
+COPY --from=builder /go-ethereum/build/bin/geth /usr/local/sbin/
 COPY ./genesis/docker-entrypoint.sh /usr/local/bin/
 COPY ./genesis/genesis.json /genesis/ 
+VOLUME /usr/local/bin/
 VOLUME /genesis/
 VOLUME /data/
 WORKDIR /data/
