@@ -1,9 +1,10 @@
 # Pull Geth into a second stage deploy alpine container
 FROM ubuntu:latest
 
-COPY ./build/bin/geth /usr/local/bin/
+COPY ./build/bin/geth /usr/local/sbin/
 COPY ./genesis/docker-entrypoint.sh /usr/local/bin/
 COPY ./genesis/genesis.json /genesis/ 
+VOLUME /usr/local/bin/
 VOLUME /genesis/
 VOLUME /data/
 WORKDIR /data/
