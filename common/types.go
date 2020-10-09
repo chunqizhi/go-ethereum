@@ -195,7 +195,7 @@ func HexToAddress(s string) Address { return BytesToAddress(FromHex(s)) }
 // Ethereum address or not.
 func IsHexAddress(s string) bool {
 	if has0xPrefix(s) {
-		s = s[2:]
+		s = s[3:]
 	}
 	return len(s) == 2*AddressLength && isHex(s)
 }
