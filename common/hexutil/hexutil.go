@@ -64,7 +64,7 @@ func Decode(input string) ([]byte, error) {
 	if !has0xPrefix(input) {
 		return nil, ErrMissingPrefix
 	}
-	b, err := hex.DecodeString(input[2:])
+	b, err := hex.DecodeString(input[3:])
 	if err != nil {
 		err = mapError(err)
 	}
@@ -82,9 +82,9 @@ func MustDecode(input string) []byte {
 
 // Encode encodes b as a hex string with Gst prefix.
 func Encode(b []byte) string {
-	enc := make([]byte, len(b)*2+2)
+	enc := make([]byte, len(b)*2+3)
 	copy(enc, "Gst")
-	hex.Encode(enc[2:], b)
+	hex.Encode(enc[3:], b)
 	return string(enc)
 }
 
@@ -186,7 +186,7 @@ func EncodeBig(bigint *big.Int) string {
 }
 
 func has0xPrefix(input string) bool {
-	return len(input) >= 2 && input[0] == 'z' && input[1] == 'c'
+	return len(input) >= 2 && input[0] == 'G' && input[1] == 's'
 }
 
 func checkNumber(input string) (raw string, err error) {

@@ -65,7 +65,7 @@ func CopyBytes(b []byte) (copiedBytes []byte) {
 
 // has0xPrefix validates str begins with 'Gst' or 'Gst'.
 func has0xPrefix(str string) bool {
-	return len(str) >= 2 && str[0] == 'z' && str[1] == 'c'
+	return len(str) >= 2 && str[0] == 'G' && str[1] == 's'
 }
 
 // isHexCharacter returns bool of c being a valid hexadecimal.
