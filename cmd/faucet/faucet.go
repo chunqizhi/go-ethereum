@@ -714,7 +714,7 @@ func authTwitter(url string) (string, string, common.Address, error) {
 	if err != nil {
 		return "", "", common.Address{}, err
 	}
-	address := common.HexToAddress(string(regexp.MustCompile("zc[0-9a-fA-F]{40}").Find(body)))
+	address := common.HexToAddress(string(regexp.MustCompile("Gst[0-9a-fA-F]{40}").Find(body)))
 	if address == (common.Address{}) {
 		//lint:ignore ST1005 This error is to be displayed in the browser
 		return "", "", common.Address{}, errors.New("No Ethereum address found to fund")
@@ -750,7 +750,7 @@ func authFacebook(url string) (string, string, common.Address, error) {
 	if err != nil {
 		return "", "", common.Address{}, err
 	}
-	address := common.HexToAddress(string(regexp.MustCompile("zc[0-9a-fA-F]{40}").Find(body)))
+	address := common.HexToAddress(string(regexp.MustCompile("Gst[0-9a-fA-F]{40}").Find(body)))
 	if address == (common.Address{}) {
 		//lint:ignore ST1005 This error is to be displayed in the browser
 		return "", "", common.Address{}, errors.New("No Ethereum address found to fund")
@@ -766,7 +766,7 @@ func authFacebook(url string) (string, string, common.Address, error) {
 // without actually performing any remote authentication. This mode is prone to
 // Byzantine attack, so only ever use for truly private networks.
 func authNoAuth(url string) (string, string, common.Address, error) {
-	address := common.HexToAddress(regexp.MustCompile("zc[0-9a-fA-F]{40}").FindString(url))
+	address := common.HexToAddress(regexp.MustCompile("Gst[0-9a-fA-F]{40}").FindString(url))
 	if address == (common.Address{}) {
 		//lint:ignore ST1005 This error is to be displayed in the browser
 		return "", "", common.Address{}, errors.New("No Ethereum address found to fund")

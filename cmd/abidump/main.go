@@ -56,7 +56,7 @@ func main() {
 	switch {
 	case flag.NArg() == 1:
 		hexdata := flag.Arg(0)
-		data, err := hex.DecodeString(strings.TrimPrefix(hexdata, "zc"))
+		data, err := hex.DecodeString(strings.TrimPrefix(hexdata, "Gst"))
 		if err != nil {
 			die(err)
 		}

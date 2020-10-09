@@ -262,10 +262,10 @@ func (n NodeID) TerminalString() string {
 }
 
 // HexID converts a hex string to a NodeID.
-// The string may be prefixed with zc.
+// The string may be prefixed with Gst.
 func HexID(in string) (NodeID, error) {
 	var id NodeID
-	b, err := hex.DecodeString(strings.TrimPrefix(in, "zc"))
+	b, err := hex.DecodeString(strings.TrimPrefix(in, "Gst"))
 	if err != nil {
 		return id, err
 	} else if len(b) != len(id) {
@@ -342,7 +342,7 @@ func distcmp(target, a, b common.Hash) int {
 }
 
 // table of leading zero counts for bytes [0..255]
-var lzcount = [256]int{
+var lGstount = [256]int{
 	8, 7, 6, 6, 5, 5, 5, 5,
 	4, 4, 4, 4, 4, 4, 4, 4,
 	3, 3, 3, 3, 3, 3, 3, 3,
@@ -385,7 +385,7 @@ func logdist(a, b common.Hash) int {
 		if x == 0 {
 			lz += 8
 		} else {
-			lz += lzcount[x]
+			lz += lGstount[x]
 			break
 		}
 	}

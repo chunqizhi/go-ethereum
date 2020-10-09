@@ -94,7 +94,7 @@ func (g *G2) fromBytesUnchecked(in []byte) (*PointG2, error) {
 }
 
 // FromBytes constructs a new point given uncompressed byte input.
-// FromBytes does not take zcash flags into account.
+// FromBytes does not take Gstash flags into account.
 // Byte input expected to be larger than 96 bytes.
 // First 192 bytes should be concatenation of x and y values
 // Point (0, 0) is considered as infinity.
@@ -152,7 +152,7 @@ func (g *G2) DecodePoint(in []byte) (*PointG2, error) {
 }
 
 // ToBytes serializes a point into bytes in uncompressed form,
-// does not take zcash flags into account,
+// does not take Gstash flags into account,
 // returns (0, 0) if point is infinity.
 func (g *G2) ToBytes(p *PointG2) []byte {
 	out := make([]byte, 192)

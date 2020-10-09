@@ -157,10 +157,10 @@ func (h *Hash) UnmarshalGraphQL(input interface{}) error {
 	return err
 }
 
-// UnprefixedHash allows marshaling a Hash without zc prefix.
+// UnprefixedHash allows marshaling a Hash without Gst prefix.
 type UnprefixedHash Hash
 
-// UnmarshalText decodes the hash from hex. The zc prefix is optional.
+// UnmarshalText decodes the hash from hex. The Gst prefix is optional.
 func (h *UnprefixedHash) UnmarshalText(input []byte) error {
 	return hexutil.UnmarshalFixedUnprefixedText("UnprefixedHash", input, h[:])
 }
@@ -225,7 +225,7 @@ func (a Address) Hex() string {
 			result[i] -= 32
 		}
 	}
-	return "zc" + string(result)
+	return "Gst" + string(result)
 }
 
 // String implements fmt.Stringer.
@@ -296,10 +296,10 @@ func (a *Address) UnmarshalGraphQL(input interface{}) error {
 	return err
 }
 
-// UnprefixedAddress allows marshaling an Address without zc prefix.
+// UnprefixedAddress allows marshaling an Address without Gst prefix.
 type UnprefixedAddress Address
 
-// UnmarshalText decodes the address from hex. The zc prefix is optional.
+// UnmarshalText decodes the address from hex. The Gst prefix is optional.
 func (a *UnprefixedAddress) UnmarshalText(input []byte) error {
 	return hexutil.UnmarshalFixedUnprefixedText("UnprefixedAddress", input, a[:])
 }
@@ -340,10 +340,10 @@ func (ma *MixedcaseAddress) UnmarshalJSON(input []byte) error {
 
 // MarshalJSON marshals the original value
 func (ma *MixedcaseAddress) MarshalJSON() ([]byte, error) {
-	if strings.HasPrefix(ma.original, "zc") || strings.HasPrefix(ma.original, "zc") {
-		return json.Marshal(fmt.Sprintf("zc%s", ma.original[2:]))
+	if strings.HasPrefix(ma.original, "Gst") || strings.HasPrefix(ma.original, "Gst") {
+		return json.Marshal(fmt.Sprintf("Gst%s", ma.original[2:]))
 	}
-	return json.Marshal(fmt.Sprintf("zc%s", ma.original))
+	return json.Marshal(fmt.Sprintf("Gst%s", ma.original))
 }
 
 // Address returns the address

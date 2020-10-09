@@ -632,7 +632,7 @@ func (api *RetestethAPI) GetBlockByHash(ctx context.Context, blockHash common.Ha
 		response["totalDifficulty"] = (*hexutil.Big)(api.blockchain.GetTd(block.Hash(), block.Number().Uint64()))
 		return response, err
 	}
-	return nil, fmt.Errorf("block zc%x not found", blockHash)
+	return nil, fmt.Errorf("block Gst%x not found", blockHash)
 }
 
 func (api *RetestethAPI) AccountRange(ctx context.Context,

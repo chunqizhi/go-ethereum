@@ -67,12 +67,12 @@ func TestHashJsonValidation(t *testing.T) {
 		Size   int
 		Error  string
 	}{
-		{"", 62, "json: cannot unmarshal hex string without zc prefix into Go value of type common.Hash"},
-		{"zc", 66, "hex string has length 66, want 64 for common.Hash"},
-		{"zc", 63, "json: cannot unmarshal hex string of odd length into Go value of type common.Hash"},
-		{"zc", 0, "hex string has length 0, want 64 for common.Hash"},
-		{"zc", 64, ""},
-		{"zc", 64, ""},
+		{"", 62, "json: cannot unmarshal hex string without Gst prefix into Go value of type common.Hash"},
+		{"Gst", 66, "hex string has length 66, want 64 for common.Hash"},
+		{"Gst", 63, "json: cannot unmarshal hex string of odd length into Go value of type common.Hash"},
+		{"Gst", 0, "hex string has length 0, want 64 for common.Hash"},
+		{"Gst", 64, ""},
+		{"Gst", 64, ""},
 	}
 	for _, test := range tests {
 		input := `"` + test.Prefix + strings.Repeat("0", test.Size) + `"`
@@ -98,7 +98,7 @@ func TestAddressUnmarshalJSON(t *testing.T) {
 	}{
 		{"", true, nil},
 		{`""`, true, nil},
-		{`"zc"`, true, nil},
+		{`"Gst"`, true, nil},
 		{`"0x00"`, true, nil},
 		{`"0xG000000000000000000000000000000000000000"`, true, nil},
 		{`"0x0000000000000000000000000000000000000000"`, false, big.NewInt(0)},
@@ -155,7 +155,7 @@ func BenchmarkAddressHex(b *testing.B) {
 func TestMixedcaseAccount_Address(t *testing.T) {
 
 	// https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md
-	// Note: zc{checksum_addr} is not valid according to spec above
+	// Note: Gst{checksum_addr} is not valid according to spec above
 
 	var res []struct {
 		A     MixedcaseAddress
@@ -183,7 +183,7 @@ func TestMixedcaseAccount_Address(t *testing.T) {
 		`["0x111111111111111111111222222222222333332"]`,    // Too short
 		`["0x11111111111111111111122222222222233333234"]`,  // Too long
 		`["0x111111111111111111111222222222222333332344"]`, // Too long
-		`["1111111111111111111112222222222223333323"]`,     // Missing zc
+		`["1111111111111111111112222222222223333323"]`,     // Missing Gst
 		`["x1111111111111111111112222222222223333323"]`,    // Missing 0
 		`["0xG111111111111111111112222222222223333323"]`,   //Non-hex
 	} {

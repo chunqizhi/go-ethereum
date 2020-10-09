@@ -112,7 +112,7 @@ type genesisAccountMarshaling struct {
 type storageJSON common.Hash
 
 func (h *storageJSON) UnmarshalText(text []byte) error {
-	text = bytes.TrimPrefix(text, []byte("zc"))
+	text = bytes.TrimPrefix(text, []byte("Gst"))
 	if len(text) > 64 {
 		return fmt.Errorf("too many hex characters in storage key/value %q", text)
 	}

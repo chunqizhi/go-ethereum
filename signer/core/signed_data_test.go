@@ -276,7 +276,7 @@ func TestHashStruct(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	mainHash := fmt.Sprintf("zc%s", common.Bytes2Hex(hash))
+	mainHash := fmt.Sprintf("Gst%s", common.Bytes2Hex(hash))
 	if mainHash != "0xc52c0ee5d84264471806290a3f2c4cecfc5490626bf912d01f240d7a274b371e" {
 		t.Errorf("Expected different hashStruct result (got %s)", mainHash)
 	}
@@ -285,7 +285,7 @@ func TestHashStruct(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	domainHash := fmt.Sprintf("zc%s", common.Bytes2Hex(hash))
+	domainHash := fmt.Sprintf("Gst%s", common.Bytes2Hex(hash))
 	if domainHash != "0xf2cee375fa42b42143804025fc449deafd50cc031ca257e0b194a650a912090f" {
 		t.Errorf("Expected different domain hashStruct result (got %s)", domainHash)
 	}
@@ -304,7 +304,7 @@ func TestEncodeType(t *testing.T) {
 }
 
 func TestTypeHash(t *testing.T) {
-	mailTypeHash := fmt.Sprintf("zc%s", common.Bytes2Hex(typedData.TypeHash(typedData.PrimaryType)))
+	mailTypeHash := fmt.Sprintf("Gst%s", common.Bytes2Hex(typedData.TypeHash(typedData.PrimaryType)))
 	if mailTypeHash != "0xa0cedeb2dc280ba39b857546d74f5549c3a1d7bdc2dd96bf881f76108e23dac2" {
 		t.Errorf("Expected different typeHash result (got %s)", mailTypeHash)
 	}
@@ -315,7 +315,7 @@ func TestEncodeData(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	dataEncoding := fmt.Sprintf("zc%s", common.Bytes2Hex(hash))
+	dataEncoding := fmt.Sprintf("Gst%s", common.Bytes2Hex(hash))
 	if dataEncoding != "0xa0cedeb2dc280ba39b857546d74f5549c3a1d7bdc2dd96bf881f76108e23dac2fc71e5fa27ff56c350aa531bc129ebdf613b772b6604664f5d8dbe21b85eb0c8cd54f074a4af31b4411ff6a60c9719dbd559c221c8ac3492d9d872b041d703d1b5aadf3154a261abdd9086fc627b61efca26ae5702701d05cd2305f7c52a2fc8" {
 		t.Errorf("Expected different encodeData result (got %s)", dataEncoding)
 	}

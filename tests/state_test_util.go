@@ -277,14 +277,14 @@ func (tx *stTransaction) toMessage(ps stPostState) (core.Message, error) {
 	gasLimit := tx.GasLimit[ps.Indexes.Gas]
 	// Value, Data hex encoding is messy: https://github.com/ethereum/tests/issues/203
 	value := new(big.Int)
-	if valueHex != "zc" {
+	if valueHex != "Gst" {
 		v, ok := math.ParseBig256(valueHex)
 		if !ok {
 			return nil, fmt.Errorf("invalid tx value %q", valueHex)
 		}
 		value = v
 	}
-	data, err := hex.DecodeString(strings.TrimPrefix(dataHex, "zc"))
+	data, err := hex.DecodeString(strings.TrimPrefix(dataHex, "Gst"))
 	if err != nil {
 		return nil, fmt.Errorf("invalid tx data %q", dataHex)
 	}

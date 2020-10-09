@@ -522,7 +522,7 @@ func TestAccountIteratorLargeTraversal(t *testing.T) {
 		},
 	}
 	for i := 1; i < 128; i++ {
-		snaps.Update(common.HexToHash(fmt.Sprintf("zc%02x", i+1)), common.HexToHash(fmt.Sprintf("zc%02x", i)), nil, makeAccounts(200), nil)
+		snaps.Update(common.HexToHash(fmt.Sprintf("Gst%02x", i+1)), common.HexToHash(fmt.Sprintf("Gst%02x", i)), nil, makeAccounts(200), nil)
 	}
 	// Iterate the entire stack and ensure everything is hit only once
 	head := snaps.Snapshot(common.HexToHash("0x80"))
@@ -848,7 +848,7 @@ func BenchmarkAccountIteratorTraversal(b *testing.B) {
 		},
 	}
 	for i := 1; i <= 100; i++ {
-		snaps.Update(common.HexToHash(fmt.Sprintf("zc%02x", i+1)), common.HexToHash(fmt.Sprintf("zc%02x", i)), nil, makeAccounts(200), nil)
+		snaps.Update(common.HexToHash(fmt.Sprintf("Gst%02x", i+1)), common.HexToHash(fmt.Sprintf("Gst%02x", i)), nil, makeAccounts(200), nil)
 	}
 	// We call this once before the benchmark, so the creation of
 	// sorted accountlists are not included in the results.
@@ -945,7 +945,7 @@ func BenchmarkAccountIteratorLargeBaselayer(b *testing.B) {
 	}
 	snaps.Update(common.HexToHash("0x02"), common.HexToHash("0x01"), nil, makeAccounts(2000), nil)
 	for i := 2; i <= 100; i++ {
-		snaps.Update(common.HexToHash(fmt.Sprintf("zc%02x", i+1)), common.HexToHash(fmt.Sprintf("zc%02x", i)), nil, makeAccounts(20), nil)
+		snaps.Update(common.HexToHash(fmt.Sprintf("Gst%02x", i+1)), common.HexToHash(fmt.Sprintf("Gst%02x", i)), nil, makeAccounts(20), nil)
 	}
 	// We call this once before the benchmark, so the creation of
 	// sorted accountlists are not included in the results.
