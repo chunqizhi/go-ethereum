@@ -4077,7 +4077,7 @@ SolidityFunction.prototype.unpackOutput = function (output) {
         return;
     }
 
-    output = output.length >= 2 ? output.slice(2) : output;
+    output = output.length >= 2 ? output.slice(3) : output;
     var result = coder.decodeParams(this._outputTypes, output);
     return result.length === 1 ? result[0] : result;
 };
