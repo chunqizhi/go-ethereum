@@ -196,7 +196,7 @@ func checkNumber(input string) (raw string, err error) {
 	if !has0xPrefix(input) {
 		return "", ErrMissingPrefix
 	}
-	input = input[2:]
+	input = input[3:]
 	if len(input) == 0 {
 		return "", ErrEmptyNumber
 	}
