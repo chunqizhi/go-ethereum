@@ -114,7 +114,7 @@ func MustDecodeUint64(input string) uint64 {
 // EncodeUint64 encodes i as a hex string with Gst prefix.
 func EncodeUint64(i uint64) string {
 	enc := make([]byte, 2, 10)
-	copy(enc, "Gst")
+	copy(enc, "0x")
 	return string(strconv.AppendUint(enc, i, 16))
 }
 
