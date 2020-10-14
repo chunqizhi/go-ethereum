@@ -5495,6 +5495,10 @@ var properties = function () {
             outputFormatter: utils.toDecimal
         }),
         new Property({
+          name: 'GetCurrentBlockDifficulty',
+          getter: 'eth_getCurrentBlockDifficulty',
+        }),
+        new Property({
             name: 'protocolVersion',
             getter: 'eth_protocolVersion'
         })
