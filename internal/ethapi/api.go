@@ -545,6 +545,17 @@ func (s *PublicBlockChainAPI) BlockNumber() hexutil.Uint64 {
 	return hexutil.Uint64(header.Number.Uint64())
 }
 
+// 获取当前区块的难度值
+func(s *PublicBlockChainAPI) GetCurrentBlockDifficulty() *big.Int {
+	number := s.BlockNumber()
+	block, err := s.b.BlockByNumber(context.Background(), rpc.BlockNumber(number))
+	if err != nil {
+		log.Error("GetCurrentBlockDifficulty failed: ",err.Error())
+		return nil
+	}
+	return block.Difficulty()
+}
+
 // GetBalance returns the amount of wei for the given address in the state of the
 // given block number. The rpc.LatestBlockNumber and rpc.PendingBlockNumber meta
 // block numbers are also allowed.
